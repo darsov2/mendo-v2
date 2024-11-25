@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <title>МЕНДО - Регистрација на натпревар</title>
+    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5efe6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /*padding: 2rem;*/
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #2c1810;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #2c1810;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #E6AA68;
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fff5eb;
+            color: #2c1810;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2c1810;
+            box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
+        }
+
+        .helper-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .mendo-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.8rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            width: 100%;
+            font-size: 1.1rem;
+            background-color: #E6AA68;
+            color: #2c1810;
+            margin-top: 1rem;
+            grid-column: 1 / -1;
+        }
+
+        .mendo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c1810' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="section-title">Регистрација на натпревар</h2>
+
+    <div class="form-card">
+        <form id="competitionForm" class="form-grid">
+            <!-- Left Column -->
+            <div class="form-group">
+                <label class="form-label">Наслов на натпреварот</label>
+                <input type="text" class="form-control" name="title" required placeholder="Внесете наслов на натпреварот">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Датум на одржување</label>
+                <input type="date" class="form-control" name="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Време на почеток</label>
+                <input type="time" class="form-control" name="startTime" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Време на завршување</label>
+                <input type="time" class="form-control" name="endTime" required>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-group">
+                <label class="form-label">Тип на натпревар</label>
+                <select class="form-control" name="type" required>
+                    <option value="">Изберете тип на натпревар</option>
+                    <option value="REGIONAL">Регионален</option>
+                    <option value="NATIONAL">Државен</option>
+                    <option value="INTERNATIONAL">Меѓународен</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Место на одржување</label>
+                <input type="text" class="form-control" name="place" required placeholder="Внесете место на одржување">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Краен рок за пријавување</label>
+                <input type="datetime-local" class="form-control" name="deadline" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Циклус на натпревари</label>
+                <select class="form-control" name="cycle" required>
+                    <option value="">Изберете циклус</option>
+                    <option value="1">Циклус 2024</option>
+                    <option value="2">Пролетен циклус 2024</option>
+                </select>
+            </div>
+
+            <!-- Full Width -->
+            <div class="form-group full-width">
+                <label class="form-label">Дополнителни информации</label>
+                <textarea class="form-control" name="info" rows="3" placeholder="Внесете дополнителни информации за натпреварот"></textarea>
+            </div>
+
+            <button type="submit" class="mendo-btn">
+                Регистрирај натпревар
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
