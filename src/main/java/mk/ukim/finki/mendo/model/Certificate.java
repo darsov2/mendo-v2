@@ -3,23 +3,20 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @Data
-public class Certificate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Certificate extends BaseAuditedEntity<Long> {
     LocalDate date;
     String place;
     @OneToOne
     Participation participation;
     @ManyToOne
-    User user;
+    MendoUser mendoUser;
     @ManyToOne
     Competition competition;
 }

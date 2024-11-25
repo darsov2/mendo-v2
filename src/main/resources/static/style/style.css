@@ -65,26 +65,32 @@ body {
     gap: 1rem;
 }
 
-.btn {
+.mendo-btn {
     padding: 0.6rem 1.2rem;
     border-radius: 0.8rem;
     border: none;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease;
+    text-decoration: none;
 }
 
-.btn:hover {
+.mendo-btn:hover {
     transform: translateY(-2px);
 }
 
-.btn-login {
+.mendo-btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+}
+
+.mendo-btn-login {
     background-color: transparent;
     border: 2px solid #E6AA68;
     color: #E6AA68;
 }
 
-.btn-signup {
+.mendo-btn-signup {
     background-color: #E6AA68;
     color: #2c1810;
     font-weight: 600;
@@ -123,7 +129,7 @@ body {
     margin-top: 2.5rem;
 }
 
-.cta-btn {
+.cta-mendo-btn {
     padding: 1rem 2.5rem;
     border-radius: 0.8rem;
     text-decoration: none;

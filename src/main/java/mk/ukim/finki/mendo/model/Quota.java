@@ -3,19 +3,16 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Quota {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Quota extends BaseAuditedEntity<Long> {
+    @Column(name = "quota_limit")
     Integer limit;
     @ManyToOne
     School school;
     @ManyToOne
     Competition competition;
-
 }

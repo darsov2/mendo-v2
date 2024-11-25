@@ -3,16 +3,17 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Participation {
+public class Participation extends BaseAuditedEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @ManyToOne
-    User user;
+    MendoUser mendoUser;
     @ManyToOne
     Competition competition;
 }

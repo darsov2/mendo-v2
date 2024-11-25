@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Data
-public class Post {
+public class Post extends BaseAuditedEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class Post {
     @OneToMany
     List<Post> replies;
     @ManyToOne
-    User user;
+    MendoUser mendoUser;
     @ManyToOne
     Thread thread;
 

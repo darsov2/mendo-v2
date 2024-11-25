@@ -3,18 +3,15 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 @Entity
 @NoArgsConstructor
 @Data
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Question extends BaseAuditedEntity<Long> {
     String description;
     @ManyToOne
-    User user;
+    MendoUser mendoUser;
     @ManyToOne
     Question question;
 }

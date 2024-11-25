@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,11 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Data
-public class Competition {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Competition extends BaseAuditedEntity<Long> {
     String title;
     LocalDate startDate;
     LocalDateTime startTime;
@@ -25,5 +22,4 @@ public class Competition {
     String place;
     String info;
     LocalDateTime deadline;
-
 }

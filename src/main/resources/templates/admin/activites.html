@@ -1,0 +1,397 @@
+<style>
+
+    /*.main-content {*/
+    /*    flex: 1;*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*    justify-content: center;*/
+    /*    padding: 2rem;*/
+    /*}*/
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+        display: flex;
+    }
+
+    .sidebar {
+        width: 100%;
+        /*width: 300px;*/
+        background: white;
+        height: 90vh;
+        overflow-y: auto;
+        border-right: 1px solid #e2e8f0;
+        /*position: fixed;*/
+    }
+
+    .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .sidebar-title {
+        color: #2c1810;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .tree-view {
+        padding: 1rem;
+    }
+
+    .tree-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .tree-parent {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        color: #2c1810;
+        transition: all 0.2s ease;
+    }
+
+    .tree-parent:hover {
+        background-color: #f5efe6;
+    }
+
+    .tree-parent.active {
+        background-color: #E6AA68;
+        color: #2c1810;
+        font-weight: 500;
+    }
+
+    .tree-content {
+        margin-left: 1.5rem;
+        border-left: 2px solid #e2e8f0;
+        padding-left: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .tree-toggle {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    .tree-icon {
+        margin-right: 0.5rem;
+        width: 20px;
+        color: #E6AA68;
+    }
+
+    .main-content {
+        padding: 2rem;
+        max-width: unset !important;
+        margin: unset !important;
+        background-color: #f5efe6;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .header h1 {
+        color: #2c1810;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .btn-add {
+        background-color: #E6AA68;
+        color: #2c1810;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+    }
+
+    .content-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .content-table th {
+        text-align: left;
+        padding: 1rem;
+        background-color: #f5efe6;
+        color: #2c1810;
+        font-weight: 600;
+    }
+
+    .content-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f5efe6;
+    }
+
+    .lesson-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .status-lecture {
+        background-color: #e2e8f0;
+        color: #475569;
+    }
+
+    .status-task {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-action {
+        padding: 0.4rem;
+        border-radius: 0.4rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: transparent;
+    }
+
+    .btn-edit:hover {
+        background-color: #f5efe6;
+        color: #E6AA68;
+    }
+
+    .btn-delete:hover {
+        background-color: #fee2e2;
+        color: #ef4444;
+    }
+
+    .tree-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .drag-handle {
+        cursor: move;
+        color: #94a3b8;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        color: #666;
+    }
+
+    .breadcrumb-item {
+        color: #2c1810;
+        text-decoration: none;
+    }
+
+    .breadcrumb-separator {
+        color: #94a3b8;
+    }
+</style>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<main>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Категории</span>
+                    <button class="btn-action btn-edit">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="tree-view">
+                    <div class="tree-item">
+                        <div class="tree-parent active">
+                        <button data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true" class="tree-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <i class="fas fa-book tree-icon"></i>
+                        <span>Научете C++</span>
+                        <div class="tree-actions">
+                            <button class="btn-action btn-edit">
+                                    <i class="fas fa-pencil"></i>
+                            </button>
+                            <button class="btn-action btn-delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            </div>
+                        </div>
+                        <div class="tree-content collapse show" id="home-collapse">
+                            <div class="tree-parent">
+                                 <span class="tree-toggle">
+                                    <i class="fas fa-chevron-right"></i>
+                            </span>
+                                <i class="fas fa-folder tree-icon"></i>
+                                <span>Програмски јазик C++</span>
+                                <div class="tree-actions">
+                                    <button class="btn-action btn-edit">
+                                        <i class="fas fa-pencil"></i>
+                                    </button>
+                                    <button class="btn-action btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-item">
+                        <div class="tree-parent">
+                    <span class="tree-toggle">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                            <i class="fas fa-book tree-icon"></i>
+                            <span>Алгоритми</span>
+                            <div class="tree-actions">
+                                <button class="btn-action btn-edit">
+                                    <i class="fas fa-pencil"></i>
+                                </button>
+                                <button class="btn-action btn-delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-item">
+                        <div class="tree-parent">
+                    <span class="tree-toggle">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                            <i class="fas fa-book tree-icon"></i>
+                            <span>Почетници</span>
+                            <div class="tree-actions">
+                                <button class="btn-action btn-edit">
+                                    <i class="fas fa-pencil"></i>
+                                </button>
+                                <button class="btn-action btn-delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="main-content">
+                <div class="breadcrumb">
+                    <a href="#" class="breadcrumb-item">Научете C++</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="#" class="breadcrumb-item">Програмски јазик C++</a>
+                </div>
+
+                <div class="header">
+                    <h1>Програмски јазик C++</h1>
+                    <button class="btn-add">
+                        <i class="fas fa-plus"></i>
+                        Додај нова лекција
+                    </button>
+                </div>
+
+                <div class="content-card">
+                    <table class="content-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 40px"></th>
+                            <th>Име</th>
+                            <th>Извор</th>
+                            <th>Активност</th>
+                            <th>Акции</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                            <td>
+                                <div class="lesson-title">
+                                    <i class="fas fa-book"></i>
+                                    Вовед. Структурирано програмирање
+                                </div>
+                            </td>
+                            <td>-</td>
+                            <td><span class="status-badge status-lecture">предавање</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn-action btn-edit">
+                                        <i class="fas fa-pencil"></i>
+                                    </button>
+                                    <button class="btn-action btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                            <td>
+                                <div class="lesson-title">
+                                    <i class="fas fa-code"></i>
+                                    Здраво
+                                </div>
+                            </td>
+                            <td>вовед '12</td>
+                            <td><span class="status-badge status-task">задача</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn-action btn-edit">
+                                        <i class="fas fa-pencil"></i>
+                                    </button>
+                                    <button class="btn-action btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html>

@@ -3,30 +3,17 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.ActivityTag;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Data
-public class Lecture {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Lecture extends BaseAuditedEntity<Long> {
     String title;
-    String text; //todo ?
+    String text;
     @ManyToMany
-    @JoinTable(
-            name = "lecture_created",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "lecture_id"))
-    List<User> users;
-    @ManyToMany
-    @JoinTable(
-            name = "lecture_tasks",
-            joinColumns = @JoinColumn(name = "lecture_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id"))
-    List<Task> tasks;
-
+    List<ActivityTag> tags;
 }

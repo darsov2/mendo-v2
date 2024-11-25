@@ -3,17 +3,15 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.ActivityTag;
+import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
 
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Data
-public class Task {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Task extends BaseAuditedEntity<Long> {
     @OneToOne
     Thread thread;
     @ManyToMany
@@ -25,7 +23,6 @@ public class Task {
 //    @Column(name = "address", columnDefinition = "jsonb")
     @OneToMany
     List<TestCase> testCases;
-
-
-
+    @ManyToMany
+    List<ActivityTag> tags;
 }
