@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class Competition extends BaseAuditedEntity<Long> {
+
+
+
     String title;
     LocalDate startDate;
     LocalDateTime startTime;
@@ -22,4 +25,20 @@ public class Competition extends BaseAuditedEntity<Long> {
     String place;
     String info;
     LocalDateTime deadline;
+
+    @ManyToOne
+    CompetitionCycle cycle;
+
+
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {
+        this.title = title;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.type = type;
+        this.place = place;
+        this.info = info;
+        this.deadline = deadline;
+        this.cycle = cycle;
+    }
 }

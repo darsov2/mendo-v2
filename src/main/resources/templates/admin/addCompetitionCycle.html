@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <title>МЕНДО - Регистрација на циклус</title>
+    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../static/style/style.css" rel="stylesheet">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        /*padding: 2rem;*/
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        color: #2c1810;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 3rem;
+        box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        color: #2c1810;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #E6AA68;
+        border-radius: 0.8rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff5eb;
+        color: #2c1810;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #2c1810;
+        box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
+    }
+
+    .helper-text {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .mendo-btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 0.8rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        width: 100%;
+        font-size: 1.1rem;
+        background-color: #E6AA68;
+        color: #2c1810;
+        margin-top: 1rem;
+    }
+
+    .mendo-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem;
+        }
+
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+        }
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        width: 100%;
+    }
+</style>
+
+
+<body>
+<div class="container">
+    <h2 class="section-title">Регистрација на нов циклус</h2>
+
+    <div class="form-card">
+        <form id="competitionCycleForm" method="POST" action="/admin/cycle/add">
+            <div class="form-group">
+                <label class="form-label">Име на циклусот</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        required
+                        placeholder="Внесете име на циклусот"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Година</label>
+                <input
+                        type="date"
+                        class="form-control"
+                        name="year"
+                        required
+                >
+                <div class="helper-text">Изберете година за циклусот</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Краен рок за регистрација</label>
+                <input
+                        type="datetime-local"
+                        class="form-control"
+                        name="registrationDeadline"
+                        required
+                >
+                <div class="helper-text">Внесете краен рок за регистрација</div>
+            </div>
+
+            <button type="submit" class="mendo-btn">
+                Регистрирај циклус
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
