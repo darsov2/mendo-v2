@@ -1,8 +1,7 @@
-package mk.ukim.finki.mendo;
+package mk.ukim.finki.mendo.model;
 
 import jakarta.persistence.Entity;
 import lombok.Data;
-import mk.ukim.finki.mendo.model.BaseEntity;
 
 @Data
 @Entity
