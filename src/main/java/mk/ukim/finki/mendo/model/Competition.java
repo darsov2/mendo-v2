@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
-import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
+import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,5 +40,9 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.info = info;
         this.deadline = deadline;
         this.cycle = cycle;
+    }
+
+    public Long getId(){
+        return id;
     }
 }

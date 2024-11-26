@@ -1,4 +1,4 @@
-package mk.ukim.finki.mendo.model.web.request;
+package mk.ukim.finki.mendo.web.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;

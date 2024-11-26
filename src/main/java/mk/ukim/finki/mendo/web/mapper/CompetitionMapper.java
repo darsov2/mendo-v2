@@ -1,7 +1,7 @@
-package mk.ukim.finki.mendo.model.web.mapper;
+package mk.ukim.finki.mendo.web.mapper;
 
 import mk.ukim.finki.mendo.model.Competition;
-import mk.ukim.finki.mendo.model.web.request.CompetitionRequest;
+import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import org.springframework.stereotype.Service;
 

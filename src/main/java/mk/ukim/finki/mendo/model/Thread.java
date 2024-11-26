@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
+import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 @Entity
 @Data

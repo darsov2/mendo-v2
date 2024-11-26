@@ -13,4 +13,8 @@ import lombok.NoArgsConstructor;
 public class School extends BaseEntity<Long> {
     String name;
     String address;
+
+    public Long getId(){
+        return id;
+    }
 }

@@ -1,4 +1,4 @@
-package mk.ukim.finki.mendo.model.web.controllers;
+package mk.ukim.finki.mendo.web.controllers;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

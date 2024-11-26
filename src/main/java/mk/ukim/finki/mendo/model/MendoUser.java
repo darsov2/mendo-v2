@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.Grade;
-import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
+import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

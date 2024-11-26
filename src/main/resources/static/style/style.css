@@ -398,3 +398,251 @@ body {
         padding: 1.5rem;
     }
 }
+
+.competitions-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.competition-section {
+    background: white;
+    border-radius: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+    overflow: hidden;
+}
+
+.competition-header {
+    padding: 1.5rem 2rem;
+    background: white;
+    color: #2c1810;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-weight: 600;
+    font-size: 1.2rem;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.competition-header:hover {
+    background-color: #fff5eb;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cycle-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c1810;
+}
+
+.cycle-registration {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.registration-closed {
+    color: #999;
+    font-style: italic;
+}
+
+.competition-content {
+    display: none;
+    padding: 0;
+}
+
+.competition-content.active {
+    display: block;
+}
+
+.competition-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.competition-table th {
+    background-color: #fff5eb;
+    color: #2c1810;
+    padding: 1rem 2rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.competition-table td {
+    padding: 1rem 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+.competition-table tr:hover td {
+    background-color: #fff5eb;
+}
+
+.competition-name {
+    color: #2c1810;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.competition-name:hover {
+    color: #E6AA68;
+}
+
+.competition-date {
+    color: #E6AA68;
+    font-weight: 500;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+    color: #E6AA68;
+    margin-top: 0.5rem;
+}
+
+.competition-header.active .arrow {
+    transform: rotate(180deg);
+}
+
+/* Add to existing media queries */
+@media (max-width: 768px) {
+    .cycle-registration {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .competition-header,
+    .competition-table td,
+    .competition-table th {
+        padding: 1rem;
+    }
+}
+
+.register-btn {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background-color: #E6AA68;
+    color: #2c1810;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+}
+
+.custom-modal .modal-content {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 4px 12px rgba(44, 24, 16, 0.1);
+}
+
+.custom-modal .modal-header {
+    border-bottom: 1px solid rgba(44, 24, 16, 0.1);
+    background-color: #fff5eb;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.5rem;
+}
+
+.custom-modal .modal-title {
+    color: #2c1810;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.custom-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.custom-modal .modal-footer {
+    border-top: 1px solid rgba(44, 24, 16, 0.1);
+    padding: 1.5rem;
+    background-color: #fff5eb;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.modal-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.custom-list-group .list-group-item {
+    border: 1px solid rgba(44, 24, 16, 0.1);
+    padding: 1rem;
+    color: #2c1810;
+    background-color: #fff5eb;
+}
+
+.custom-select {
+    border: 1px solid rgba(44, 24, 16, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: #2c1810;
+    background-color: #fff;
+}
+
+.custom-select:focus {
+    border-color: #E6AA68;
+    box-shadow: 0 0 0 0.2rem rgba(230, 170, 104, 0.25);
+}
+
+.form-label {
+    color: #2c1810;
+    margin-bottom: 0.5rem;
+}
+
+.modal-footer .btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.modal-footer .btn-success {
+    background-color: #E6AA68;
+    border: none;
+    color: #2c1810;
+}
+
+.modal-footer .btn-success:hover {
+    background-color: #d99b59;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+}
+
+.modal-footer .btn-secondary {
+    background-color: transparent;
+    border: 2px solid #E6AA68;
+    color: #E6AA68;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #fff5eb;
+    transform: translateY(-2px);
+}
+
+.btn-close {
+    color: #2c1810;
+}
+
+.btn-close:hover {
+    color: #E6AA68;
+}

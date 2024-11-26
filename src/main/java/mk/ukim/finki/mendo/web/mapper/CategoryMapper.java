@@ -1,4 +1,4 @@
-package mk.ukim.finki.mendo.model.web.mapper;
+package mk.ukim.finki.mendo.web.mapper;
 
 import mk.ukim.finki.mendo.model.Category;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;

@@ -1,12 +1,9 @@
-package mk.ukim.finki.mendo.model.web.controllers;
+package mk.ukim.finki.mendo.web.controllers;
 
-import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
-import mk.ukim.finki.mendo.model.web.mapper.CompetitionMapper;
-import mk.ukim.finki.mendo.model.web.request.CompetitionCycleRequest;
-import mk.ukim.finki.mendo.model.web.request.CompetitionRequest;
+import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
+import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
-import mk.ukim.finki.mendo.service.CompetitionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package mk.ukim.finki.mendo.model.web.request;
+package mk.ukim.finki.mendo.web.request;
 
 import lombok.Data;
 import mk.ukim.finki.mendo.model.enums.Grade;

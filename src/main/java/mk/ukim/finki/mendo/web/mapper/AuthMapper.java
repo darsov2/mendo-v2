@@ -1,7 +1,7 @@
-package mk.ukim.finki.mendo.model.web.mapper;
+package mk.ukim.finki.mendo.web.mapper;
 
 import mk.ukim.finki.mendo.model.MendoUser;
-import mk.ukim.finki.mendo.model.web.request.UserRegisterRequest;
+import mk.ukim.finki.mendo.web.request.UserRegisterRequest;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import org.springframework.stereotype.Service;
 

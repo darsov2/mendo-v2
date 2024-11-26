@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompetitionCycleServiceImpl implements CompetitionCycleService {
@@ -26,6 +27,37 @@ public class CompetitionCycleServiceImpl implements CompetitionCycleService {
     @Override
     public CompetitionCycle findById(Long id) {
         return competitionCycleRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public List<CompetitionCycle> findAllSortedByYearDesc() {
+        return competitionCycleRepository.findAllByOrderByYearDesc();
+    }
+
+    @Override
+    public CompetitionCycle create(String name, LocalDate year, LocalDateTime registrationDeadline) {
+        if (competitionCycleRepository.existsByNameAndYear(name, year)) {
+            throw new IllegalArgumentException("Competition cycle with this name and year already exists");
+        }
+
+        CompetitionCycle cycle = new CompetitionCycle(name, year, registrationDeadline);
+        return competitionCycleRepository.save(cycle);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        competitionCycleRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<CompetitionCycle> update(Long id, String name, LocalDate year, LocalDateTime registrationDeadline) {
+        return competitionCycleRepository.findById(id)
+                .map(cycle -> {
+                    cycle.setName(name);
+                    cycle.setYear(year);
+                    cycle.setRegistrationDeadline(registrationDeadline);
+                    return competitionCycleRepository.save(cycle);
+                });
     }
 
     @Override

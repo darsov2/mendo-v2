@@ -3,7 +3,7 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mk.ukim.finki.mendo.model.web.controllers.BaseAuditedEntity;
+import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 @Entity
 @NoArgsConstructor

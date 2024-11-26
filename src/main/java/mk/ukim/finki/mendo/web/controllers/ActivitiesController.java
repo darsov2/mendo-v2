@@ -1,7 +1,7 @@
-package mk.ukim.finki.mendo.model.web.controllers;
+package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
-import mk.ukim.finki.mendo.model.web.mapper.CategoryMapper;
+import mk.ukim.finki.mendo.web.mapper.CategoryMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
