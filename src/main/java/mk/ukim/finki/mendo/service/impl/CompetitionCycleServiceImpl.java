@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CompetitionCycleServiceImpl implements CompetitionCycleService {
@@ -25,5 +26,10 @@ public class CompetitionCycleServiceImpl implements CompetitionCycleService {
     @Override
     public CompetitionCycle findById(Long id) {
         return competitionCycleRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public List<CompetitionCycle> findAll() {
+        return competitionCycleRepository.findAll();
     }
 }

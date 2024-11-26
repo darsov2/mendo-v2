@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <title>МЕНДО - Регистрација на натпревар</title>
     <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../static/style/style.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
 
-        body {
-            background-color: #f5efe6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            /*padding: 2rem;*/
-        }
+        /*body {*/
+        /*    background-color: #f5efe6;*/
+        /*    min-height: 100vh;*/
+        /*    display: flex;*/
+        /*    flex-direction: column;*/
+        /*    !*padding: 2rem;*!*/
+        /*}*/
 
         .container {
             max-width: 1200px;
@@ -26,11 +21,8 @@
             width: 100%;
         }
 
+
         .section-title {
-            font-size: 2.2rem;
-            color: #2c1810;
-            margin-bottom: 2rem;
-            text-align: center;
             font-weight: 600;
         }
 
@@ -44,12 +36,12 @@
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            gap: 1rem;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+        /*.form-group {*/
+        /*    margin-bottom: 1.5rem;*/
+        /*}*/
 
         .form-label {
             display: block;
@@ -140,7 +132,7 @@
     <h2 class="section-title">Регистрација на натпревар</h2>
 
     <div class="form-card">
-        <form id="competitionForm" class="form-grid">
+        <form id="competitionForm" class="form-grid" method="POST" >
             <!-- Left Column -->
             <div class="form-group">
                 <label class="form-label">Наслов на натпреварот</label>
@@ -167,9 +159,10 @@
                 <label class="form-label">Тип на натпревар</label>
                 <select class="form-control" name="type" required>
                     <option value="">Изберете тип на натпревар</option>
-                    <option value="REGIONAL">Регионален</option>
-                    <option value="NATIONAL">Државен</option>
-                    <option value="INTERNATIONAL">Меѓународен</option>
+                    <option th:each="type : ${types}"
+                            th:value="${type}"
+                            th:text="${type}">
+                    </option>
                 </select>
             </div>
 
@@ -185,10 +178,12 @@
 
             <div class="form-group">
                 <label class="form-label">Циклус на натпревари</label>
-                <select class="form-control" name="cycle" required>
+                <select class="form-control" name="cycleId" required>
                     <option value="">Изберете циклус</option>
-                    <option value="1">Циклус 2024</option>
-                    <option value="2">Пролетен циклус 2024</option>
+                    <option th:each="cycle : ${cycles}"
+                            th:value="${cycle.id}"
+                            th:text="${cycle.name}">
+                    </option>
                 </select>
             </div>
 
