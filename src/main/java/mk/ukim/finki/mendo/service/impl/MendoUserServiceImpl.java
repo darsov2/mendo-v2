@@ -61,6 +61,11 @@ public class MendoUserServiceImpl implements MendoUserService {
                 .orElseThrow(() -> new RuntimeException("No authenticated user found"));
     }
 
+    @Override
+    public MendoUser saveUser(MendoUser user) {
+        return mendoUserRepository.save(user);
+    }
+
     @Transactional
     public String extractUsername(Authentication authentication) {
         Object principal = authentication.getPrincipal();

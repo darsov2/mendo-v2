@@ -65,6 +65,16 @@
     </div>
 </div>
 
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="registrationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
 <div th:if="${currentUser != null}" class="modal fade custom-modal" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -136,12 +146,44 @@
         });
     });
 
+    function showToast(message, isSuccess = true) {
+        const toast = document.getElementById('registrationToast');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+
+        toast.classList.remove('success', 'error');
+        toast.classList.add(isSuccess ? 'success' : 'error');
+
+        toastTitle.textContent = isSuccess ? 'Успешна регистрација' : 'Грешка';
+        toastMessage.textContent = message;
+
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+    }
+
     document.getElementById('applicationForm').addEventListener('submit', function(event) {
         event.preventDefault();
         const cycleId = document.getElementById('cycleIdInput').value;
-        const formAction = `/application/${cycleId}`;
-        this.action = formAction;
-        this.submit();
+        const formData = new FormData(this);
+
+        fetch(`/application/${cycleId}`, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('applicationModal'));
+                modal.hide();
+
+                showToast(data.message, data.success);
+
+                if (data.success) {
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            })
+            .catch(error => {
+                showToast('Се случи грешка. Обидете се повторно.', false);
+            });
     });
 </script>
 

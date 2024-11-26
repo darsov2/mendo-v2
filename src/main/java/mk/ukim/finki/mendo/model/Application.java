@@ -20,4 +20,5 @@ public class Application extends BaseAuditedEntity<Long> {
     MendoUser student;
     @ManyToOne
     CompetitionCycle competitionCycle;
+    Boolean confirmed=false;
 }

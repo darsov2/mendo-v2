@@ -57,6 +57,7 @@ public class CompetitionsController {
         model.addAttribute("selectedCycle", new CompetitionCycle());
         model.addAttribute("schools", schools);
         model.addAttribute("grades", Grade.values());
+
         return "master";
     }
 

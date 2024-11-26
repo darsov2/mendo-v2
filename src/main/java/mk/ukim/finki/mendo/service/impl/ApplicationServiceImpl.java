@@ -1,6 +1,5 @@
 package mk.ukim.finki.mendo.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.repository.ApplicationRepository;
@@ -30,25 +29,34 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public boolean isUserAlreadyRegistered(Long cycleId) {
+        MendoUser currentUser = mendoUserService.getCurrentUser()
+                .orElseThrow(() -> new RuntimeException("Not logged in!"));
+
+        return applicationRepository.findByCompetitionCycle_IdAndStudent_Id(cycleId, currentUser.getId())
+                .isPresent();
+    }
+
+    @Override
     @Transactional
     public Application registerForCompetition(Long cycleId, Grade grade, Long schoolId) {
-        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
-
-        if (currentUser == null) {
-            throw new RuntimeException("Not logged in!");
-        }
+        MendoUser currentUser = mendoUserService.getCurrentUser()
+                .orElseThrow(() -> new RuntimeException("Не сте најавени!"));
 
         CompetitionCycle cycle = competitionCycleService.findById(cycleId);
 
         if (cycle.getRegistrationDeadline().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Registration ended for: "+cycle.getName());
+            throw new RuntimeException("Рокот за пријавување е истечен за: " + cycle.getName());
         }
 
         School school = schoolService.findById(schoolId)
-                .orElseThrow(() -> new RuntimeException("School not found: "+schoolId));
+                .orElseThrow(() -> new RuntimeException("Училиштето не е пронајдено!"));
 
-        Application application = new Application(LocalDate.now(),null,currentUser,cycle);
+        currentUser.setGrade(grade);
+        currentUser.setStudiesSchool(school);
+        mendoUserService.saveUser(currentUser);
 
+        Application application = new Application(LocalDate.now(), null, currentUser, cycle,false);
         return applicationRepository.save(application);
     }
 

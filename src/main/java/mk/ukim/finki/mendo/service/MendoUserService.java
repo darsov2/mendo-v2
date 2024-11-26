@@ -7,4 +7,5 @@ public interface MendoUserService {
     MendoUser registerUser(MendoUser user);
     Optional<MendoUser> getCurrentUser();
     MendoUser getCurrentUserOrThrow();
+    MendoUser saveUser(MendoUser user);
 }
