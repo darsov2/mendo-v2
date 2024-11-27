@@ -11,6 +11,8 @@ import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 public class CompetitionRequest {
@@ -24,6 +26,7 @@ public class CompetitionRequest {
     String info;
     LocalDateTime deadline;
     Long cycleId;
+    List<Long> rooms;
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(
@@ -38,5 +41,6 @@ public class CompetitionRequest {
                 LocalTime.parse(startTime)
         );
     }
+
 
 }

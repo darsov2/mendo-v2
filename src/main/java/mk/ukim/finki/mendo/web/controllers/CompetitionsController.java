@@ -63,11 +63,10 @@ public class CompetitionsController {
 
     @GetMapping("/{id}")
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
-        return competitionService.findById(id)
-                .map(competition -> {
-                    model.addAttribute("competition", competition);
-                    return "competition-details";
-                })
-                .orElse("redirect:/competitions?error=Competition+not+found");
+        Competition competition = competitionService.findById(id);
+        model.addAttribute("competition", competition);
+        model.addAttribute("bodyContent", "competition-details");
+        return "master";
+
     }
 }

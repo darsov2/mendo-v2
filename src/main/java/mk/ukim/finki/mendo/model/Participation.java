@@ -16,4 +16,6 @@ public class Participation extends BaseAuditedEntity<Long> {
     MendoUser mendoUser;
     @ManyToOne
     Competition competition;
+    @ManyToOne
+    Rooms room;
 }

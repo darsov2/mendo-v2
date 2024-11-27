@@ -30,7 +30,7 @@ public class CycleController {
             throw new RuntimeException("Can't add competitionCycle");
         }
         //todo the right path should be listing of competitions
-        model.addAttribute("bodyContent", "home");
+        model.addAttribute("bodyContent", "competitions");
         return "master";
     }
 }
