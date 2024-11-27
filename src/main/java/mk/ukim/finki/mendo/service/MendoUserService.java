@@ -8,4 +8,5 @@ public interface MendoUserService {
     Optional<MendoUser> getCurrentUser();
     MendoUser getCurrentUserOrThrow();
     MendoUser saveUser(MendoUser user);
+    MendoUser findById(Long id);
 }

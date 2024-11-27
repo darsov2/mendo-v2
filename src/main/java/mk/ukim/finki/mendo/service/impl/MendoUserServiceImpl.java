@@ -66,6 +66,11 @@ public class MendoUserServiceImpl implements MendoUserService {
         return mendoUserRepository.save(user);
     }
 
+    @Override
+    public MendoUser findById(Long id) {
+        return mendoUserRepository.findById(id).get();
+    }
+
     @Transactional
     public String extractUsername(Authentication authentication) {
         Object principal = authentication.getPrincipal();

@@ -1,6 +1,7 @@
 package mk.ukim.finki.mendo.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.Grade;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class MendoUser extends BaseAuditedEntity<Long> implements UserDetails {
     Boolean isTeacher;
     String username;

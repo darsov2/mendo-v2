@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -38,6 +40,28 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<Application> getAllApplicationsBySchoolId(Long schoolId) {
+        return this.applicationRepository.findByStudent_StudiesSchool_Id(schoolId);
+    }
+
+    public List<Application> getAllApplicationsForTeacherSchoolsAndNotConfirmed(List<School> teacherSchools) {
+        List<Long> schoolIds = teacherSchools.stream()
+                .map(School::getId)
+                .collect(Collectors.toList());
+        return applicationRepository.findByStudent_StudiesSchool_IdInAndConfirmedFalse(schoolIds);
+    }
+
+    @Override
+    public Application getApplicationById(Long applicationId) {
+        return applicationRepository.findById(applicationId).get();
+    }
+
+    @Override
+    public Application save(Application application) {
+        return applicationRepository.save(application);
+    }
+
+    @Override
     @Transactional
     public Application registerForCompetition(Long cycleId, Grade grade, Long schoolId) {
         MendoUser currentUser = mendoUserService.getCurrentUser()
@@ -59,6 +83,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         Application application = new Application(LocalDate.now(), null, currentUser, cycle,false);
         return applicationRepository.save(application);
     }
+
+
 
 
 }

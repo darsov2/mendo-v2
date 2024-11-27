@@ -7,6 +7,7 @@ import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -15,6 +16,8 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
     private String name;
     private LocalDate year;
     private LocalDateTime registrationDeadline;
+    @OneToMany
+    private List<Competition> competitions;
 
 
     public CompetitionCycle(String name, LocalDate year, LocalDateTime registrationDeadline) {
