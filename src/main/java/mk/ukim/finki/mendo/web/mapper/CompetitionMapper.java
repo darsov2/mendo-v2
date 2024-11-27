@@ -26,8 +26,8 @@ public class CompetitionMapper {
                 request.getPlace(),
                 request.getInfo(),
                 request.getDeadline(),
-                request.getCycleId(),
-                request.getRooms());
+                request.getCycleId()
+        );
 
     }
 }

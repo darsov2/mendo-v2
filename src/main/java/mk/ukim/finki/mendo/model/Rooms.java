@@ -14,5 +14,9 @@ public class Rooms extends BaseEntity<Long> {
     String name;
     String city;
 
-
+    public Rooms(Integer capacity, String name, String city) {
+        this.capacity = capacity;
+        this.name = name;
+        this.city = city;
+    }
 }

@@ -5,11 +5,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface RoomsService {
 
     Rooms findById(Long id);
     List<Rooms> findAllByCity(String city);
     List<Rooms> findAll();
+    Rooms save(Integer capacity, String name, String city);
 
 }

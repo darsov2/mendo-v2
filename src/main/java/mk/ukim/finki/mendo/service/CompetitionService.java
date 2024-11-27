@@ -18,9 +18,9 @@ public interface CompetitionService {
                                String place,
                                String info,
                                LocalDateTime deadline,
-                               Long cycleId,
-                               List<Long> roomIds
+                               Long cycleId
     );
+
     List<Participation> distributeStudentsForCompetition(Long id, String city);
 
     List<Competition> findAll();

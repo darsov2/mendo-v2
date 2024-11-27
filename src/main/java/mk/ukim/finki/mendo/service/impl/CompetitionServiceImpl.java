@@ -32,10 +32,10 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, List<Long> rooms) {
+    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId) {
         CompetitionCycle cycle = competitionCycleService.findById(cycleId);
-        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
-        return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, roomsList));
+//        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
+        return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle));
     }
 
     @Override
@@ -74,9 +74,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (cycle == null) {
             throw new IllegalArgumentException("Competition cycle not found");
         }
-        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
+//        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
         Competition competition = new Competition(title, startDate, startTime, endTime,
-                type, place, info, deadline, cycle, roomsList);
+                type, place, info, deadline, cycle);
 
         return competitionRepository.save(competition);
     }

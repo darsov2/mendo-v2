@@ -23,7 +23,4 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
         this.registrationDeadline = registrationDeadline;
     }
 
-    public Long getId() {
-        return id;
-    }
 }

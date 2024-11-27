@@ -26,7 +26,6 @@ public class CompetitionRequest {
     String info;
     LocalDateTime deadline;
     Long cycleId;
-    List<Long> rooms;
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(

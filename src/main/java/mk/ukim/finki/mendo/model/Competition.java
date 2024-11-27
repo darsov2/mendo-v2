@@ -39,7 +39,7 @@ public class Competition extends BaseAuditedEntity<Long> {
     private List<Rooms> rooms;
 
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, List<Rooms> rooms) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -49,7 +49,6 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.info = info;
         this.deadline = deadline;
         this.cycle = cycle;
-        this.rooms = rooms;
     }
 
 
