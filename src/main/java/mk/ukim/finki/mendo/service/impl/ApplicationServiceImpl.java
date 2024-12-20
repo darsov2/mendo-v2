@@ -1,5 +1,6 @@
 package mk.ukim.finki.mendo.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.repository.ApplicationRepository;
@@ -64,17 +65,19 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @Transactional
     public Application registerForCompetition(Long cycleId, Grade grade, Long schoolId) {
-        MendoUser currentUser = mendoUserService.getCurrentUser()
-                .orElseThrow(() -> new RuntimeException("Не сте најавени!"));
+        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
+
+        if (currentUser == null) {
+            throw new RuntimeException("Not logged in!");
+        }
 
         CompetitionCycle cycle = competitionCycleService.findById(cycleId);
 
         if (cycle.getRegistrationDeadline().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Рокот за пријавување е истечен за: " + cycle.getName());
+            throw new RuntimeException("Registration ended for: "+cycle.getName());
         }
 
-        School school = schoolService.findById(schoolId)
-                .orElseThrow(() -> new RuntimeException("Училиштето не е пронајдено!"));
+        School school = schoolService.findById(schoolId);
 
         currentUser.setGrade(grade);
         currentUser.setStudiesSchool(school);
@@ -83,8 +86,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         Application application = new Application(LocalDate.now(), null, currentUser, cycle,false);
         return applicationRepository.save(application);
     }
-
-
 
 
 }
