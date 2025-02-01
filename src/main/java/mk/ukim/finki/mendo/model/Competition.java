@@ -30,13 +30,20 @@ public class Competition extends BaseAuditedEntity<Long> {
     CompetitionTypes type;
     String place;
     String info;
+    LocalDateTime registrationOpens;
+    LocalDateTime registrationCloses;
     LocalDateTime deadline;
+    Boolean requiresRegistration;
+    Boolean visibleToPublic;
 
     @ManyToOne
     CompetitionCycle cycle;
 
-    @OneToMany
-    private List<Rooms> rooms;
+    @ManyToOne
+    Competition parentCompetition;
+
+    @ManyToMany
+    List<MendoUser> moderators;
 
 
     public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {

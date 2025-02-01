@@ -14,11 +14,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Application extends BaseAuditedEntity<Long> {
     LocalDate date;
+
     @ManyToOne
     MendoUser mentor;
+
     @ManyToOne
     MendoUser student;
+
     @ManyToOne
     CompetitionCycle competitionCycle;
+
     Boolean confirmed=false;
 }

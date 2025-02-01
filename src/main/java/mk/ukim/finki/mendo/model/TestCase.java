@@ -16,9 +16,8 @@ public class TestCase {
     Integer executionTime; //ms
     String memoryLimit;
     Integer executionTimeLimit; //ms
-    @Column(name = "test_case_group")
-    String group;
-
-
-
+    @ManyToOne
+    TestGroup testGroup;
+    Boolean isExample;
+    String furtherExplanation;
 }

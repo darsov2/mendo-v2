@@ -26,6 +26,6 @@ public class ParticipationServiceImpl implements ParticipationService {
     public Participation save(Long userId, Long cycleId) {
         MendoUser mendoUser = mendoUserService.findById(userId);
         Competition competition = competitionCycleService.findById(cycleId).getCompetitions().get(0);
-        return participationRepository.save(new Participation(mendoUser,competition,null));
+        return participationRepository.save(new Participation(mendoUser,competition,null, null));
     }
 }

@@ -18,4 +18,6 @@ public class Submission extends BaseAuditedEntity<Long> {
     MendoUser mendoUser;
     @ManyToOne
     Task task;
+    String code;
+    Integer points;
 }

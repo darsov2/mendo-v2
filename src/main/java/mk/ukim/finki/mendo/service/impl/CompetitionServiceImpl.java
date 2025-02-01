@@ -103,7 +103,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                     competition.setInfo(info);
                     competition.setDeadline(deadline);
                     competition.setCycle(cycle);
-                    competition.setRooms(roomsList);
+//                    competition.setRooms(roomsList);
 
                     return competitionRepository.save(competition);
                 });

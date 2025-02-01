@@ -17,4 +17,5 @@ public class Participation extends BaseAuditedEntity<Long> {
     Competition competition;
     @ManyToOne
     Rooms room;
+    Double finalPoints = 0.0;
 }

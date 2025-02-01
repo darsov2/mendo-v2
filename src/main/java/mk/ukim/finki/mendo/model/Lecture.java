@@ -8,13 +8,10 @@ import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Data
-public class Lecture extends BaseAuditedEntity<Long> {
+@NoArgsConstructor
+@PrimaryKeyJoinColumn(name = "content_id")
+public class Lecture extends Content {
     String title;
     String text;
-    @ManyToMany
-    List<ActivityTag> tags;
-    @ManyToOne
-    Category category;
 }

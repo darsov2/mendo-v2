@@ -2,6 +2,7 @@ package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.web.mapper.CategoryMapper;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,12 @@ public class ActivitiesController {
         List<CategoryDTO> categories = categoryMapper.getAllCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("bodyContent","admin/activites");
+        return "master";
+    }
+
+    @GetMapping("mce")
+    public String testEditor(Model model) {
+        model.addAttribute("bodyContent","admin/edit-activity");
         return "master";
     }
 }
