@@ -6,7 +6,13 @@
 <body>
 <div class="main-content" th:fragment="applications">
   <div class="quick-start">
-    <h2 class="section-title">Студентски Пријави</h2>
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="section-title">Студентски Пријави</h2>
+      <a href="/application/admin/usernameApply" style="
+    padding: 0.4rem 0.8rem; border-radius: 0.8rem;border: none; cursor: pointer;font-weight: 500;transition: all 0.2s ease;text-decoration: none;background-color: #E6AA68;color: #2c1810;font-weight: 600;display: inline-block;">
+        <i class="bi bi-person"></i> Пријави со username
+      </a>
+    </div>
     <div class="table-responsive">
       <table class="competition-table">
         <thead>
@@ -31,7 +37,7 @@
           </td>
           <td>
             <div class="d-flex flex-column">
-              <span class="competition-name" th:text="${applicationStudent.competitionCycle.name}"></span>
+              <span class="competition-name" th:text="${applicationStudent.competition.name}"></span>
             </div>
           </td>
           <td>

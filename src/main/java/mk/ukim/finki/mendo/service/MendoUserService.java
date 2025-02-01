@@ -9,4 +9,5 @@ public interface MendoUserService {
     MendoUser getCurrentUserOrThrow();
     MendoUser saveUser(MendoUser user);
     MendoUser findById(Long id);
+    Optional<MendoUser> findByUsername(String username);
 }

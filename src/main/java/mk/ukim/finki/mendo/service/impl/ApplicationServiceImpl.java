@@ -32,7 +32,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public boolean isUserAlreadyRegistered(Long cycleId) {
+    public boolean isUserAlreadyRegisteredOnCycle(Long cycleId) {
         MendoUser currentUser = mendoUserService.getCurrentUser()
                 .orElseThrow(() -> new RuntimeException("Not logged in!"));
 
@@ -63,6 +63,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public boolean isUserAlreadyRegisteredOnCompetition(Long competitionId, String username) {
+
+        return applicationRepository.findByStudent_UsernameAndCompetition_Id(username,competitionId) != null;
+    }
+
+    @Override
     @Transactional
     public Application registerForCompetition(Long cycleId, Grade grade, Long schoolId) {
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
@@ -83,7 +89,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         currentUser.setStudiesSchool(school);
         mendoUserService.saveUser(currentUser);
 
-        Application application = new Application(LocalDate.now(), null, currentUser, cycle,false);
+        Application application = new Application(LocalDate.now(), null, currentUser, cycle.getCompetitions().getFirst(),false);
         return applicationRepository.save(application);
     }
 
