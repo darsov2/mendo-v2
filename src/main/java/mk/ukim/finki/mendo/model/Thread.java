@@ -12,8 +12,6 @@ import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 @Data
 @NoArgsConstructor
 public class Thread extends BaseAuditedEntity<Long> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+
     String name;
 }
