@@ -4,11 +4,13 @@ import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.CompetitionCycle;
 import mk.ukim.finki.mendo.model.MendoUser;
 import mk.ukim.finki.mendo.model.School;
+import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.SchoolService;
+import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,17 +29,22 @@ public class CompetitionsController {
     private final CompetitionCycleService competitionCycleService;
     private final SchoolService schoolService;
     private final MendoUserService mendoUserService;
+    private final CompetitionMapper competitionMapper;
 
     public CompetitionsController(CompetitionService competitionService,
-                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService) {
+                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper) {
         this.competitionService = competitionService;
         this.competitionCycleService = competitionCycleService;
         this.schoolService = schoolService;
         this.mendoUserService = mendoUserService;
+        this.competitionMapper = competitionMapper;
     }
 
     @GetMapping
     public String home(Model model) {
+
+
+
         List<School> schools = schoolService.findAll();
         List<CompetitionCycle> cycles = competitionCycleService.findAllSortedByYearDesc();
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
@@ -59,6 +65,20 @@ public class CompetitionsController {
         model.addAttribute("grades", Grade.values());
 
         return "master";
+    }
+
+    @GetMapping("/sorted")
+    public String sorted(Model model) {
+
+
+        List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
+        model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
+
+        model.addAttribute("bodyContent", "allCompetitions");
+        return "master";
+
+
+
     }
 
     @GetMapping("/{id}")

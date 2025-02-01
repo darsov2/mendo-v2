@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, Long> {
     List<Competition> findAllByCycleId(Long cycleId);
+    List<Competition> findAllByCycleIsNullOrderByStartTimeAsc();
     List<Competition> findAllByCycleIdOrderByStartTimeAsc(Long cycleId);
 }

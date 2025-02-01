@@ -16,14 +16,19 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
     private String name;
     private LocalDate year;
     private LocalDateTime registrationDeadline;
-    @OneToMany
+    @OneToMany(mappedBy = "cycle")
     private List<Competition> competitions;
 
 
     public CompetitionCycle(String name, LocalDate year, LocalDateTime registrationDeadline) {
+
         this.name = name;
         this.year = year;
         this.registrationDeadline = registrationDeadline;
     }
+
+
+
+
 
 }
