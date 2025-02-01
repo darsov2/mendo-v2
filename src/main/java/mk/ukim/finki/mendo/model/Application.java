@@ -22,7 +22,7 @@ public class Application extends BaseAuditedEntity<Long> {
     MendoUser student;
 
     @ManyToOne
-    CompetitionCycle competitionCycle;
+    Competition competition;
 
     Boolean confirmed=false;
 }

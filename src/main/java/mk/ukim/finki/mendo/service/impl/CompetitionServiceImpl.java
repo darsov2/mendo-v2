@@ -129,4 +129,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     public void deleteById(Long id) {
         competitionCycleService.deleteById(id);
     }
+
+    @Override
+    public List<Competition> findAllOpenRegistrationCompetitions() {
+        return competitionRepository.findAllByRegistrationDateBetween(LocalDateTime.now());
+    }
 }

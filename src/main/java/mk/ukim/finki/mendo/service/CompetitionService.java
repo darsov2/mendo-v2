@@ -36,5 +36,6 @@ public interface CompetitionService {
                                  CompetitionTypes type, String place, String info,
                                  LocalDateTime deadline, Long cycleId, List<Long> roomIds);
     void deleteById(Long id);
+    List<Competition> findAllOpenRegistrationCompetitions();
 
 }

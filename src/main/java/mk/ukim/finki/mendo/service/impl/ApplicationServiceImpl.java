@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.repository.ApplicationRepository;
-import mk.ukim.finki.mendo.service.ApplicationService;
-import mk.ukim.finki.mendo.service.CompetitionCycleService;
-import mk.ukim.finki.mendo.service.MendoUserService;
-import mk.ukim.finki.mendo.service.SchoolService;
+import mk.ukim.finki.mendo.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +18,20 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final CompetitionCycleService competitionCycleService;
+    private final CompetitionService competitionService;
     private final SchoolService schoolService;
     private final MendoUserService mendoUserService;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService) {
+    public ApplicationServiceImpl(ApplicationRepository applicationRepository, CompetitionCycleService competitionCycleService, CompetitionService competitionService, SchoolService schoolService, MendoUserService mendoUserService) {
         this.applicationRepository = applicationRepository;
         this.competitionCycleService = competitionCycleService;
+        this.competitionService = competitionService;
         this.schoolService = schoolService;
         this.mendoUserService = mendoUserService;
     }
 
     @Override
-    public boolean isUserAlreadyRegistered(Long cycleId) {
+    public boolean isUserAlreadyRegisteredOnCycle(Long cycleId) {
         MendoUser currentUser = mendoUserService.getCurrentUser()
                 .orElseThrow(() -> new RuntimeException("Not logged in!"));
 
@@ -63,8 +62,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public boolean isUserAlreadyRegisteredOnCompetition(Long competitionId, String username) {
+        MendoUser currentUser = mendoUserService.getCurrentUser()
+                .orElseThrow(() -> new RuntimeException("Not logged in!"));
+        return applicationRepository.findByStudent_UsernameAndCompetition_Id(username,competitionId) != null;
+    }
+
+    @Override
     @Transactional
-    public Application registerForCompetition(Long cycleId, Grade grade, Long schoolId) {
+    public Application registerForCompetitionCycle(Long cycleId, Grade grade, Long schoolId) {
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
 
         if (currentUser == null) {
@@ -83,7 +89,31 @@ public class ApplicationServiceImpl implements ApplicationService {
         currentUser.setStudiesSchool(school);
         mendoUserService.saveUser(currentUser);
 
-        Application application = new Application(LocalDate.now(), null, currentUser, cycle,false);
+        Application application = new Application(LocalDate.now(), null, currentUser, cycle.getCompetitions().getFirst(),false);
+        return applicationRepository.save(application);
+    }
+
+    @Override
+    public Application registerForCompetition(Long competitionId, Grade grade, Long schoolId) {
+        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
+
+        if (currentUser == null) {
+            throw new RuntimeException("Not logged in!");
+        }
+
+        Competition competition = competitionService.findById(competitionId);
+
+        if (competition.getRegistrationOpens().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Registration ended for: "+competition.getTitle());
+        }
+
+        School school = schoolService.findById(schoolId);
+
+        currentUser.setGrade(grade);
+        currentUser.setStudiesSchool(school);
+        mendoUserService.saveUser(currentUser);
+
+        Application application = new Application(LocalDate.now(), null, currentUser, competition,false);
         return applicationRepository.save(application);
     }
 

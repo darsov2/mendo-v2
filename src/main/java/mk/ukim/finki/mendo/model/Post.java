@@ -19,8 +19,8 @@ public class Post extends BaseAuditedEntity<Long> {
     LocalDateTime timestamp;
     Integer upvote;
     String description;
-    @OneToMany
-    List<Post> replies;
+    @ManyToOne
+    Post parent;
     @ManyToOne
     MendoUser mendoUser;
     @ManyToOne

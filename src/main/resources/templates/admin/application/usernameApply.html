@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрација на ученици на натпревар</title>
+    <style>
+        .registration-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            margin: 2rem;
+        }
+
+        .registration-title {
+            color: #2c1810;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .registration-form {
+            background-color: #fff5eb;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(230, 170, 104, 0.3);
+        }
+
+        .form-field {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: #2c1810;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E6AA68;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 14px;
+            color: #2c1810;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: #2c1810;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .submit-btn {
+            background-color: #E6AA68;
+            color: #2c1810;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .results-table th, .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E6AA68;
+        }
+
+        .results-table th {
+            background-color: #E6AA68;
+            color: #2c1810;
+            font-weight: 600;
+        }
+
+        .status-success {
+            color: #2da44e;
+        }
+
+        .status-warning {
+            color: #9a6700;
+        }
+
+        .status-error {
+            color: #cf222e;
+        }
+    </style>
+</head>
+<body>
+<div style="display: flex; justify-content: center" class="wrapper">
+    <div class="registration-container">
+        <h1 class="registration-title">Регистрација на ученици на натпревар</h1>
+
+        <!-- Results Section -->
+        <div th:if="${not #maps.isEmpty(results)}" class="results-container">
+            <table class="results-table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="result : ${results}">
+                    <td th:text="${result.key}"></td>
+                    <td th:class="${
+                            result.value == 'Ученикот е успешно регистриран' ? 'status-success' :
+                            result.value == 'Ученикот е веќе регистриран за овој натпревар' ? 'status-warning' :
+                            'status-error'
+                        }" th:text="${result.value}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Registration Form -->
+        <form th:action="@{/admin/usernameApply}" method="post" class="registration-form">
+            <div class="form-field">
+                <label class="form-label" for="competition">Одберете Натпревар</label>
+                <select id="competition" name="competition" required>
+                    <option value="">Натпревари...</option>
+                    <option th:each="comp : ${competitions}"
+                            th:value="${comp.id}"
+                            th:text="${comp.title + ' (Starts: ' + #temporals.format(comp.startDate, 'MMM dd, yyyy') + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label class="form-label" for="usernames">Кориснички имиња</label>
+                <textarea id="usernames"
+                          name="usernames"
+                          placeholder="Внесете кориснички имиња со запирка меѓу нив..."
+                          required></textarea>
+                <p class="help-text">Одвоете ги корисничките имиња со запирка (Пример: korisnik1,korisnik2,korisnik3)</p>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Испратете регистрација
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
