@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/competitions")
+@RequestMapping("/competition")
 public class CompetitionsController {
 
     private final CompetitionService competitionService;
@@ -42,9 +42,6 @@ public class CompetitionsController {
 
     @GetMapping
     public String home(Model model) {
-
-
-
         List<School> schools = schoolService.findAll();
         List<CompetitionCycle> cycles = competitionCycleService.findAllSortedByYearDesc();
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
@@ -67,25 +64,25 @@ public class CompetitionsController {
         return "master";
     }
 
-    @GetMapping("/sorted")
-    public String sorted(Model model) {
-
-
-        List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
-        model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
-
-        model.addAttribute("bodyContent", "allCompetitions");
-        return "master";
-
-
-
-    }
+//    @GetMapping("/sorted")
+//    public String sorted(Model model) {
+//
+//
+//        List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
+//        model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
+//
+//        model.addAttribute("bodyContent", "allCompetitions");
+//        return "master";
+//
+//
+//
+//    }
 
     @GetMapping("/{id}")
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
-        model.addAttribute("bodyContent", "competition-details");
+        model.addAttribute("bodyContent", "competition/competition_details");
         return "master";
 
     }
