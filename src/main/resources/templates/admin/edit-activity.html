@@ -100,7 +100,7 @@
             <button class="mendo-btn mendo-btn-secondary me-2">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h1 class="h5 mb-0">Уредување активност</h1>
+            <h1 class="h5 mb-0">Уредување предавање</h1>
         </div>
         <div>
             <button class="mendo-btn mendo-btn-secondary me-2">Откажи</button>
@@ -110,48 +110,103 @@
 </nav>
 
 <div class="main-container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Научете C++</a></li>
-            <li class="breadcrumb-item"><a href="#">Програмски јазик C++</a></li>
-            <li class="breadcrumb-item active">Уредување активност</li>
-        </ol>
-    </nav>
-    <form method="post" action="/admin/activites">
+    <form th:object="${lecture}"
+          th:method="${lecture.id != null} ? 'put' : 'post'"
+          th:action="${lecture.id != null} ? '/activities/lectures/' + ${lecture.id} : '/activities/lectures'">
     <div class="content-card">
         <div class="mb-4">
-            <label for="activity-title" class="form-label">Наслов на активноста</label>
-            <input type="text" name="title" class="form-control" id="activity-title" placeholder="Внесете наслов...">
+            <label for="activity-title" class="form-label">Наслов на предавањето</label>
+            <input type="text" name="title" class="form-control" id="activity-title" th:field="*{title}" placeholder="Внесете наслов...">
         </div>
 
         <div class="options-grid mb-4">
             <div>
-                <label for="category" class="form-label">Тип на активност</label>
-                <select class="form-select" name="type" id="category">
-                    <option value="lecture">Предавање</option>
-                    <option value="task">Задача</option>
-                    <option value="quiz">Квиз</option>
-                </select>
+                <label for="source" class="form-label">Извор</label>
+                <input type="text" class="form-control" id="source" th:field="*{source}" name="source">
             </div>
             <div>
-                <label for="visibility" class="form-label">Видливост</label>
-                <select class="form-select" name="visibility" id="visibility">
-                    <option value="public">Јавна</option>
-                    <option value="private">Приватна</option>
-                    <option value="registered">Само за регистрирани</option>
+                <label for="activity-tag" class="form-label">Тагови</label>
+                <select id="activity-tag" name="tagsId[]" th:field="*{tagsId}" class="form-control form-select" multiple="multiple">
+                    <option th:each="tag:${activityTags}" th:value="${tag.id}" th:text="${tag.value}"></option>
                 </select>
             </div>
         </div>
 
+        <div class="options-grid mb-4">
+            <div>
+                <label for="topic" class="form-label">Тема</label>
+                <select id="topic" name="topicId" th:field="*{topicId}" class="form-control form-select">
+                    <option th:each="topic:${topics}" th:value="${topic.id}" th:text="${topic.value}"></option>
+                </select>
+
+                <input type="text" style="display: none" id="manual-topic-input" name="manualTopicInput" class="form-control" placeholder="Внесете тема..."/>
+
+                <div class="d-flex align-items-center">
+                    <input type="checkbox" id="add-manual-topic" class="me-2">
+                    <label for="add-manual-topic">Додади нова тема</label>
+                </div>
+            </div>
+
+            <div>
+                <label for="category" class="form-label">Категорија</label>
+                <select id="category" name="categoryId" th:field="*{categoryId}" class="form-control form-select">
+                    <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.value}"></option>
+                </select>
+            </div>
+
+        </div>
+
         <div class="mb-4">
             <label for="editor" class="form-label">Содржина</label>
-            <textarea name="editor-text" id="editor"></textarea>
+            <textarea name="text" th:utext="${lecture?.content}" id="editor"></textarea>
         </div>
     </div>
     </form>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.getElementById('activity-tag');
+
+        $(checkboxes).multiselect({
+            templates: {
+                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+            },
+            enableCaseInsensitiveFiltering: true,
+            withSynchronizationMode: 'ifPopupIsSmaller',
+            buttonWidth: '100%',
+            numberDisplayed: 5,
+            nonSelectedText: "Немате избрано тагови за предавањето",
+            widthSynchronizationMode: 'always',
+            allSelectedText: false,
+            filterPlaceholder: 'Пребарај...',
+            includeSelectAllOption: true,
+            selectAllText: "Избери ги сите"
+            // includeFilterClearBtn: false
+        });
+
+        const saveButton = document.querySelector('.mendo-btn-primary');
+        saveButton.addEventListener('click', function() {
+            tinymce.triggerSave();
+            document.querySelector('form').submit();
+        });
+
+        var manualTopicCheckbox = document.getElementById('add-manual-topic');
+        var manualTopicInput = document.getElementById('manual-topic-input');
+        var topicSelect = document.getElementById('topic');
+
+        manualTopicCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                topicSelect.style.display = 'none';
+                manualTopicInput.style.display = 'block';
+            } else {
+                topicSelect.style.display = 'block';
+                manualTopicInput.style.display = 'none';
+            }
+        });
+
+    });
+
     tinymce.init({
         selector: 'textarea',  // change this value according to your HTML
         plugins: [
@@ -195,10 +250,9 @@
             input.click();
         },
 
-        // Image editing options
-        image_advtab: true,  // Enable advanced image settings
-        image_dimensions: true,  // Enable dimension inputs
-        image_class_list: [  // Optional: predefined classes for images
+        image_advtab: true,
+        image_dimensions: true,
+        image_class_list: [
             {title: 'None', value: ''},
             {title: 'Responsive', value: 'img-fluid'},
             {title: 'Thumbnail', value: 'img-thumbnail'}

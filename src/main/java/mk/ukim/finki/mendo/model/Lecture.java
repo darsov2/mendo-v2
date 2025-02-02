@@ -12,6 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @PrimaryKeyJoinColumn(name = "content_id")
 public class Lecture extends Content {
-    String title;
-    String text;
+
 }

@@ -16,6 +16,9 @@ public abstract class Content extends BaseAuditedEntity<Long> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ContentType type;
+    private String title;
+    @Column(columnDefinition = "TEXT")
+    String text;
 
     @ManyToMany
     List<ActivityTag> tags;
@@ -25,5 +28,9 @@ public abstract class Content extends BaseAuditedEntity<Long> {
 
     Boolean visible = true;
 
+    @Column(name = "content_order")
     Integer order;
+    String source;
+    @ManyToOne
+    Topic topic;
 }

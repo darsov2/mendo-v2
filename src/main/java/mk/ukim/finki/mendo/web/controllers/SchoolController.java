@@ -18,10 +18,6 @@ public class SchoolController {
         this.mapper = mapper;
     }
 
-    //todo html za ListingSchools
-    //todo html za dodavanjeSchools
-    //
-
     @GetMapping({"/", ""})
     public String schools(Model model){
         model.addAttribute("schools", mapper.listSchools());

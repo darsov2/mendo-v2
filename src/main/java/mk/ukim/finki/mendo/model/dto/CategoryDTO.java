@@ -9,5 +9,6 @@ import java.util.List;
 public class CategoryDTO {
     private Long id;
     private String name;
+    private Boolean isSelected;
     private List<CategoryDTO> children = new ArrayList<>();
 }
