@@ -1,0 +1,102 @@
+<div class="main-content">
+    <div class="competitions-container">
+        <div class="quick-start">
+            <h1 class="section-title" th:text="${competition.title}">Regional Finals 2024</h1>
+
+            <div class="header-content mb-4">
+                <div class="cycle-registration">
+                    <span th:if="${competition.requiresRegistration}">
+                        <span th:if="${#temporals.createNow().isBefore(competition.registrationCloses) && #temporals.createNow().isAfter(competition.registrationOpens)}"
+                              class="register-btn">
+                            <i class="bi bi-person-plus"></i> Registration Open
+                        </span>
+                        <span th:if="${#temporals.createNow().isAfter(competition.registrationCloses)}"
+                              class="registration-closed">
+                            <i class="bi bi-lock"></i> Registration Closed
+                        </span>
+                        <span th:if="${#temporals.createNow().isBefore(competition.registrationOpens)}"
+                              class="registration-closed">
+                            <i class="bi bi-clock"></i> Registration Opens Soon
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Competition Details -->
+            <div class="competition-section">
+                <div class="competition-content active">
+                    <div class="row">
+                        <!-- Main Information -->
+                        <div class="col-md-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h3 class="card-title"><i class="bi bi-info-circle"></i> Competition Information</h3>
+                                    <div class="mt-3" th:utext="${competition.info}">
+                                        Competition description and detailed information goes here...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Side Information -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4"><i class="bi bi-calendar-event"></i> Event Details</h3>
+
+                                    <div class="mb-3">
+                                        <h5><i class="bi bi-geo-alt"></i> Location</h5>
+                                        <p th:text="${competition.place}">FINKI, Skopje</p>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h5><i class="bi bi-calendar3"></i> Date</h5>
+                                        <p th:text="${#temporals.format(competition.startDate, 'EEEE, dd MMM yyyy')}">
+                                            Saturday, 15 Mar 2024
+                                        </p>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h5><i class="bi bi-clock"></i> Time</h5>
+                                        <p th:text="${#temporals.format(competition.startTime, 'HH:mm')} + ' - ' + ${#temporals.format(competition.endTime, 'HH:mm')}">
+                                            10:00 - 14:00
+                                        </p>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h5><i class="bi bi-tag"></i> Type</h5>
+                                        <p th:text="${competition.type}">REGIONAL</p>
+                                    </div>
+
+                                    <div th:if="${competition.requiresRegistration}" class="mb-3">
+                                        <h5><i class="bi bi-calendar-check"></i> Registration Period</h5>
+                                        <p>
+                                            <small>Opens: </small>
+                                            <span th:text="${#temporals.format(competition.registrationOpens, 'dd MMM yyyy HH:mm')}">
+                                                01 Mar 2024 09:00
+                                            </span>
+                                            <br>
+                                            <small>Closes: </small>
+                                            <span th:text="${#temporals.format(competition.registrationCloses, 'dd MMM yyyy HH:mm')}">
+                                                14 Mar 2024 23:59
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <div th:if="${competition.requiresRegistration &&
+                                                 #temporals.createNow().isBefore(competition.registrationCloses) &&
+                                                 #temporals.createNow().isAfter(competition.registrationOpens)}"
+                                         class="mt-4">
+                                        <a href="#" class="mendo-btn mendo-btn-signup w-100 text-center">
+                                            <i class="bi bi-person-plus"></i> Register Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
