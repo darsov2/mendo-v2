@@ -40,41 +40,48 @@ public class CompetitionsController {
         this.competitionMapper = competitionMapper;
     }
 
-    @GetMapping
-    public String home(Model model) {
+//    @GetMapping
+//    public String home(Model model) {
+//
+//
+//
+//        List<School> schools = schoolService.findAll();
+//        List<CompetitionCycle> cycles = competitionCycleService.findAllSortedByYearDesc();
+//        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
+//
+//        Map<Long, List<Competition>> competitionsByCycle = cycles.stream()
+//                .collect(Collectors.toMap(
+//                        CompetitionCycle::getId,
+//                        cycle -> competitionService.findAllByCycleId(cycle.getId())
+//                ));
+//
+//        model.addAttribute("currentDateTime", LocalDateTime.now());
+//        model.addAttribute("competitionCycles", cycles);
+//        model.addAttribute("competitionsByCycle", competitionsByCycle);
+//        model.addAttribute("bodyContent", "competitions");
+//        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("selectedCycle", new CompetitionCycle());
+//        model.addAttribute("schools", schools);
+//        model.addAttribute("grades", Grade.values());
+//
+//        return "master";
+//    }
 
-
-
+    @GetMapping("")
+    public String allCompetitions(Model model) {
         List<School> schools = schoolService.findAll();
-        List<CompetitionCycle> cycles = competitionCycleService.findAllSortedByYearDesc();
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
 
-        Map<Long, List<Competition>> competitionsByCycle = cycles.stream()
-                .collect(Collectors.toMap(
-                        CompetitionCycle::getId,
-                        cycle -> competitionService.findAllByCycleId(cycle.getId())
-                ));
-
+        List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
         model.addAttribute("currentDateTime", LocalDateTime.now());
-        model.addAttribute("competitionCycles", cycles);
-        model.addAttribute("competitionsByCycle", competitionsByCycle);
+        model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
         model.addAttribute("bodyContent", "competitions");
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("selectedCycle", new CompetitionCycle());
         model.addAttribute("schools", schools);
         model.addAttribute("grades", Grade.values());
 
-        return "master";
-    }
 
-    @GetMapping("/sorted")
-    public String sorted(Model model) {
-
-
-        List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
-        model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
-
-        model.addAttribute("bodyContent", "allCompetitions");
+//        model.addAttribute("bodyContent", "allCompetitions");
         return "master";
 
 
