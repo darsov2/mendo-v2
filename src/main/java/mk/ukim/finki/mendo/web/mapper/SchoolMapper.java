@@ -22,5 +22,9 @@ public class SchoolMapper {
     public Object listSchools() {
         return schoolService.findAll();
     }
+
+    public School findById(Long id) {
+        return schoolService.findById(id);
+    }
 }
 

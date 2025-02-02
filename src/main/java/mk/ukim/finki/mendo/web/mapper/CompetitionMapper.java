@@ -36,6 +36,10 @@ public class CompetitionMapper {
         );
     }
 
+    public Competition findById(Long id){
+        return competitionService.findById(id);
+    }
+
 
     public List<CycleOrCompetitionDTO> getCyclesOrCompetitions() {
         List<CycleOrCompetitionDTO> cyclesOrCompetitions = new ArrayList<>();
@@ -48,5 +52,10 @@ public class CompetitionMapper {
             }
         });
         return cyclesOrCompetitions.stream().distinct().toList();
+    }
+
+
+    public List<Competition> listCompetitions(){
+        return  competitionService.findAll();
     }
 }

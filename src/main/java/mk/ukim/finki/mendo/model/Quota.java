@@ -15,4 +15,10 @@ public class Quota extends BaseAuditedEntity<Long> {
     School school;
     @ManyToOne
     Competition competition;
+
+    public Quota(Integer limit, School school, Competition competition) {
+        this.limit = limit;
+        this.school = school;
+        this.competition = competition;
+    }
 }
