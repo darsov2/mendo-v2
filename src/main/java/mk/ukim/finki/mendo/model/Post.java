@@ -13,9 +13,6 @@ import java.util.List;
 @Data
 public class Post extends BaseAuditedEntity<Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
     LocalDateTime timestamp;
     Integer upvote;
     String description;
@@ -26,4 +23,12 @@ public class Post extends BaseAuditedEntity<Long> {
     @ManyToOne
     Thread thread;
 
+    public Post(String description, Post parent, Thread thread, MendoUser mendoUser) {
+        this.timestamp = LocalDateTime.now();
+        this.upvote = 0;
+        this.description = description;
+        this.parent = parent;
+        this.mendoUser = mendoUser;
+        this.thread = thread;
+    }
 }
