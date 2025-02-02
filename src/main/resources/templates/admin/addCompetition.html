@@ -184,6 +184,19 @@
                             th:value="${cycle.id}"
                             th:text="${cycle.name}">
                     </option>
+                    <option value="">Самостоен натпревар</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Претходен натпревар</label>
+                <select class="form-control" name="parentId" required>
+                    <option value="">Изберете претходен на натпревар</option>
+                    <option th:each="parent : ${parents}"
+                            th:value="${parent.id}"
+                            th:text="${parent.name}">
+                    </option>
+                    <option value="">Нема претоден натпревар</option>
                 </select>
             </div>
 

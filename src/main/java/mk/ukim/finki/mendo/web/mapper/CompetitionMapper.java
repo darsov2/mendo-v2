@@ -1,9 +1,14 @@
 package mk.ukim.finki.mendo.web.mapper;
 
 import mk.ukim.finki.mendo.model.Competition;
+import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
 import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class CompetitionMapper {
@@ -26,8 +31,22 @@ public class CompetitionMapper {
                 request.getPlace(),
                 request.getInfo(),
                 request.getDeadline(),
-                request.getCycleId()
+                request.getCycleId(),
+                request.getParentId()
         );
+    }
 
+
+    public List<CycleOrCompetitionDTO> getCyclesOrCompetitions() {
+        List<CycleOrCompetitionDTO> cyclesOrCompetitions = new ArrayList<>();
+        List<Competition> competitions = competitionService.findAll().stream().sorted(Comparator.comparing(Competition::getStartDate)).toList();
+        competitions.forEach(competition -> {
+            if (competition.getCycle() != null){
+                cyclesOrCompetitions.add(new CycleOrCompetitionDTO(competition.getCycle(), null));
+            } else {
+                cyclesOrCompetitions.add(new CycleOrCompetitionDTO(null, competition));
+            }
+        });
+        return cyclesOrCompetitions.stream().distinct().toList();
     }
 }

@@ -18,9 +18,11 @@ public interface CompetitionService {
                                String place,
                                String info,
                                LocalDateTime deadline,
-                               Long cycleId
+                               Long cycleId,
+                               Long parentId
     );
 
+    List<Competition> findAllWithoutCycle();
     List<Participation> distributeStudentsForCompetition(Long id, String city);
 
     List<Competition> findAll();

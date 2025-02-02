@@ -32,10 +32,26 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId) {
+    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, Long parentId) {
+        if (cycleId == null && parentId == null) {
+            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline));
+        }
+        else if (cycleId == null) {
+            Competition parent = findById(parentId);
+            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, parent));
+        }
+        else if (parentId == null) {
+            CompetitionCycle cycle = competitionCycleService.findById(cycleId);
+            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle));
+        }
         CompetitionCycle cycle = competitionCycleService.findById(cycleId);
-//        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
-        return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle));
+        Competition parent = findById(parentId);
+        return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, parent));
+    }
+
+    @Override
+    public List<Competition> findAllWithoutCycle() {
+        return competitionRepository.findAllByCycleIsNullOrderByStartTimeAsc();
     }
 
     @Override

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -33,9 +32,9 @@ public class ApplicationController {
         this.competitionService = competitionService;
     }
 
-    @PostMapping("/{cycleId}")
+    @PostMapping("/cycle/{cycleId}")
     @ResponseBody
-    public Map<String, Object> registerForCompetition(
+    public Map<String, Object> registerForCompetitionCycle(
             @PathVariable Long cycleId,
             @RequestParam Grade grade,
             @RequestParam Long schoolId
@@ -49,7 +48,35 @@ public class ApplicationController {
                 return response;
             }
 
-            applicationService.registerForCompetition(cycleId, grade, schoolId);
+            applicationService.registerForCompetitionCycle(cycleId, grade, schoolId);
+            response.put("success", true);
+            response.put("message", "Успешно се пријавивте за натпреварот.");
+
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+
+        return response;
+    }
+    @PostMapping("/competition/{competitionId}")
+    @ResponseBody
+    public Map<String, Object> registerForCompetition(
+            @PathVariable Long competitionId,
+            @RequestParam Grade grade,
+            @RequestParam Long schoolId
+    ) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            MendoUser currentUser = mendoUserService.getCurrentUserOrThrow();
+            if (applicationService.isUserAlreadyRegisteredOnCompetition(competitionId,currentUser.getUsername())) {
+                response.put("success", false);
+                response.put("message", "Веќе сте регистрирани за овој натпревар.");
+                return response;
+            }
+
+            applicationService.registerForCompetition(competitionId, grade, schoolId);
             response.put("success", true);
             response.put("message", "Успешно се пријавивте за натпреварот.");
 

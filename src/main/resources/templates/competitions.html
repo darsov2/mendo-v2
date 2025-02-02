@@ -14,57 +14,142 @@
             background-color: #f5efe6;
             min-height: 100vh;
         }
+
+        .competition-content {
+            display: none;
+        }
+
+        .competition-content.active,
+        .competition-content.always-visible {
+            display: block;
+        }
+
+        .competition-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .competition-table th,
+        .competition-table td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .competition-table thead {
+            background-color: #f8f9fa;
+        }
+
+        .competition-name {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .registration-closed {
+            color: #999;
+            font-style: italic;
+        }
+
+        .register-btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.8rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            background-color: #E6AA68;
+            color: #2c1810;
+            font-weight: 600;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
 <div class="main-content">
-    <h1 class="section-title">Листа на актуелни натпревари</h1>
+    <h1 class="section-title">Листа на натпревари</h1>
 
     <div class="competitions-container">
-        <div class="competition-section" th:each="cycle : ${competitionCycles}">
-            <button class="competition-header">
-                <div class="header-content">
-                    <span class="cycle-title" th:text="${cycle.getName()}"></span>
-                    <span class="cycle-registration">
-                        <th:block th:if="${cycle.getRegistrationDeadline().isAfter(currentDateTime)}">
-                            <span th:text="'Рок за пријавување: ' + ${#temporals.format(cycle.getRegistrationDeadline(), 'dd.MM.yyyy, HH:mm')} + ' CET'"></span>
-                            <a th:if="${currentUser != null}" th:data-cycle-id="${cycle.id}" class="register-btn">Пријави се</a>
-                            <a th:if="${currentUser == null}" class="register-btn" style="background-color: #8e8e8e">Најавете се</a>
-                        </th:block>
-                        <span th:unless="${cycle.getRegistrationDeadline().isAfter(currentDateTime)}" class="registration-closed">
-                            Пријавувањето е затворено
-                        </span>
-                    </span>
+        <div th:each="item : ${cyclesOrCompetitions}">
+            <!-- Handle Cycle -->
+            <th:block th:if="${item.competitionCycle != null}">
+                <div class="competition-section">
+                    <button class="competition-header">
+                        <div class="header-content">
+                            <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}"><span class="cycle-title" th:text="${item.competitionCycle.name}"></span></a>
+                            <span class="cycle-registration" th:if="${item.competitionCycle.registrationDeadline != null}">
+                                <th:block th:if="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}">
+                                    <span th:text="'Рок за пријавување: ' + ${#temporals.format(item.competitionCycle.registrationDeadline, 'dd.MM.yyyy, HH:mm')} + ' CET'"></span>
+                                    <a th:if="${currentUser != null}" th:data-cycle-id="${item.competitionCycle.id}" class="register-btn">Пријави се</a>
+                                    <a th:if="${currentUser == null}" class="register-btn" style="background-color: #8e8e8e">Најавете се</a>
+                                </th:block>
+                                <span th:unless="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}" class="registration-closed">
+                                    Пријавувањето е затворено
+                                </span>
+                            </span>
+                        </div>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="competition-content">
+                        <table class="competition-table">
+                            <thead>
+                            <tr>
+                                <th>Име на натпревар</th>
+                                <th>Почеток</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="comp : ${item.competitionCycle.competitions}">
+                                <td>
+                                    <a th:href="@{'/competitions/' + ${comp.id}}"
+                                       class="competition-name"
+                                       th:text="${comp.title}">
+                                    </a>
+                                </td>
+                                <td class="competition-date"
+                                    th:text="${#temporals.format(comp.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <span class="arrow">▼</span>
-            </button>
-            <div class="competition-content">
-                <table class="competition-table">
-                    <thead>
-                    <tr>
-                        <th>Име на натпревар</th>
-                        <th>Почеток</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="competition : ${competitionsByCycle.get(cycle.getId())}">
-                        <td>
-                            <a th:href="@{'/competitions/{id}' (id=${competition.getId()})}"
-                               class="competition-name"
-                               th:text="${competition.title}">
-                            </a>
-                        </td>
-                        <td class="competition-date"
-                            th:text="${#temporals.format(competition.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            </th:block>
+
+            <th:block th:if="${item.competition != null}">
+                <div class="competition-section">
+                    <div class="competition-content always-visible">
+                        <table class="competition-table">
+                            <thead>
+                            <tr>
+                                <th>Име на самостоен натпревар</th>
+                                <th>Почеток</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <a th:href="@{'/competitions/' + ${item.competition.id}}"
+                                       class="competition-name"
+                                       th:text="${item.competition.title}">
+                                    </a>
+                                </td>
+                                <td class="competition-date"
+                                    th:text="${#temporals.format(item.competition.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </th:block>
         </div>
     </div>
 </div>
 
+<!-- Toast Container -->
 <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="registrationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
@@ -75,6 +160,7 @@
     </div>
 </div>
 
+<!-- Registration Modal -->
 <div th:if="${currentUser != null}" class="modal fade custom-modal" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -120,10 +206,12 @@
 </div>
 
 <script>
-    document.querySelectorAll('.competition-header').forEach(header => {
+    document.querySelectorAll('.competition-section:has(.competition-header)').forEach(section => {
+        const header = section.querySelector('.competition-header');
+        const content = section.querySelector('.competition-content');
+
         header.addEventListener('click', () => {
             header.classList.toggle('active');
-            const content = header.nextElementSibling;
             content.classList.toggle('active');
         });
     });
@@ -166,7 +254,11 @@
         const cycleId = document.getElementById('cycleIdInput').value;
         const formData = new FormData(this);
 
-        fetch(`/application/${cycleId}`, {
+        // Determine if this is a cycle or competition registration
+        const isCycle = button.closest('.competition-section').querySelector('.cycle-title') !== null;
+        const endpoint = isCycle ? `/application/cycle/${cycleId}` : `/application/competition/${cycleId}`;
+
+        fetch(endpoint, {
             method: 'POST',
             body: formData
         })
@@ -186,6 +278,7 @@
             });
     });
 </script>
+
 
 </body>
 </html>

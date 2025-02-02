@@ -47,6 +47,8 @@ public class Competition extends BaseAuditedEntity<Long> {
     List<MendoUser> moderators;
 
 
+
+
     public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {
         this.title = title;
         this.startDate = startDate;
@@ -57,6 +59,42 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.info = info;
         this.deadline = deadline;
         this.cycle = cycle;
+    }
+
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, Competition parent) {
+        this.title = title;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.type = type;
+        this.place = place;
+        this.info = info;
+        this.deadline = deadline;
+        this.cycle = cycle;
+        this.parentCompetition = parent;
+    }
+
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Competition parent) {
+        this.title = title;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.type = type;
+        this.place = place;
+        this.info = info;
+        this.deadline = deadline;
+        this.parentCompetition = parent;
+    }
+
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline) {
+        this.title = title;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.type = type;
+        this.place = place;
+        this.info = info;
+        this.deadline = deadline;
     }
 
 
