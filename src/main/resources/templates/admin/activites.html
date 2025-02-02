@@ -399,9 +399,11 @@
                   <a class="btn-action btn-delete link-no-decor">
                     <i class="fas fa-trash"></i>
                   </a>
-                  <a th:href="@{/activities/lectures/{id} (id=${act.id})}" class="btn-action btn-edit link-no-decor">
+                  <a th:href="@{/activities/{type}/{id} (type=${act.type == 'TASK' ? 'tasks' : 'lectures'}, id=${act.id})}"
+                     class="btn-action btn-edit link-no-decor">
                     <i class="fa-solid fa-magnifying-glass"></i>
                   </a>
+
                 </div>
               </td>
             </tr>

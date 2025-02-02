@@ -89,7 +89,6 @@ public class ActivitiesMapper {
 
   public LectureDTO getLecturePreview(Long lectureId) {
     Lecture lecture = contentService.findLectureById(lectureId);
-    Topic topic = lecture.getTopic();
     return LectureDTO.toDTO(contentService.findLectureById(lectureId));
   }
 
