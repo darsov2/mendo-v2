@@ -1,71 +1,212 @@
-<!DOCTYPE html>
-<html lang="mk" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>МЕНДО - Натпревари</title>
-    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-    <style>
-        body {
-            background-color: #f5efe6;
-            min-height: 100vh;
-        }
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+    }
 
-        .competition-content {
-            display: none;
-        }
+    .main-content {
+        padding: 2rem;
+        max-width: unset !important;
+        margin: unset !important;
+        background-color: #f5efe6;
+    }
 
-        .competition-content.active,
-        .competition-content.always-visible {
-            display: block;
-        }
+    .section-title {
+        color: #2c1810;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
 
-        .competition-table {
-            width: 100%;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
+    .competition-section {
+        margin-bottom: 1.5rem;
+    }
 
-        .competition-table th,
-        .competition-table td {
-            padding: 1rem;
-            text-align: left;
-        }
+    .competition-header {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+        transition: all 0.2s ease;
+    }
 
-        .competition-table thead {
-            background-color: #f8f9fa;
-        }
+    .competition-header:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(44, 24, 16, 0.15);
+    }
 
-        .competition-name {
-            text-decoration: none;
-            color: inherit;
-        }
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
+    }
 
-        .registration-closed {
-            color: #999;
-            font-style: italic;
-        }
+    .cycle-title {
+        color: #2c1810;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
 
-        .register-btn {
-            padding: 0.4rem 0.8rem;
-            border-radius: 0.8rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            background-color: #E6AA68;
-            color: #2c1810;
-            font-weight: 600;
-            display: inline-block;
-        }
-    </style>
+    .cycle-registration {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #666;
+    }
+
+    .register-btn {
+        background-color: #E6AA68;
+        color: #2c1810;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+    .register-btn.disabled {
+        background-color: #8e8e8e;
+        cursor: not-allowed;
+    }
+
+    .registration-closed {
+        color: #999;
+        font-style: italic;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .arrow {
+        color: #666;
+        transition: transform 0.3s ease;
+    }
+
+    .competition-header.active .arrow {
+        transform: rotate(180deg);
+    }
+
+    .competition-content {
+        display: none;
+        margin-top: 1rem;
+    }
+
+    .competition-content.active,
+    .competition-content.always-visible {
+        display: block;
+    }
+
+    .competition-table {
+        width: 100%;
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+    }
+
+    .competition-table th,
+    .competition-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #f5efe6;
+    }
+
+    .competition-table thead {
+        background-color: #f8f9fa;
+    }
+
+    .competition-table th {
+        font-weight: 600;
+        color: #2c1810;
+    }
+
+    .competition-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .competition-table tr:hover td {
+        background-color: #f8f9fa;
+    }
+
+    .competition-name {
+        text-decoration: none;
+        color: #2c1810;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .competition-name:hover {
+        color: #E6AA68;
+    }
+
+    .competition-date {
+        color: #666;
+    }
+
+    .custom-modal .modal-content {
+        border-radius: 1rem;
+        border: none;
+    }
+
+    .custom-modal .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .custom-modal .modal-title {
+        color: #2c1810;
+        font-weight: 600;
+    }
+
+    .custom-modal .list-group-item {
+        border-color: #e2e8f0;
+    }
+
+    .custom-select {
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem;
+    }
+
+    .toast {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .toast.success {
+        border-left: 4px solid #10B981;
+    }
+
+    .toast.error {
+        border-left: 4px solid #EF4444;
+    }
+</style>
 </head>
 <body>
 <div class="main-content">
@@ -73,22 +214,25 @@
 
     <div class="competitions-container">
         <div th:each="item : ${cyclesOrCompetitions}">
-            <!-- Handle Cycle -->
+            <!-- Competition Cycle Section -->
             <th:block th:if="${item.competitionCycle != null}">
                 <div class="competition-section">
                     <button class="competition-header">
                         <div class="header-content">
-                            <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}"><span class="cycle-title" th:text="${item.competitionCycle.name}"></span></a>
+                            <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}" class="cycle-title"
+                               th:text="${item.competitionCycle.name}">Пролетен циклус 2024</a>
                             <span class="cycle-registration" th:if="${item.competitionCycle.registrationDeadline != null}">
-                                <th:block th:if="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}">
-                                    <span th:text="'Рок за пријавување: ' + ${#temporals.format(item.competitionCycle.registrationDeadline, 'dd.MM.yyyy, HH:mm')} + ' CET'"></span>
-                                    <a th:if="${currentUser != null}" th:data-cycle-id="${item.competitionCycle.id}" class="register-btn">Пријави се</a>
-                                    <a th:if="${currentUser == null}" class="register-btn" style="background-color: #8e8e8e">Најавете се</a>
-                                </th:block>
-                                <span th:unless="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}" class="registration-closed">
-                                    Пријавувањето е затворено
+                                    <th:block th:if="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}">
+                                        <span th:text="'Рок за пријавување: ' + ${#temporals.format(item.competitionCycle.registrationDeadline, 'dd.MM.yyyy, HH:mm')} + ' CET'"></span>
+                                        <a th:if="${currentUser != null}"
+                                           th:data-cycle-id="${item.competitionCycle.id}"
+                                           class="register-btn">Пријави се</a>
+                                        <a th:if="${currentUser == null}"
+                                           class="register-btn disabled">Најавете се</a>
+                                    </th:block>
+                                    <span th:unless="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}"
+                                          class="registration-closed">Пријавувањето е затворено</span>
                                 </span>
-                            </span>
                         </div>
                         <span class="arrow">▼</span>
                     </button>
@@ -105,12 +249,10 @@
                                 <td>
                                     <a th:href="@{'/competition/' + ${comp.id}}"
                                        class="competition-name"
-                                       th:text="${comp.title}">
-                                    </a>
+                                       th:text="${comp.title}"></a>
                                 </td>
                                 <td class="competition-date"
-                                    th:text="${#temporals.format(comp.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'">
-                                </td>
+                                    th:text="${#temporals.format(comp.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -118,6 +260,7 @@
                 </div>
             </th:block>
 
+            <!-- Individual Competition Section -->
             <th:block th:if="${item.competition != null}">
                 <div class="competition-section">
                     <div class="competition-content always-visible">
@@ -133,12 +276,10 @@
                                 <td>
                                     <a th:href="@{'/competition/' + ${item.competition.id}}"
                                        class="competition-name"
-                                       th:text="${item.competition.title}">
-                                    </a>
+                                       th:text="${item.competition.title}"></a>
                                 </td>
                                 <td class="competition-date"
-                                    th:text="${#temporals.format(item.competition.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'">
-                                </td>
+                                    th:text="${#temporals.format(item.competition.startTime, 'dd.MM.yyyy, HH:mm')} + ' CET'"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -174,7 +315,7 @@
                     <p class="modal-description">Ве молиме проверете ги следните информации пред да продолжите:</p>
                     <ul class="list-group custom-list-group mb-3">
                         <li class="list-group-item"><strong>Натпревар:</strong> <span id="cycleName"></span></li>
-                        <li class="list-group-item"> <span id="cycleDeadline"></span></li>
+                        <li class="list-group-item"><span id="cycleDeadline"></span></li>
                     </ul>
                     <div class="mb-3">
                         <label for="userGrade" class="form-label"><strong>Одделение:</strong></label>
@@ -192,7 +333,8 @@
                             <option th:each="school : ${schools}"
                                     th:value="${school.id}"
                                     th:text="${school.name}"
-                                    th:selected="${currentUser.studiesSchool!=null ? school.id == currentUser.studiesSchool.id : false }"></option>
+                                    th:selected="${currentUser.studiesSchool!=null ? school.id == currentUser.studiesSchool.id : false}">
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -278,7 +420,3 @@
             });
     });
 </script>
-
-
-</body>
-</html>
