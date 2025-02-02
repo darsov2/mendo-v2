@@ -1,7 +1,10 @@
 package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.School;
+import mk.ukim.finki.mendo.service.CompetitionService;
 import mk.ukim.finki.mendo.service.SchoolService;
+import mk.ukim.finki.mendo.web.mapper.CompetitionCycleMapper;
+import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
 import mk.ukim.finki.mendo.web.mapper.SchoolMapper;
 import mk.ukim.finki.mendo.web.request.SchoolRequest;
 import org.springframework.stereotype.Controller;
@@ -13,9 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class SchoolController {
     public final SchoolService schoolService;
     public final SchoolMapper mapper;
-    public SchoolController(SchoolService schoolService, SchoolMapper mapper) {
+    public final CompetitionCycleMapper cycleMapper;
+    public final CompetitionMapper competitionMapper;
+
+    public SchoolController(SchoolService schoolService, SchoolMapper mapper, CompetitionCycleMapper cycleMapper, CompetitionMapper competitionMapper) {
         this.schoolService = schoolService;
         this.mapper = mapper;
+        this.cycleMapper = cycleMapper;
+        this.competitionMapper = competitionMapper;
     }
 
     @GetMapping({"/", ""})
@@ -49,6 +57,8 @@ public class SchoolController {
         mapper.saveSchool(request);
         return "master";
     }
+
+
 
 
 }
