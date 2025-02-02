@@ -1,0 +1,472 @@
+<nav class="toolbar-top">
+    <a th:href="@{/competition}" class="btn-back">
+        <i class="fas fa-arrow-left"></i>
+        Натпревари
+    </a>
+</nav>
+
+<div class="main-content">
+    <!-- Competition Header -->
+    <div class="competition-header">
+        <h1 class="competition-title" th:text="${competition.title}">Regional Competition 2024</h1>
+        <div th:if="${competition.canStudentRegister and competition.requiresRegistration}">
+            <div class="toolbar-actions">
+                <!-- Registration Button Logic -->
+                <th:block th:with="canRegister=${competition.requiresRegistration and competition.visibleToPublic and competition.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationDeadline.isAfter(currentDateTime)}">
+                    <th:block th:if="${canRegister}">
+                        <th:block th:if="${currentUser != null}">
+                            <button class="btn-register" th:data-cycle-id="${cycle.id}">
+                                <i class="fas fa-user-plus"></i> Пријави се
+                            </button>
+                        </th:block>
+                        <th:block th:unless="${currentUser != null}">
+                            <a th:href="@{/login}" class="btn-register disabled">
+                                <i class="fas fa-sign-in-alt"></i> Најавете се за да се пријавите
+                            </a>
+                        </th:block>
+                    </th:block>
+                    <span th:unless="${canRegister}" class="registration-closed">
+                <i class="fas fa-lock"></i> Пријавувањето е затворено
+            </span>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <!-- Competition Info -->
+    <div class="content-card">
+        <div class="competition-info">
+            <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Локација
+                    </span>
+                <span class="info-value" th:text="${competition.place}">FINKI, Skopje</span>
+            </div>
+            <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-calendar"></i>
+                        Датум
+                    </span>
+                <span class="info-value" th:text="${#temporals.format(competition.startDate, 'EEEE, dd MMMM yyyy')}">Saturday, 15 March 2024</span>
+            </div>
+            <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-clock"></i>
+                        Време
+                    </span>
+                <span class="info-value">
+                        <span th:text="${#temporals.format(competition.startTime, 'HH:mm')}">10:00</span> -
+                        <span th:text="${#temporals.format(competition.endTime, 'HH:mm')}">14:00</span>
+                    </span>
+            </div>
+        </div>
+
+        <div class="registration-info" th:if="${competition.requiresRegistration}">
+            <h3>
+                <i class="fas fa-calendar-check"></i>
+                Период за регистрација
+            </h3>
+            <div class="registration-dates">
+                <div class="date-item">
+                    <span class="date-label">Започнува:</span>
+                    <span class="date-value" th:text="${#temporals.format(competition.registrationOpens, 'dd MMMM yyyy HH:mm')}">01 March 2024 09:00</span>
+                </div>
+                <div class="date-item">
+                    <span class="date-label">Завршува:</span>
+                    <span class="date-value" th:text="${#temporals.format(competition.registrationCloses, 'dd MMMM yyyy HH:mm')}">14 March 2024 23:59</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Table -->
+    <div class="content-card" th:if="${not #lists.isEmpty(competition.tasks)}">
+        <h3>Задачи</h3>
+        <table class="content-table">
+            <thead>
+            <tr>
+                <th>Задача</th>
+                <th>Поени</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="competitionTask : ${competition.tasks}">
+                <td th:if="${competitionTask.task != null}" th:text="${competitionTask.task.title}">Task A</td>
+                <td th:text="${competitionTask.points}">100</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Competition Description -->
+    <div class="content-card">
+        <div class="competition-description">
+            <h3>Опис на натпреварот</h3>
+            <div th:utext="${competition.info}">
+                <p>Competition information will be displayed here.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:if="${currentUser != null}" class="modal fade" id="registrationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form th:action="@{/register}" method="post" id="registrationForm">
+                <input type="hidden" id="competitionIdInput" name="competitionId" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title">Потврди регистрација</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">Ве молиме проверете ги следните информации:</p>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><strong>Натпревар:</strong> <span id="competitionName"></span></li>
+                        <li class="list-group-item"><strong>Краен рок:</strong> <span id="registrationDeadline"></span></li>
+                    </ul>
+                    <div class="mb-3">
+                        <label for="userGrade" class="form-label">Одделение:</label>
+                        <select id="userGrade" name="grade" class="form-select" required>
+                            <option th:each="grade : ${grades}"
+                                    th:value="${grade}"
+                                    th:text="${grade.prettyName}"
+                                    th:selected="${grade == currentUser.grade}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userSchool" class="form-label">Училиште:</label>
+                        <select id="userSchool" name="schoolId" class="form-select" required>
+                            <option th:each="school : ${schools}"
+                                    th:value="${school.id}"
+                                    th:text="${school.name}"
+                                    th:selected="${currentUser.studiesSchool != null and school.id == currentUser.studiesSchool.id}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit">Пријави се</button>
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Откажи</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="registrationToast" class="toast" role="alert">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+    }
+
+    .main-content {
+        padding: 2rem;
+        max-width: unset !important;
+        margin: unset !important;
+        background-color: #f5efe6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .competition-header, .content-card{
+        width: 80%;
+    }
+
+    .toolbar-top {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .toolbar-title {
+        color: #2c1810;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .competition-header {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .competition-title {
+        color: #2c1810;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+    }
+
+    .content-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .content-table th {
+        text-align: left;
+        padding: 1rem;
+        background-color: #f5efe6;
+        color: #2c1810;
+        font-weight: 600;
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .content-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f5efe6;
+        color: #2c1810;
+    }
+
+    .content-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .content-table tr:hover td {
+        background-color: #f8f9fa;
+    }
+
+    .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .status-easy {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+
+    .status-medium {
+        background-color: #fff7ed;
+        color: #c2410c;
+    }
+
+    .status-hard {
+        background-color: #fee2e2;
+        color: #dc2626;
+    }
+
+    .competition-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-value {
+        color: #2c1810;
+        font-weight: 500;
+    }
+
+    .register-btn {
+        background-color: #E6AA68;
+        color: #2c1810;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+    .registration-closed {
+        background-color: #e2e8f0;
+        color: #475569;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .registration-info {
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .registration-info h3 {
+        color: #2c1810;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .registration-dates {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .date-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .date-label {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .date-value {
+        color: #2c1810;
+        font-weight: 500;
+    }
+
+    .competition-description {
+        color: #2c1810;
+        line-height: 1.6;
+    }
+
+    .btn-back {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-back:hover {
+        background-color: #f5efe6;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle registration button clicks
+        document.querySelectorAll('.btn-register:not(.disabled)').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const cycleId = button.getAttribute('data-cycle-id');
+                const cycleName = document.querySelector('.toolbar-title span').textContent;
+                const cycleDeadline = document.querySelector('.registration-info').textContent;
+
+                document.getElementById('cycleIdInput').value = cycleId;
+                document.getElementById('cycleName').textContent = cycleName;
+                document.getElementById('cycleDeadline').textContent = cycleDeadline;
+
+                const modal = new bootstrap.Modal(document.getElementById('applicationModal'));
+                modal.show();
+            });
+        });
+
+        // Toast notification handler
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('registrationToast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toast.classList.remove('success', 'error');
+            toast.classList.add(isSuccess ? 'success' : 'error');
+
+            toastTitle.textContent = isSuccess ? 'Успешна регистрација' : 'Грешка';
+            toastMessage.textContent = message;
+
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        // Handle form submission
+        document.getElementById('applicationForm')?.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const cycleId = document.getElementById('cycleIdInput').value;
+            const formData = new FormData(this);
+
+            fetch(`/application/competition/${cycleId}`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('applicationModal'));
+                    modal.hide();
+
+                    showToast(data.message, data.success);
+
+                    if (data.success) {
+                        setTimeout(() => window.location.reload(), 2000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Registration error:', error);
+                    showToast('Се случи грешка. Обидете се повторно.', false);
+                });
+        });
+    });
+</script>

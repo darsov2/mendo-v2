@@ -26,9 +26,4 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
         this.year = year;
         this.registrationDeadline = registrationDeadline;
     }
-
-
-
-
-
 }

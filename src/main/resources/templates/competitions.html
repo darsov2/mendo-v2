@@ -103,7 +103,7 @@
                             <tbody>
                             <tr th:each="comp : ${item.competitionCycle.competitions}">
                                 <td>
-                                    <a th:href="@{'/competitions/' + ${comp.id}}"
+                                    <a th:href="@{'/competition/' + ${comp.id}}"
                                        class="competition-name"
                                        th:text="${comp.title}">
                                     </a>
@@ -131,7 +131,7 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <a th:href="@{'/competitions/' + ${item.competition.id}}"
+                                    <a th:href="@{'/competition/' + ${item.competition.id}}"
                                        class="competition-name"
                                        th:text="${item.competition.title}">
                                     </a>
