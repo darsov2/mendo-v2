@@ -1,0 +1,155 @@
+<style>
+  .main-lecture-content {
+    display: flex;
+    flex: 1;
+    padding: 2rem;
+    gap: 2rem;
+    background-color: #f5efe6;
+    position: relative;
+  }
+
+  .sidebar {
+    width: 300px;
+    background: white;
+    border-radius: 0.8rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(44, 24, 16, 0.05);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    position: absolute;
+    left: 2rem;
+    height: calc(100% - 4rem);
+    z-index: 10;
+  }
+
+  .toggle-sidebar {
+    position: absolute;
+    top: 50%;
+    right: -32px;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 0.75rem 0.5rem;
+    box-shadow: 2px 0 4px rgba(44, 24, 16, 0.05);
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 48px;
+  }
+
+  .lecture-content {
+    flex: 1;
+    background: white;
+    border-radius: 0.8rem;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(44, 24, 16, 0.05);
+    transition: margin-left 0.3s ease;
+  }
+
+  .lecture-content.expanded {
+    margin-left: 0;
+  }
+
+  /* Rest of your existing styles */
+  .lecture-list {
+    list-style: none;
+    padding-left: unset;
+  }
+
+  .lecture-list-item {
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lecture-list-item:hover {
+    background: #fff5eb;
+  }
+
+  .lecture-list-item.active {
+    background: #fff5eb;
+    color: #2c1810;
+    font-weight: 500;
+  }
+
+  h1 {
+    color: #2c1810;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+
+  h2 {
+    color: #2c1810;
+    margin: 2rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .chapter-title {
+    font-weight: 600;
+    color: #2c1810;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .lecture-meta {
+    display: flex;
+    gap: 2rem;
+    color: #666;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+</style>
+
+<div class="main-lecture-content">
+  <div class="sidebar">
+    <button class="toggle-sidebar btn" aria-label="Toggle Sidebar">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <h2>Содржина</h2>
+    <div class="chapter-title" th:text="${lecture?.topic?.title}"></div>
+    <ul class="lecture-list">
+      <a class="link-no-decor" th:each="lect : ${lecture?.topic?.lectures}"
+         th:href="@{/activities/lectures/{id} (id=${lect.id})}">
+        <li th:class="${lect.active ? 'lecture-list-item active' : 'lecture-list-item'}"
+            th:text="${lect.title}"></li>
+      </a>
+    </ul>
+  </div>
+  <div class="lecture-content">
+    <h1 th:text="${lecture.title}">lectureTitle</h1>
+    <div class="lecture-meta">
+      <span>✍️ Автор: Проф. д-р Игор Игоровски</span>
+    </div>
+    <div th:utext="${lecture.text}">
+      lectureContent
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleButton = document.querySelector('.toggle-sidebar');
+    const lectureContent = document.querySelector('.lecture-content');
+    const toggleIcon = toggleButton.querySelector('i');
+
+    toggleButton.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      lectureContent.classList.toggle('expanded');
+
+      // Toggle the chevron icon direction
+      toggleIcon.classList.toggle('bi-chevron-left');
+      toggleIcon.classList.toggle('bi-chevron-right');
+    });
+  });
+</script>

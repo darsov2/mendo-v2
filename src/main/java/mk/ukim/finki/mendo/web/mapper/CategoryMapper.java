@@ -19,26 +19,24 @@ public class CategoryMapper {
         this.categoryService = categoryService;
     }
 
-    public List<CategoryDTO> getAllCategories() {
+    public List<CategoryDTO> getAllCategories(Long selectedCategory) {
         return categoryService.findAllParent().stream()
                 .map(category -> toDTO(category, new HashSet<Long>()))
+                .peek(categoryDTO -> categoryDTO.setIsSelected(categoryDTO.getId() == selectedCategory))
                 .toList();
     }
 
     public static CategoryDTO toDTO(Category category, Set<Long> processedCategories) {
         if (category == null || processedCategories.contains(category.getId())) {
-            return null; // Avoid infinite recursion
+            return null;
         }
 
-        // Mark the current category as processed
         processedCategories.add(category.getId());
 
-        // Map the category to a DTO
         CategoryDTO dto = new CategoryDTO();
         dto.setId(category.getId());
         dto.setName(category.getName());
 
-        // Map children, avoiding cycles
         if (category.getChildren() != null) {
             dto.setChildren(
                     category.getChildren().stream()

@@ -14,19 +14,13 @@ import java.util.List;
 public class Task extends Content {
     @OneToOne
     Thread thread;
-
-    @ManyToMany
-    @JoinTable(name = "category_task",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    List<Category> categories;
-
     @OneToMany
     List<TestCase> testCases;
 
+    @Column(columnDefinition = "text")
     String inputFormat;
-
+    @Column(columnDefinition = "text")
     String outputFormat;
-
-    Boolean visible = true;
+    Integer timeLimit; //in ms
+    Integer memoryLimit; //in MB
 }

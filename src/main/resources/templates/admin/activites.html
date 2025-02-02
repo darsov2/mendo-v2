@@ -1,423 +1,415 @@
 <style>
 
-    /*.main-content {*/
-    /*    flex: 1;*/
-    /*    display: flex;*/
-    /*    align-items: center;*/
-    /*    justify-content: center;*/
-    /*    padding: 2rem;*/
-    /*}*/
+  /*.main-content {*/
+  /*    flex: 1;*/
+  /*    display: flex;*/
+  /*    align-items: center;*/
+  /*    justify-content: center;*/
+  /*    padding: 2rem;*/
+  /*}*/
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background-color: #f5efe6;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  .sidebar {
+    width: 100%;
+    /*width: 300px;*/
+    background: white;
+    height: 90vh;
+    overflow-y: auto;
+    border-right: 1px solid #e2e8f0;
+    /*position: fixed;*/
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sidebar-title {
+    color: #2c1810;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .tree-view {
+    padding: 1rem;
+  }
+
+  .tree-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .tree-parent {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: #2c1810;
+    transition: all 0.2s ease;
+
+    .fa-chevron-up {
+      display: none;
     }
 
-    body {
-        background-color: #f5efe6;
-        min-height: 100vh;
-        display: flex;
+    .fa-chevron-right {
+      display: unset;
+    }
+  }
+
+  .tree-parent:hover {
+    background-color: #f5efe6;
+  }
+
+  .tree-parent:has([aria-expanded="true"]) {
+    background-color: #E6AA68;
+    color: #2c1810;
+    font-weight: 500;
+
+    .fa-chevron-right {
+      display: none;
     }
 
-    .sidebar {
-        width: 100%;
-        /*width: 300px;*/
-        background: white;
-        height: 90vh;
-        overflow-y: auto;
-        border-right: 1px solid #e2e8f0;
-        /*position: fixed;*/
+    .fa-chevron-up {
+      display: unset;
     }
+  }
 
-    .sidebar-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+  .tree-content {
+    margin-left: 1.5rem;
+    border-left: 2px solid #e2e8f0;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+  }
 
-    .sidebar-title {
-        color: #2c1810;
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
+  .tree-toggle {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    background: none;
+    border: none;
+  }
 
-    .tree-view {
-        padding: 1rem;
-    }
+  .tree-icon {
+    margin-right: 0.5rem;
+    width: 20px;
+    color: #E6AA68;
+  }
 
-    .tree-item {
-        margin-bottom: 0.5rem;
-    }
+  .main-content {
+    padding: 2rem;
+    max-width: unset !important;
+    margin: unset !important;
+    background-color: #f5efe6;
+  }
 
-    .tree-parent {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        color: #2c1810;
-        transition: all 0.2s ease;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
 
-        .fa-chevron-up {
-            display: none;
-        }
+  .header h1 {
+    color: #2c1810;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
 
-        .fa-chevron-right {
-            display: unset;
-        }
-    }
+  .btn-add {
+    background-color: #E6AA68;
+    color: #2c1810;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-    .tree-parent:hover {
-        background-color: #f5efe6;
-    }
+  .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+  }
 
-    .tree-parent:has([aria-expanded="true"]) {
-        background-color: #E6AA68;
-        color: #2c1810;
-        font-weight: 500;
+  .content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+  }
 
-        .fa-chevron-right {
-            display: none;
-        }
+  .content-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-        .fa-chevron-up {
-            display: unset;
-        }
-    }
+  .content-table th {
+    text-align: left;
+    padding: 1rem;
+    background-color: #f5efe6;
+    color: #2c1810;
+    font-weight: 600;
+  }
 
-    .tree-content {
-        margin-left: 1.5rem;
-        border-left: 2px solid #e2e8f0;
-        padding-left: 1rem;
-        margin-top: 0.5rem;
-    }
+  .content-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #f5efe6;
+  }
 
-    .tree-toggle {
-        width: 20px;
-        height: 20px;
-        margin-right: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        background: none;
-        border: none;
-    }
+  .lesson-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-    .tree-icon {
-        margin-right: 0.5rem;
-        width: 20px;
-        color: #E6AA68;
-    }
+  .status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
 
-    .main-content {
-        padding: 2rem;
-        max-width: unset !important;
-        margin: unset !important;
-        background-color: #f5efe6;
-    }
+  .status-lecture {
+    background-color: #e2e8f0;
+    color: #475569;
+  }
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
+  .status-task {
+    background-color: #dcfce7;
+    color: #166534;
+  }
 
-    .header h1 {
-        color: #2c1810;
-        font-size: 1.8rem;
-        font-weight: 600;
-    }
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
 
-    .btn-add {
-        background-color: #E6AA68;
-        color: #2c1810;
-        padding: 0.6rem 1.2rem;
-        border-radius: 0.5rem;
-        border: none;
-        cursor: pointer;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .btn-action {
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+  }
 
-    .btn-add:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-    }
+  .btn-edit:hover {
+    background-color: #f5efe6;
+    color: #E6AA68;
+  }
 
-    .content-card {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
+  .btn-delete:hover {
+    background-color: #fee2e2;
+    color: #ef4444;
+  }
 
-    .content-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+  .tree-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
 
-    .content-table th {
-        text-align: left;
-        padding: 1rem;
-        background-color: #f5efe6;
-        color: #2c1810;
-        font-weight: 600;
-    }
+  .drag-handle {
+    cursor: move;
+    color: #94a3b8;
+  }
 
-    .content-table td {
-        padding: 1rem;
-        border-bottom: 1px solid #f5efe6;
-    }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #666;
+  }
 
-    .lesson-title {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .breadcrumb-item {
+    color: #2c1810;
+    text-decoration: none;
+  }
 
-    .status-badge {
-        padding: 0.3rem 0.8rem;
-        border-radius: 1rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
+  .breadcrumb-separator {
+    color: #94a3b8;
+  }
 
-    .status-lecture {
-        background-color: #e2e8f0;
-        color: #475569;
-    }
+  .tree-content.collapse {
+    display: none;
+  }
 
-    .status-task {
-        background-color: #dcfce7;
-        color: #166534;
-    }
+  .toolbar-top {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
 
-    .actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .btn-action {
-        padding: 0.4rem;
-        border-radius: 0.4rem;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        background: transparent;
-    }
-
-    .btn-edit:hover {
-        background-color: #f5efe6;
-        color: #E6AA68;
-    }
-
-    .btn-delete:hover {
-        background-color: #fee2e2;
-        color: #ef4444;
-    }
-
-    .tree-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .drag-handle {
-        cursor: move;
-        color: #94a3b8;
-    }
-
-    .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        color: #666;
-    }
-
-    .breadcrumb-item {
-        color: #2c1810;
-        text-decoration: none;
-    }
-
-    .breadcrumb-separator {
-        color: #94a3b8;
-    }
-
-    .tree-content.collapse {
-        display: none;
-    }
-
-    .tree-content.show {
-        display: block !important;
-    }
+  .tree-content.show {
+    display: block !important;
+  }
 </style>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <main>
-    <!--    <ul>-->
-    <!--        <li th:each="category : ${categories}">-->
-    <!--            <span th:text="${category.name}"></span>-->
-    <!--            <ul th:if="${category.children}">-->
-    <!--                <li th:each="child : ${category.children}">-->
-    <!--                    <span th:text="${child.name}"></span>-->
-    <!--                    &lt;!&ndash; Recursively include subcategories &ndash;&gt;-->
-    <!--                    <div th:insert="~{this :: subtree(category=child)}"></div>-->
-    <!--                </li>-->
-    <!--            </ul>-->
-    <!--        </li>-->
-    <!--    </ul>-->
+  <nav class="toolbar-top navbar">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center">
+        <button class="mendo-btn mendo-btn-secondary me-2">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="h5 mb-0">Достапни содржини</h1>
+      </div>
 
-    <!--    &lt;!&ndash; Recursive template fragment &ndash;&gt;-->
-    <!--    <div th:fragment="subtree (category)">-->
-    <!--        <ul th:if="${category.children}">-->
-    <!--            <li th:each="child : ${category.children}">-->
-    <!--                <span th:text="${child.name}"></span>-->
-    <!--                <div th:insert="~{this :: subtree(category=child)}"></div>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-    <!--    </div>-->
+    </div>
+  </nav>
 
-
-    <div class="row">
-        <div class="col-md-2">
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <span class="sidebar-title">Категории</span>
-                    <button class="btn-action btn-edit">
-                        <i class="fas fa-plus"></i>
-                    </button>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-title">Категории</span>
+          <div>
+            <a style="color: unset" href="/activities" class="btn-action btn-edit">
+              <i class="fa-solid fa-filter-circle-xmark"></i>
+            </a>
+            <a style="color: unset" href="/categories/add" class="btn-action btn-edit">
+              <i class="fas fa-plus"></i>
+            </a>
+          </div>
+        </div>
+        <div class="tree-view">
+          <div th:each="category : ${categories}" class="tree-item">
+            <div class="tree-parent"
+                 th:style="${category.isSelected ? 'background-color: #f5efe6;' : ''}">
+              <div class="row d-flex justify-content-evenly align-items-center">
+                <div class="col-2">
+                  <button th:if="${!category.children.empty}" data-bs-toggle="collapse"
+                          th:data-bs-target="'#' + ${category.getId()}" aria-expanded="false"
+                          class="tree-toggle">
+                    <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-chevron-up"></i>
+                  </button>
                 </div>
-                <div class="tree-view">
-                    <div th:each="category : ${categories}" class="tree-item">
-                        <div class="tree-parent">
-                            <div class="row d-flex justify-content-evenly align-items-center">
-                                <div class="col-2">
-                                    <button th:if="${!category.children.empty}" data-bs-toggle="collapse"
-                                            th:data-bs-target="'#' + ${category.getId()}" aria-expanded="false"
-                                            class="tree-toggle">
-                                        <i class="fas fa-chevron-right"></i>
-                                        <i class="fas fa-chevron-up"></i>
-                                    </button>
-                                </div>
-                                <div class="col-6">
-                                    <span th:text="${category.name}">Category Name</span>
-                                </div>
-                                <div class="col-4 d-flex justify-content-between align-items-center">
-                                    <div class="tree-actions">
-                                        <button class="btn-action btn-edit">
-                                            <i class="fas fa-pencil"></i>
-                                        </button>
-                                        <button class="btn-action btn-delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div th:if="${category.children}" class="tree-content collapse" th:id="${category.id}">
-                            <div th:each="child : ${category.children}" class="tree-parent">
+                <a style="text-decoration: none; color: unset;"
+                   th:href="@{/activities(categoryId=${category.id})}" class="col-6">
+                  <span th:text="${category.name}">Category Name</span>
+                </a>
+                <div class="col-4 d-flex justify-content-between align-items-center">
+                  <div class="tree-actions">
+                    <button class="btn-action btn-edit">
+                      <i class="fas fa-pencil"></i>
+                    </button>
+                    <button class="btn-action btn-delete">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div th:if="${category.children}" class="tree-content collapse" th:id="${category.id}">
+              <div th:each="child : ${category.children}" class="tree-parent">
                                  <span class="tree-toggle">
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
-                                <i class="fas fa-folder tree-icon"></i>
-                                <span th:text="${child.name}">SubCategory Name</span>
-                                <div class="tree-actions">
-                                    <button class="btn-action btn-edit">
-                                        <i class="fas fa-pencil"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <i class="fas fa-folder tree-icon"></i>
+                <span th:text="${child.name}">SubCategory Name</span>
+                <div class="tree-actions">
+                  <button class="btn-action btn-edit">
+                    <i class="fas fa-pencil"></i>
+                  </button>
+                  <button class="btn-action btn-delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="col-md-10">
-            <div class="main-content">
-                <div class="breadcrumb">
-                    <a href="#" class="breadcrumb-item">Научете C++</a>
-                    <span class="breadcrumb-separator">/</span>
-                    <a href="#" class="breadcrumb-item">Програмски јазик C++</a>
-                </div>
-
-                <div class="header">
-                    <h1>Програмски јазик C++</h1>
-                    <button class="btn-add">
-                        <i class="fas fa-plus"></i>
-                        Додај нова лекција
-                    </button>
-                </div>
-
-                <div class="content-card">
-                    <table class="content-table">
-                        <thead>
-                        <tr>
-                            <th style="width: 40px"></th>
-                            <th>Име</th>
-                            <th>Извор</th>
-                            <th>Активност</th>
-                            <th>Акции</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><i class="fas fa-grip-vertical drag-handle"></i></td>
-                            <td>
-                                <div class="lesson-title">
-                                    <i class="fas fa-book"></i>
-                                    Вовед. Структурирано програмирање
-                                </div>
-                            </td>
-                            <td>-</td>
-                            <td><span class="status-badge status-lecture">предавање</span></td>
-                            <td>
-                                <div class="actions">
-                                    <button class="btn-action btn-edit">
-                                        <i class="fas fa-pencil"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><i class="fas fa-grip-vertical drag-handle"></i></td>
-                            <td>
-                                <div class="lesson-title">
-                                    <i class="fas fa-code"></i>
-                                    Здраво
-                                </div>
-                            </td>
-                            <td>вовед '12</td>
-                            <td><span class="status-badge status-task">задача</span></td>
-                            <td>
-                                <div class="actions">
-                                    <button class="btn-action btn-edit">
-                                        <i class="fas fa-pencil"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-10">
+      <div class="main-content">
+
+        <div class="header">
+          <div></div>
+          <div style="display: flex; gap: 10px;">
+            <a style="text-decoration: none" href="/activities/lectures/add" class="btn-add">
+              <i class="fas fa-plus"></i>
+              Додади ново предавање
+            </a>
+            <a style="text-decoration: none" href="/activities/lectures/add" class="btn-add">
+              <i class="fas fa-plus"></i>
+              Додади нова задача
+            </a>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <table class="content-table">
+            <thead>
+            <tr>
+              <th style="width: 40px"></th>
+              <th>Име</th>
+              <th>Извор</th>
+              <th>Тип</th>
+              <th>Тагови</th>
+              <th>Акции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="act:${activities}">
+              <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+              <td>
+                <div class="lesson-title">
+                  <i th:if="${act.type eq 'LECTURE'}" class="fas fa-book"></i>
+                  <i th:if="${act.type eq 'TASK'}" class="fas fa-code"></i>
+                  <span th:text="${act.name}"></span>
+                </div>
+              </td>
+              <td th:text="${act?.source}"></td>
+              <td>
+                <span th:if="${act.type eq 'LECTURE'}">предавање</span>
+                <span th:if="${act.type eq 'TASK'}">задача</span>
+              </td>
+              <td><span th:each="tag:${act.tags}" class="status-badge status-lecture"
+                        th:text="${tag}">предавање</span></td>
+              <td>
+                <div class="actions">
+                  <a th:href="@{/activities/lectures/edit/{id} (id=${act.id})}" class="btn-action btn-edit link-no-decor">
+                    <i class="fas fa-pencil"></i>
+                  </a>
+                  <a class="btn-action btn-delete link-no-decor">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                  <a th:href="@{/activities/lectures/{id} (id=${act.id})}" class="btn-action btn-edit link-no-decor">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 </html>
