@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/competitions")
+@RequestMapping("/competition")
 public class CompetitionsController {
 
     private final CompetitionService competitionService;
@@ -92,7 +92,7 @@ public class CompetitionsController {
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
-        model.addAttribute("bodyContent", "competition-details");
+        model.addAttribute("bodyContent", "competition/competition_details");
         return "master";
 
     }

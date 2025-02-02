@@ -46,8 +46,8 @@ public class Competition extends BaseAuditedEntity<Long> {
     @ManyToMany
     List<MendoUser> moderators;
 
-
-
+    @OneToMany(mappedBy = "competition")
+    List<CompetitionTask> tasks;
 
     public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {
         this.title = title;
