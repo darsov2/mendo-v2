@@ -1,17 +1,20 @@
 package mk.ukim.finki.mendo.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import mk.ukim.finki.mendo.model.ActivityTag;
 import mk.ukim.finki.mendo.model.Category;
 import mk.ukim.finki.mendo.model.Content;
 import mk.ukim.finki.mendo.model.Lecture;
 import mk.ukim.finki.mendo.model.Task;
+import mk.ukim.finki.mendo.model.Thread;
 import mk.ukim.finki.mendo.model.Topic;
 import mk.ukim.finki.mendo.model.enums.ContentType;
 import mk.ukim.finki.mendo.repository.ContentRepository;
 import mk.ukim.finki.mendo.repository.LectureRepository;
 import mk.ukim.finki.mendo.repository.TaskRepository;
+import mk.ukim.finki.mendo.repository.ThreadRepository;
 import mk.ukim.finki.mendo.service.CategoryService;
 import mk.ukim.finki.mendo.service.ContentService;
 import org.springframework.stereotype.Service;
@@ -25,13 +28,16 @@ public class ContentServiceImpl implements ContentService {
   private final CategoryService categoryService;
   private final LectureRepository lectureRepository;
   private final TaskRepository taskRepository;
+  private final ThreadRepository threadRepository;
 
   public ContentServiceImpl(ContentRepository contentRepository, CategoryService categoryService,
-      LectureRepository lectureRepository, TaskRepository taskRepository) {
+      LectureRepository lectureRepository, TaskRepository taskRepository,
+      ThreadRepository threadRepository) {
     this.contentRepository = contentRepository;
     this.categoryService = categoryService;
     this.lectureRepository = lectureRepository;
     this.taskRepository = taskRepository;
+    this.threadRepository = threadRepository;
   }
 
   @Override
@@ -75,19 +81,24 @@ public class ContentServiceImpl implements ContentService {
   }
 
   @Override
+  @Transactional
   public Task createTask(Category category, List<ActivityTag> activityTags, String title,
       String source, String content, String inputContent, String outputContent, Topic topic) {
+    Thread thread = new Thread("Форум за задача " + title);
+    thread = threadRepository.save(thread);
+
     Task task = new Task();
     task.setCategory(category);
     task.setTitle(title);
     task.setSource(source);
     task.setTags(activityTags);
     task.setOrder(0);
-    task.setType(ContentType.LECTURE);
+    task.setType(ContentType.TASK);
     task.setText(content);
     task.setInputFormat(inputContent);
     task.setOutputFormat(outputContent);
     task.setTopic(topic);
+    task.setThread(thread);
     return taskRepository.save(task);
   }
 
