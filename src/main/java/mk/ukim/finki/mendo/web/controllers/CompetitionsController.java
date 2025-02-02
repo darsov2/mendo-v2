@@ -92,7 +92,8 @@ public class CompetitionsController {
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
-        model.addAttribute("bodyContent", "competition/competition_details");
+        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("bodyContent", "competition/competition-details");
         return "master";
 
     }
