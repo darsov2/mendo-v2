@@ -39,7 +39,13 @@ public class QuotaController {
     @PostMapping("/add")
     public String addQuota(@RequestParam Long competitionId, @RequestParam Map<String, String> allParams){
         mapper.bulkSave(competitionId, allParams);
-        return "master";
+        return "redirect:/competition/" + competitionId;
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editQuota(@PathVariable Long id, @RequestParam Map<String, String> allParams){
+        mapper.editBulkSave(id, allParams);
+        return "redirect:/competition/" + id;
     }
 
 }
