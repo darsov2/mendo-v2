@@ -25,6 +25,11 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    public List<School> findAllById(List<Long> ids) {
+        return schoolRepository.findAllByIdIn(ids);
+    }
+
+    @Override
     public School findById(Long schoolId) {
         return schoolRepository.findById(schoolId).orElseThrow(RuntimeException::new);
     }
