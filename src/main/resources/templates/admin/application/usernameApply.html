@@ -130,8 +130,8 @@
             <table class="results-table">
                 <thead>
                 <tr>
-                    <th>Username</th>
-                    <th>Message</th>
+                    <th>Корисничко име</th>
+                    <th>Порака</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -148,7 +148,7 @@
         </div>
 
         <!-- Registration Form -->
-        <form th:action="@{/admin/usernameApply}" method="post" class="registration-form">
+        <form th:action="@{/application/admin/usernameApply}" method="post" class="registration-form">
             <div class="form-field">
                 <label class="form-label" for="competition">Одберете Натпревар</label>
                 <select id="competition" name="competition" required>
