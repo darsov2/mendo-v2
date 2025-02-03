@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="mk">
+<html lang="mk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>МЕНДО - Дома</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/inter/3.19.3/inter.css" rel="stylesheet">
-    <style>
-
-    </style>
 </head>
 <body>
-
 
 <div class="hero-section">
     <h1 class="hero-title">Добредојдовте на МЕНДО</h1>
@@ -21,7 +17,6 @@
         <a href="#compete" class="cta-mendo-btn cta-secondary">Натпревари</a>
     </div>
 </div>
-
 
 <main class="main-content">
     <section class="quick-start">
@@ -47,33 +42,11 @@
 
     <h2 class="section-title">Најнови информации</h2>
     <div class="news-grid">
-        <div class="news-card">
+        <!-- Iterate over the articles and display them dynamically -->
+        <div class="news-card" th:each="article : ${articles}">
             <div class="news-content">
-                <h3 class="news-title">Натпревари по информатика 2024</h3>
-                <p class="news-text">
-                    Здружението на информатичарите на Македонија организира нов циклус на натпревари по информатика, во
-                    сличен формат како и минатите години...
-                </p>
-                <a href="#more" class="news-link">Повеќе →</a>
-            </div>
-        </div>
-
-        <div class="news-card">
-            <div class="news-content">
-                <h3 class="news-title">Нови курсеви на платформата</h3>
-                <p class="news-text">
-                    Додадени се нови материјали за учење, вклучувајќи интерактивни задачи и видео лекции...
-                </p>
-                <a href="#more" class="news-link">Повеќе →</a>
-            </div>
-        </div>
-
-        <div class="news-card">
-            <div class="news-content">
-                <h3 class="news-title">Успех на македонските информатичари</h3>
-                <p class="news-text">
-                    Нашите натпреварувачи постигнаа извонредни резултати на меѓународните натпревари...
-                </p>
+                <h3 class="news-title" th:text="${article.title}">Наслов на вест</h3>
+                <p class="news-text" th:text="${article.text}">Опис на вест...</p>
                 <a href="#more" class="news-link">Повеќе →</a>
             </div>
         </div>
