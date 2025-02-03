@@ -90,9 +90,15 @@ public class CompetitionsController {
 
     @GetMapping("/{id}")
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
+        List<School> schools = schoolService.findAll();
         Competition competition = competitionService.findById(id);
+        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
+
         model.addAttribute("competition", competition);
-        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("currentDateTime", LocalDateTime.now());
+        model.addAttribute("schools", schools);
+        model.addAttribute("grades", Grade.values());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("bodyContent", "competition/competition-details");
         return "master";
 
