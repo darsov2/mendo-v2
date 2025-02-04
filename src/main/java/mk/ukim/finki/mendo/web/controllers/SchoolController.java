@@ -18,12 +18,14 @@ public class SchoolController {
     public final SchoolMapper mapper;
     public final CompetitionCycleMapper cycleMapper;
     public final CompetitionMapper competitionMapper;
+    private final SchoolMapper schoolMapper;
 
-    public SchoolController(SchoolService schoolService, SchoolMapper mapper, CompetitionCycleMapper cycleMapper, CompetitionMapper competitionMapper) {
+    public SchoolController(SchoolService schoolService, SchoolMapper mapper, CompetitionCycleMapper cycleMapper, CompetitionMapper competitionMapper, SchoolMapper schoolMapper) {
         this.schoolService = schoolService;
         this.mapper = mapper;
         this.cycleMapper = cycleMapper;
         this.competitionMapper = competitionMapper;
+        this.schoolMapper = schoolMapper;
     }
 
     @GetMapping({"/", ""})
@@ -47,15 +49,16 @@ public class SchoolController {
 
     @GetMapping("/edit/{id}")
     public String editSchools(@PathVariable Long id, Model model ){
-        School school = schoolService.findById(id);
-        model.addAttribute("bodyContent", "schools");
+        School school = schoolMapper.findById(id);
+        model.addAttribute("school", school);
+        model.addAttribute("bodyContent", "admin/edit-school");
         return "master";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateSchools(SchoolRequest request, Model model ){
-        mapper.saveSchool(request);
-        return "master";
+    public String updateSchools(@PathVariable Long id, SchoolRequest request){
+        mapper.updateSchool(id, request);
+        return "redirect:/schools";
     }
 
 
