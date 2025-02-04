@@ -227,20 +227,20 @@
             <button class="tab" onclick="switchTab('forum')">Форум</button>
             <button class="tab" onclick="switchTab('editorial')">Решение</button>
         </div>
-        <div th:object="${task}" class="tab-content">
+        <div class="tab-content">
             <div id="task" class="tab-pane active">
-                <h1 th:text="*{title}">Task Title</h1>
+                <h1 th:text="${task.title}">Task Title</h1>
                 <div class="task-info">
-                    <span>⏱️ Временско ограничување: <span th:text="*{timeLimit}"></span> ms</span>
-                    <span>💾 Мемориско ограничување: <span th:text="*{memoryLimit}"></span> MB</span>
+                    <span>⏱️ Временско ограничување: <span th:text="${task.timeLimit}"></span> ms</span>
+                    <span>💾 Мемориско ограничување: <span th:text="${task.memoryLimit}"></span> MB</span>
                 </div>
-                <div th:utext="*{text}"></div>
+                <div th:utext="${task.text}"></div>
 
                 <h3>Влез</h3>
-                <div th:utext="*{inputFormat}"></div>
+                <div th:utext="${task.inputFormat}"></div>
 
                 <h3>Излез</h3>
-                <div th:utext="*{outputFormat}"></div>
+                <div th:utext="${task.outputFormat}"></div>
 
                 <h3>Примери</h3>
                 <div class="sample-case">
@@ -251,34 +251,28 @@
                 </div>
             </div>
             <div id="forum" class="tab-pane">
-                <div class="forum-post">
+                <div class="forum-post" th:each="post : ${posts}">
                     <div class="post-header">
-                        <span>Петар Петровски</span>
-                        <span>пред 2 дена</span>
+                        <span th:text="${post?.mendoUser?.firstName + ' ' + post?.mendoUser?.lastName}">Null</span>
+                        <!--                        <span th:text="${#temporals.format(post?.timestamp, 'пред ')} + ${T(java.time.temporal.ChronoUnit.DAYS).between(post?.timestamp, T(java.time.LocalDateTime).now())} + ' дена'"></span>-->
                     </div>
-                    <p>Дали може да се користи библиотеката algorithm?</p>
+                    <p th:text="${post?.description}">/</p>
                 </div>
-                <div class="forum-post">
-                    <div class="post-header">
-                        <span>Ана Ангелова</span>
-                        <span>пред 1 ден</span>
-                    </div>
-                    <p>Да, може да се користи algorithm библиотеката.</p>
-                </div>
+            </div>
 
-                <form id="schoolForm" method="POST" th:action="@{'/posts/' + *{thread.id}}">
-                    <div class="form-group">
+            <form id="schoolForm" method="POST" th:action="@{'/posts/' + ${task.thread.id}}">
+                <div class="form-group">
         <textarea
                 class="form-control"
-                name="post"
+                name="description"
                 placeholder="add comment"
         ></textarea>
-                    </div>
-                    <button type="submit" class="mendo-btn">
-                        Остави коментар
-                    </button>
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="mendo-btn">
+                    Остави коментар
+                </button>
+            </form>
+
 
             <div id="editorial" class="tab-pane">
                 <div class="editorial-content">
@@ -294,6 +288,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.6/ace.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.6/theme-monokai.min.js"></script>
