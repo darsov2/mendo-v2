@@ -22,7 +22,8 @@ public class ArticleController {
     public String showArticles(Model model) {
         List<Article> articles = articleService.findAll();
         model.addAttribute("articles", articles);
-        return "articles";
+        model.addAttribute("bodyContent", "articles");
+        return "master";
     }
 
     @GetMapping("/add")
@@ -58,5 +59,15 @@ public class ArticleController {
     public String deleteArticle(@PathVariable Long id) {
         articleService.delete(id);
         return "redirect:/articles";
+    }
+
+    @GetMapping("/{id}")
+    public String showArticleDetails(@PathVariable Long id, Model model) {
+        Article article = articleService.findById(id);
+        if (article == null) {
+            return "redirect:/articles";
+        }
+        model.addAttribute("article", article);
+        return "article-details";
     }
 }

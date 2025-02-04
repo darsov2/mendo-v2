@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Data;
 import mk.ukim.finki.mendo.model.BaseEntity;
 import mk.ukim.finki.mendo.model.MendoUser;
 import org.springframework.data.annotation.CreatedBy;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@Data
 @EntityListeners(AuditingEntityListener.class)
 public class BaseAuditedEntity<T> extends BaseEntity<T> {
     @CreatedDate
