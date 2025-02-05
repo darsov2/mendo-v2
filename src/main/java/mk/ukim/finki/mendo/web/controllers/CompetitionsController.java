@@ -1,9 +1,6 @@
 package mk.ukim.finki.mendo.web.controllers;
 
-import mk.ukim.finki.mendo.model.Competition;
-import mk.ukim.finki.mendo.model.CompetitionCycle;
-import mk.ukim.finki.mendo.model.MendoUser;
-import mk.ukim.finki.mendo.model.School;
+import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
@@ -11,12 +8,12 @@ import mk.ukim.finki.mendo.service.CompetitionService;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.SchoolService;
 import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
+import mk.ukim.finki.mendo.web.mapper.ParticipationMapper;
 import mk.ukim.finki.mendo.web.mapper.QuotaMapper;
+import mk.ukim.finki.mendo.web.mapper.RoomMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,15 +29,19 @@ public class CompetitionsController {
     private final MendoUserService mendoUserService;
     private final CompetitionMapper competitionMapper;
     private final QuotaMapper quotaMapper;
+    private final ParticipationMapper participationMapper;
+    private final RoomMapper roomMapper;
 
     public CompetitionsController(CompetitionService competitionService,
-                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper, QuotaMapper quotaMapper) {
+                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper, QuotaMapper quotaMapper, ParticipationMapper participationMapper, RoomMapper roomMapper) {
         this.competitionService = competitionService;
         this.competitionCycleService = competitionCycleService;
         this.schoolService = schoolService;
         this.mendoUserService = mendoUserService;
         this.competitionMapper = competitionMapper;
         this.quotaMapper = quotaMapper;
+        this.participationMapper = participationMapper;
+        this.roomMapper = roomMapper;
     }
 
 //    @GetMapping
@@ -107,5 +108,42 @@ public class CompetitionsController {
         model.addAttribute("bodyContent", "competition/competition-details");
         return "master";
 
+    }
+
+
+    @GetMapping("/{id}/schedule")
+    public String getSchedule(Model model, @PathVariable Long id){
+        List<Participation> participations = participationMapper.getParticipantsForCompetition(id);
+        model.addAttribute("participations", participations);
+        model.addAttribute("competitionId", id);
+
+        model.addAttribute("bodyContent", "competition/competition-schedule");
+        return "master";
+    }
+
+    @GetMapping("/{id}/edit/schedule")
+    public String getEditSchedule(Model model, @PathVariable Long id){
+        List<Participation> participations = participationMapper.getParticipantsForCompetition(id);
+        model.addAttribute("participations", participations);
+        model.addAttribute("competitionId", id);
+        model.addAttribute("rooms", roomMapper.findAllRooms());
+        model.addAttribute("bodyContent", "competition/competition-schedule-edit");
+        return "master";
+    }
+
+    @PostMapping("/{id}/edit/schedule")                //<participantId, roomId>
+    public String editSchedule(@PathVariable Long id, @RequestParam Map<String, String> allParams){
+        participationMapper.changeRoomForParticipation(id, allParams);
+        return "redirect:/competition/" + id +"/schedule";
+    }
+
+
+    @GetMapping("/{id}/generate")
+    public String generateSchedule(Model model, @PathVariable Long id) {
+        List<Participation> participations = competitionService.distributeStudentsForCompetition(id);
+        model.addAttribute("participations", participations);
+        model.addAttribute("competitionId", id);
+        model.addAttribute("bodyContent", "competition/competition-schedule");
+        return "master";
     }
 }

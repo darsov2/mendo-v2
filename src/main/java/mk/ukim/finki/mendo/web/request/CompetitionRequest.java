@@ -27,6 +27,7 @@ public class CompetitionRequest {
     LocalDateTime deadline;
     Long cycleId;
     Long parentId;
+    List<Long> roomIds;
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(

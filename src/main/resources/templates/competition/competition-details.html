@@ -172,6 +172,14 @@
     </div>
 </div>
 
+<div style="width: 80%" class="m-auto d-flex justify-content-end">
+    <a th:href="@{${competition.hasSchedule} ? '/competition/' + ${competition.id} + '/schedule' : '/competition/' + ${competition.id} + '/generate'}"
+       class="mendo-btn mb-4"
+       style="background-color: #E6AA68; text-decoration: none; color: black">
+        <span th:text="${competition.hasSchedule} ? 'Види список' : 'Генерирај Список'"></span>
+    </a>
+</div>
+
 <!-- Registration Modal -->
 <div th:if="${currentUser != null}" class="modal fade" id="registrationModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -450,7 +458,7 @@
     }
 
     .main-content {
-        padding: 2rem;
+        padding: 2rem 2rem 0 2rem !important;
         max-width: unset !important;
         margin: unset !important;
         background-color: #f5efe6;
