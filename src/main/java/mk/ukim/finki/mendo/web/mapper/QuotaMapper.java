@@ -1,6 +1,8 @@
 package mk.ukim.finki.mendo.web.mapper;
 
+import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.Quota;
+import mk.ukim.finki.mendo.model.School;
 import mk.ukim.finki.mendo.service.QuotaService;
 import mk.ukim.finki.mendo.web.request.QuotasRequest;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,32 @@ public class QuotaMapper {
     }
 
     public List<Quota> bulkSave(Long competitionId, Map<String, String> request){
+        Competition competition = competitionMapper.findById(competitionId);
 
-        List<Quota> quotas = request.entrySet().stream().skip(1).map(set ->
-            new Quota(Integer.parseInt(set.getValue()), schoolMapper.findById(Long.parseLong(set.getKey())), competitionMapper.findById(competitionId))).toList();
+        request.remove("competitionId");
+
+        List<School> schools = schoolMapper.findAllById(request.keySet().stream().map(Long::parseLong).toList());
+
+        List<Quota> quotas = schools.stream().map(s ->
+                new Quota(Integer.parseInt(request.get(s.getId().toString())), s, competition)).toList();
         service.save(quotas);
         return quotas;
+    }
+
+    public List<Quota> editBulkSave(Long competitionId, Map<String, String> request){
+        Competition competition = competitionMapper.findById(competitionId);
+        request.remove("competitionId");
+
+        List<School> schools = schoolMapper.findAllById(request.keySet().stream().map(Long::parseLong).toList());
+
+        List<Quota> quotas = schools.stream().map(s ->
+            new Quota(Integer.parseInt(request.get(s.getId().toString())), s, competition)).toList();
+
+        return service.editQuotasForCompetition(competitionId, quotas);
+    }
+
+    public List<Quota> findQuotasForCompetition(Long competitionId){
+        return service.findQuotasForCompetition(competitionId);
     }
 
 }

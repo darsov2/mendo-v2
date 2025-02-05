@@ -8,4 +8,7 @@ public interface QuotaService {
 
     public List<Quota> save(List<Quota> quotas);
 
+    List<Quota> findQuotasForCompetition(Long competitionId);
+
+    List<Quota> editQuotasForCompetition(Long competitionId, List<Quota> quotas);
 }
