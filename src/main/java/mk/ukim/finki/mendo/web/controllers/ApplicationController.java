@@ -1,9 +1,6 @@
 package mk.ukim.finki.mendo.web.controllers;
 
-import mk.ukim.finki.mendo.model.Application;
-import mk.ukim.finki.mendo.model.Competition;
-import mk.ukim.finki.mendo.model.MendoUser;
-import mk.ukim.finki.mendo.model.School;
+import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.service.ApplicationService;
 import mk.ukim.finki.mendo.service.CompetitionService;
@@ -24,6 +21,7 @@ public class ApplicationController {
     private final MendoUserService mendoUserService;
     private final ParticipationService participationService;
     private final CompetitionService competitionService;
+
 
     public ApplicationController(ApplicationService applicationService, MendoUserService mendoUserService, ParticipationService participationService, CompetitionService competitionService) {
         this.applicationService = applicationService;
@@ -59,6 +57,7 @@ public class ApplicationController {
 
         return response;
     }
+
     @PostMapping("/competition/{competitionId}")
     @ResponseBody
     public Map<String, Object> registerForCompetition(
@@ -70,7 +69,7 @@ public class ApplicationController {
 
         try {
             MendoUser currentUser = mendoUserService.getCurrentUserOrThrow();
-            if (applicationService.isUserAlreadyRegisteredOnCompetition(competitionId,currentUser.getUsername())) {
+            if (applicationService.isUserAlreadyRegisteredOnCompetition(competitionId, currentUser.getUsername())) {
                 response.put("success", false);
                 response.put("message", "Веќе сте регистрирани за овој натпревар.");
                 return response;
@@ -91,8 +90,8 @@ public class ApplicationController {
     @GetMapping("/admin/view")
     public String getAllApplicationsForSchool(Model model) {
 //        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
-        School school = new School("name","add");
-        school.setId((long)1);
+        School school = new School("name", "add");
+        school.setId((long) 1);
         MendoUser currentUser = new MendoUser(
                 true,                   // isTeacher
                 "teacher123",           // username
@@ -120,7 +119,7 @@ public class ApplicationController {
 
 
         model.addAttribute("applications", allApplications);
-        model.addAttribute("bodyContent","admin/application/applications");
+        model.addAttribute("bodyContent", "admin/application/applications");
         return "master";
     }
 
@@ -142,8 +141,8 @@ public class ApplicationController {
                                        @RequestParam("competition") Long competitionId,
                                        @RequestParam("usernames") String usernames) {
 //        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
-        School school = new School("name","add");
-        school.setId((long)1);
+        School school = new School("name", "add");
+        school.setId((long) 1);
         MendoUser currentUser = new MendoUser(
                 true,                   // isTeacher
                 "teacher123",           // username
@@ -210,6 +209,7 @@ public class ApplicationController {
 
         return "redirect:/application/admin/view";
     }
+
 
     @PostMapping("/admin/refuse/{id}")
     public String refuseApplication(@PathVariable Long id) {

@@ -19,12 +19,12 @@ public interface CompetitionService {
                                String info,
                                LocalDateTime deadline,
                                Long cycleId,
-                               Long parentId
+                               Long parentId,
+                               List<Long> roomIds
     );
 
     List<Competition> findAllWithoutCycle();
-    List<Participation> distributeStudentsForCompetition(Long id, String city);
-
+    List<Participation> distributeStudentsForCompetition(Long id);
     List<Competition> findAll();
     List<Competition> findAllByCycleId(Long cycleId);
     Competition create(String title, LocalDate startDate, LocalDateTime startTime,

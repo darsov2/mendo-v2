@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>МЕНДО - Регистрација на натпревар</title>
     <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../../static/style/style.css" rel="stylesheet">
+    <!--    <link href="../../static/style/style.css" rel="stylesheet">-->
     <style>
 
         /*body {*/
@@ -132,11 +132,12 @@
     <h2 class="section-title">Регистрација на натпревар</h2>
 
     <div class="form-card">
-        <form id="competitionForm" class="form-grid" method="POST" >
+        <form id="competitionForm" class="form-grid" method="POST">
             <!-- Left Column -->
             <div class="form-group">
                 <label class="form-label">Наслов на натпреварот</label>
-                <input type="text" class="form-control" name="title" required placeholder="Внесете наслов на натпреварот">
+                <input type="text" class="form-control" name="title" required
+                       placeholder="Внесете наслов на натпреварот">
             </div>
 
             <div class="form-group">
@@ -192,24 +193,31 @@
                 <label class="form-label">Претходен натпревар</label>
                 <select class="form-control" name="parentId" required>
                     <option value="">Изберете претходен на натпревар</option>
-                    <option th:each="parent : ${parents}"
+                    <option th:each="parent : ${competitions}"
                             th:value="${parent.id}"
-                            th:text="${parent.name}">
+                            th:text="${parent.title}">
                     </option>
                     <option value="">Нема претоден натпревар</option>
                 </select>
             </div>
 
+            <div class="form-group">
 
-            <div class="form-group full-width">
-                <label class="form-label">Додате лабаратории</label>
-                <textarea class="form-control" name="rooms" rows="3" placeholder="Внесете ги лабораториите одвоени со ', '"></textarea>
+                <label for="activity-tag" class="form-label">Тагови</label>
+                <select id="activity-tag" name="roomIds[]" class="form-control form-select" multiple="multiple">
+                    <option th:each="room : ${rooms}"
+                            th:value="${room.id}"
+                            th:text="|${room.name} ${room.city}|">
+                    </option>
+                </select>
+
             </div>
 
             <!-- Full Width -->
             <div class="form-group full-width">
                 <label class="form-label">Дополнителни информации</label>
-                <textarea class="form-control" name="info" rows="3" placeholder="Внесете дополнителни информации за натпреварот"></textarea>
+                <textarea class="form-control" name="info" rows="3"
+                          placeholder="Внесете дополнителни информации за натпреварот"></textarea>
             </div>
 
 
@@ -220,4 +228,47 @@
     </div>
 </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.getElementById('activity-tag');
+
+        $(checkboxes).multiselect({
+            templates: {
+                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+            },
+            enableCaseInsensitiveFiltering: true,
+            withSynchronizationMode: 'ifPopupIsSmaller',
+            buttonWidth: '100%',
+            numberDisplayed: 5,
+            nonSelectedText: "Немате избрано тагови за предавањето",
+            widthSynchronizationMode: 'always',
+            allSelectedText: false,
+            filterPlaceholder: 'Пребарај...',
+            includeSelectAllOption: true,
+            selectAllText: "Избери ги сите"
+            // includeFilterClearBtn: false
+        });
+
+        const saveButton = document.querySelector('.mendo-btn-primary');
+        saveButton.addEventListener('click', function () {
+            tinymce.triggerSave();
+            document.querySelector('form').submit();
+        });
+
+        var manualTopicCheckbox = document.getElementById('add-manual-topic');
+        var manualTopicInput = document.getElementById('manual-topic-input');
+        var topicSelect = document.getElementById('topic');
+
+        manualTopicCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                topicSelect.style.display = 'none';
+                manualTopicInput.style.display = 'block';
+            } else {
+                topicSelect.style.display = 'block';
+                manualTopicInput.style.display = 'none';
+            }
+        });
+
+    });
+</script>
 </html>
