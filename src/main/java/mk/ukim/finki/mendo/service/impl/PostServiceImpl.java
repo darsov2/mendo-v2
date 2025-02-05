@@ -10,6 +10,7 @@ import mk.ukim.finki.mendo.web.request.PostRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -51,5 +52,10 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.save(replyPost);
 
+    }
+
+    @Override
+    public List<Post> findAllPostsByThreadId(Long id) {
+        return postRepository.findAllByThread_Id(id);
     }
 }
