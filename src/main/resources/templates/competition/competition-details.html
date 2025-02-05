@@ -64,30 +64,36 @@
     <!-- Competition Header -->
     <div class="competition-header">
         <h1 class="competition-title" th:text="${competition.title}">Regional Competition 2024</h1>
-        <div th:if="${competition.canStudentRegister != null and competition.requiresRegistration != null and competition.canStudentRegister and competition.requiresRegistration}">
-            <div class="toolbar-actions">
-                <!-- Registration Button Logic -->
-                <th:block
-                        th:with="canRegister=${competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
-                    <th:block th:if="${canRegister}">
-                        <th:block th:if="${currentUser != null}">
-                            <button class="btn-register" th:data-competition-id="${competition.id}">
-                                <i class="fas fa-user-plus"></i> Пријави се
-                            </button>
+        <div class="header-actions">
+            <div class="toolbar-actions" th:if="${competition.endTime.isBefore(currentDateTime)}">
+                <form th:action="@{/results/competitionId={id}(id=${competition.id})}">
+                    <button type="submit" class="btn-results">Види резултати</button>
+                </form>
+            </div>
+            <div th:if="${competition.canStudentRegister != null and competition.requiresRegistration != null and competition.canStudentRegister and competition.requiresRegistration}">
+                <div class="toolbar-actions">
+                    <th:block th:with="canRegister=${competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
+                        <th:block th:if="${canRegister}">
+                            <th:block th:if="${currentUser != null}">
+                                <button class="btn-register" th:data-competition-id="${competition.id}">
+                                    <i class="fas fa-user-plus"></i> Пријави се
+                                </button>
+                            </th:block>
+                            <th:block th:unless="${currentUser != null}">
+                                <a th:href="@{/login}" class="btn-register disabled">
+                                    <i class="fas fa-sign-in-alt"></i> Најавете се за да се пријавите
+                                </a>
+                            </th:block>
                         </th:block>
-                        <th:block th:unless="${currentUser != null}">
-                            <a th:href="@{/login}" class="btn-register disabled">
-                                <i class="fas fa-sign-in-alt"></i> Најавете се за да се пријавите
-                            </a>
-                        </th:block>
-                    </th:block>
-                    <span th:unless="${canRegister}" class="registration-closed">
+                        <span th:unless="${canRegister}" class="registration-closed">
                         <i class="fas fa-lock"></i> Пријавувањето е затворено
                     </span>
-                </th:block>
+                    </th:block>
+                </div>
             </div>
         </div>
     </div>
+
 
     <!-- Competition Info -->
     <div class="content-card">
@@ -320,7 +326,80 @@
 </script>
 
 <style>
+    .competition-header {
+        width: 80%;
+        margin: auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .competition-title {
+        color: #2c1810;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-register {
+        background-color: #E6AA68;
+        color: #2c1810;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-results {
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        border: 1px solid #E6AA68;
+        background: white;
+        color: #2c1810;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-results:hover {
+        background-color: #fff5eb;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+    .btn-register.disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .registration-closed {
+        background-color: #e2e8f0;
+        color: #475569;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
     .table-responsive {
         overflow-x: auto;
         margin: 0 -1.5rem;

@@ -20,4 +20,6 @@ public class Submission extends BaseAuditedEntity<Long> {
     Task task;
     String code;
     Integer points;
+    @ManyToOne
+    CompetitionTask competitionTask;
 }
