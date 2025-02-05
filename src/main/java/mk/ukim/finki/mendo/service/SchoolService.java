@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface SchoolService {
     List<School> findAll();
-
+    List<School> findAllById(List<Long> ids);
     School findById(Long schoolId);
     School save(SchoolRequest request);
+    School update(Long id, SchoolRequest request);
 }

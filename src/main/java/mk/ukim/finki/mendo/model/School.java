@@ -21,7 +21,4 @@ public class School extends BaseEntity<Long> {
         this.address = address;
     }
 
-    public Long getId(){
-        return id;
-    }
 }

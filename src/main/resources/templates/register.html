@@ -225,6 +225,7 @@
                         <label class="form-label">Училиште</label>
                         <select class="form-input" name="school" placeholder="Вашето име и презиме">
                             <option>Изберете го вашето училиште</option>
+                            <option th:each="school : ${schools}" th:text="${school.name}" th:value="${school.id}"></option>
                         </select>
                     </div>
 

@@ -126,7 +126,7 @@ public class ApplicationController {
 
     @GetMapping("/admin/usernameApply")
     public String applyForStudentsWithUsername(Model model,
-                                               @RequestParam(required = false) Map<String, String> results) {
+                                               @ModelAttribute("results") Map<String, String> results) {
         List<Competition> competitions = competitionService.findAll();
 
         model.addAttribute("competitions", competitions);
@@ -136,16 +136,35 @@ public class ApplicationController {
         return "master";
     }
 
+
     @PostMapping("/admin/usernameApply")
     public String studentUsernameApply(RedirectAttributes redirectAttributes,
                                        @RequestParam("competition") Long competitionId,
                                        @RequestParam("usernames") String usernames) {
-        School school = new School("name", "add");
+//        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
+        School school = new School("name","add");
+        school.setId((long)1);
         MendoUser currentUser = new MendoUser(
-                true, "teacher123", "John", "Doe", "password123",
-                "Skopje", "Macedonia", null, "john.doe@school.edu",
-                null, List.of(school), true, true, true, true
+                true,                   // isTeacher
+                "teacher123",           // username
+                "John",                 // name
+                "Doe",                  // surname
+                "password123",          // password
+                "Skopje",              // city
+                "Macedonia",           // country
+                null,                  // grade (null since it's a teacher)
+                "john.doe@school.edu", // email
+                null,                  // studiesSchool (null since it's a teacher)
+                List.of(school), // teachesSchools (school with id 1)
+                true,                  // isAccountNonExpired
+                true,                  // isAccountNonLocked
+                true,                  // isCredentialsNonExpired
+                true                   // isEnabled
         );
+        if (!currentUser.getIsTeacher()) {
+            throw new RuntimeException("User is not teacher");
+        }
+        currentUser = mendoUserService.saveUser(currentUser);
 
         List<String> usernameList = Arrays.stream(usernames.split(","))
                 .map(String::trim)
@@ -175,9 +194,9 @@ public class ApplicationController {
             }
         }
 
-        results.forEach((key, value) -> redirectAttributes.addFlashAttribute("result_" + key, value));
+        redirectAttributes.addFlashAttribute("results", results);
 
-        return "redirect:/admin/usernameApply";
+        return "redirect:/application/admin/usernameApply";
     }
 
     @PostMapping("/admin/approve/{id}")
