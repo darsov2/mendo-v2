@@ -32,8 +32,12 @@ public class ResultsController {
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
         model.addAttribute("results", results);
+
         model.addAttribute("bodyContent", "competition-results");
 
         return "master";
     }
+
+
+
 }

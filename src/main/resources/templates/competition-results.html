@@ -1,4 +1,5 @@
 <!-- Navigation -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
 <nav class="toolbar-top">
     <a th:href="@{'/competition/' + ${competition.id}}" class="btn-back">
         <i class="fas fa-arrow-left"></i> Назад кон натпревар
@@ -19,6 +20,7 @@
                 <tr>
                     <th></th>
                     <th>Натпреварувач</th>
+                    <th>Држава</th>
                     <th>Училиште</th>
                     <th>Клас</th>
                     <th th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
@@ -33,6 +35,14 @@
                     <td th:text="${stat.index + 1} + '.'"></td>
                     <td>
                         <span class="contestant-name" th:text="${result.mendoUser.name}"></span>
+                    </td>
+                    <td>
+                        <div class="flag-container">
+                            <span th:if="${#strings.isEmpty(result.countryFlag)}" class="flag-icon empty-flag" style="width: 1.5rem !important;">
+                            <span th:if="${!#strings.isEmpty(result.countryFlag)}" class="flag-icon flag-icon-squared" style="width: 1.5rem !important;"
+                                  th:classappend="${'flag-icon-' + #strings.toLowerCase(result.countryFlag)}">
+                            </span>
+                        </div>
                     </td>
                     <td th:text="${result.mendoUser.studiesSchool.name}"></td>
                     <td th:text="${result.mendoUser.grade}"></td>
@@ -137,8 +147,55 @@
         background-color: #f8f9fa;
     }
 
+    /* Flag specific styles */
+    .flag-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem;
+    }
+
+    .flag-icon {
+        width: 2.6em ;  /* Increased width for horizontal aspect ratio */
+        height: 2em;   /* Kept original height */
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .flag-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .flag-icon-squared {
+        background-size: contain;  /* Changed from cover to contain */
+        background-position: center;
+        background-repeat: no-repeat;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* Adjust flag column width */
+    table.content-table th:nth-child(3),
+    table.content-table td:nth-child(3) {
+        width: 80px;  /* Increased width to accommodate horizontal flag */
+        text-align: center;
+    }
+
     .contestant-name {
         font-weight: 500;
+        color: #2c1810;
+        padding: 0.25rem 0;
+    }
+
+    /* Adjust flag column width */
+    table.content-table th:nth-child(3),
+    table.content-table td:nth-child(3) {
+        width: 60px;
+        text-align: center;
     }
 
     .no-submission {

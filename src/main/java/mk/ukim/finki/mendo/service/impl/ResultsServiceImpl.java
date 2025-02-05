@@ -1,5 +1,6 @@
 package mk.ukim.finki.mendo.service.impl;
 
+import mk.ukim.finki.mendo.config.CountryFlagUtil;
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.dto.ResultDTO;
 import mk.ukim.finki.mendo.repository.CompetitionRepository;
@@ -9,7 +10,6 @@ import mk.ukim.finki.mendo.service.ResultsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +34,8 @@ public class ResultsServiceImpl implements ResultsService {
 
         for (Participation participation : participants) {
             List<Integer> points = new ArrayList<>();
+            String participantCountryFlag = CountryFlagUtil.getCountryCode(participation.getMendoUser().getCountry());
+
             for (CompetitionTask task : competition.getTasks()){
                 Optional<Submission> lastSubmission = submissionRepository
                         .findLastSubmissionByUserAndCompetitionTask(
@@ -47,7 +49,7 @@ public class ResultsServiceImpl implements ResultsService {
                     points.add(0);
                 }
             }
-            results.add(new ResultDTO(participation.getMendoUser(),points,points.stream().mapToInt(x->x).sum()));
+            results.add(new ResultDTO(participation.getMendoUser(),points,points.stream().mapToInt(x->x).sum(),participantCountryFlag));
         }
         return results.stream()
                 .sorted((x, x2) -> x2.totalPoints.compareTo(x.totalPoints)).toList();

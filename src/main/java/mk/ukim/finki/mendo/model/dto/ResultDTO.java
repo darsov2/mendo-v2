@@ -10,4 +10,5 @@ public class ResultDTO {
     public MendoUser mendoUser;
     public List<Integer> points;
     public Integer totalPoints = 0;
+    public String countryFlag;
 }
