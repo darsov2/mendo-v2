@@ -11,6 +11,7 @@ import mk.ukim.finki.mendo.service.CompetitionService;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.SchoolService;
 import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
+import mk.ukim.finki.mendo.web.mapper.QuotaMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,14 +31,16 @@ public class CompetitionsController {
     private final SchoolService schoolService;
     private final MendoUserService mendoUserService;
     private final CompetitionMapper competitionMapper;
+    private final QuotaMapper quotaMapper;
 
     public CompetitionsController(CompetitionService competitionService,
-                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper) {
+                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper, QuotaMapper quotaMapper) {
         this.competitionService = competitionService;
         this.competitionCycleService = competitionCycleService;
         this.schoolService = schoolService;
         this.mendoUserService = mendoUserService;
         this.competitionMapper = competitionMapper;
+        this.quotaMapper = quotaMapper;
     }
 
 //    @GetMapping
@@ -90,9 +93,18 @@ public class CompetitionsController {
 
     @GetMapping("/{id}")
     public String getCompetitionDetails(@PathVariable Long id, Model model) {
+        List<School> schools = schoolService.findAll();
         Competition competition = competitionService.findById(id);
+        MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
+
         model.addAttribute("competition", competition);
-        model.addAttribute("bodyContent", "competition/competition_details");
+        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("quotas", quotaMapper.findQuotasForCompetition(id));
+        model.addAttribute("currentDateTime", LocalDateTime.now());
+        model.addAttribute("schools", schools);
+        model.addAttribute("grades", Grade.values());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("bodyContent", "competition/competition-details");
         return "master";
 
     }
