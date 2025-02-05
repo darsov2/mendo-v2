@@ -7,48 +7,56 @@
 </nav>
 
 <div class="main-content">
-    <!-- Competition Header -->
     <div class="competition-header">
         <h1 class="competition-title" th:text="'Резултати за ' + ${competition.title}">Резултати за натпревар</h1>
     </div>
 
-    <!-- Results Table -->
     <div class="content-card">
         <div class="table-responsive">
             <table class="content-table">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th class="rank-column">#</th>
                     <th>Натпреварувач</th>
                     <th>Држава</th>
                     <th>Училиште</th>
                     <th>Клас</th>
                     <th th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
-                        th:text="'зад #' + ${i}">
+                        class="task-column"
+                        th:text="'Задача #' + ${i}">
                         зад #1
                     </th>
-                    <th>Вкупно</th>
+                    <th class="total-column">Вкупно</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="result, stat : ${results}">
-                    <td th:text="${stat.index + 1} + '.'"></td>
+                    <td class="rank-column">
+                        <span class="rank-number" th:text="${stat.index + 1} + '.'"></span>
+                    </td>
                     <td>
                         <span class="contestant-name" th:text="${result.mendoUser.name}"></span>
                     </td>
                     <td>
                         <div class="flag-container">
-                            <span th:if="${#strings.isEmpty(result.countryFlag)}" class="flag-icon empty-flag" style="width: 1.5rem !important;">
-                            <span th:if="${!#strings.isEmpty(result.countryFlag)}" class="flag-icon flag-icon-squared" style="width: 1.5rem !important;"
+                            <span th:if="${result.countryFlag == null or result.countryFlag == ''}"
+                                  class="flag-icon empty-flag">
+                            </span>
+                            <span th:unless="${result.countryFlag == null or result.countryFlag == ''}"
+                                  class="flag-icon flag-icon-squared"
                                   th:classappend="${'flag-icon-' + #strings.toLowerCase(result.countryFlag)}">
                             </span>
                         </div>
                     </td>
-                    <td th:text="${result.mendoUser.studiesSchool.name}"></td>
-                    <td th:text="${result.mendoUser.grade}"></td>
+                    <td>
+                        <span class="school-name" th:text="${result.mendoUser.studiesSchool.name}"></span>
+                    </td>
+                    <td>
+                        <span class="grade-text" th:text="${T(mk.ukim.finki.mendo.model.enums.Grade).valueOf(result.mendoUser.grade).getPrettyName()}"></span>
+                    </td>
                     <td th:each="point : ${result.points}"
                         th:text="${point != null ? point : '/'}"
-                        th:class="${point != null ? '' : 'no-submission'}">
+                        th:class="${point != null ? 'point-cell' : 'no-submission'}">
                     </td>
                     <td class="total-points" th:text="${result.totalPoints ?: 0}"></td>
                 </tr>
@@ -66,34 +74,33 @@
         flex-direction: column;
         align-items: center;
         max-width: 500rem;
+        margin: 0 auto;
     }
 
     .competition-header, .content-card {
-        width: 80%;
+        width: 95%;
         margin: auto;
         background: white;
         border-radius: 1rem;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
-
-    .competition-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        box-shadow: 0 4px 6px rgba(44, 24, 16, 0.08);
     }
 
     .competition-title {
         color: #2c1810;
-        font-size: 1.5rem;
+        font-size: 1.75rem;
         font-weight: 600;
+        margin-bottom: 0.5rem;
     }
 
     .toolbar-top {
         background: white;
         padding: 1rem 1.5rem;
         border-bottom: 1px solid #e2e8f0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .btn-back {
@@ -112,16 +119,14 @@
 
     .btn-back:hover {
         background-color: #f5efe6;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
+        color: #2c1810;
     }
 
     .content-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
+        margin-top: 1rem;
     }
 
     .content-table th {
@@ -131,6 +136,7 @@
         color: #2c1810;
         font-weight: 600;
         white-space: nowrap;
+        border-bottom: 2px solid #E6AA68;
     }
 
     .content-table td {
@@ -144,20 +150,19 @@
     }
 
     .content-table tr:hover td {
-        background-color: #f8f9fa;
+        background-color: #faf6f2;
     }
 
-    /* Flag specific styles */
+    /* Enhanced Flag styles */
     .flag-container {
         display: flex;
         align-items: center;
-        justify-content: center;
         padding: 0.25rem;
     }
 
     .flag-icon {
-        width: 2.6em ;  /* Increased width for horizontal aspect ratio */
-        height: 2em;   /* Kept original height */
+        width: 2rem !important;
+        height: 1.5rem !important;
         display: inline-block;
         vertical-align: middle;
         position: relative;
@@ -172,17 +177,27 @@
     }
 
     .flag-icon-squared {
-        background-size: contain;  /* Changed from cover to contain */
+        background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
         border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    /* Adjust flag column width */
-    table.content-table th:nth-child(3),
-    table.content-table td:nth-child(3) {
-        width: 80px;  /* Increased width to accommodate horizontal flag */
+    .empty-flag {
+        background-color: #f5f5f5;
+        border: 1px dashed #ddd;
+        border-radius: 0.25rem;
+    }
+
+    /* Column specific styles */
+    .rank-column {
+        width: 50px;
         text-align: center;
+    }
+
+    .rank-number {
+        font-weight: 500;
+        color: #666;
     }
 
     .contestant-name {
@@ -191,19 +206,63 @@
         padding: 0.25rem 0;
     }
 
-    /* Adjust flag column width */
-    table.content-table th:nth-child(3),
-    table.content-table td:nth-child(3) {
-        width: 60px;
+    .school-name {
+        color: #555;
+        font-size: 0.95rem;
+    }
+
+    .grade-text {
+        color: #666;
+        font-size: 0.95rem;
+        background-color: #f8f9fa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+    }
+
+    .task-column {
         text-align: center;
+        min-width: 80px;
+    }
+
+    .point-cell {
+        text-align: center;
+        font-weight: 500;
     }
 
     .no-submission {
-        color: #888;
+        color: #999;
+        text-align: center;
+        font-style: italic;
     }
 
     .total-points {
         font-weight: 600;
         color: #E6AA68;
+        text-align: center;
+        background-color: #fff5eb;
+        border-radius: 0.25rem;
+    }
+
+    .total-column {
+        text-align: center;
+        background-color: #fff5eb;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 1rem;
+        }
+
+        .competition-header, .content-card {
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .content-table th,
+        .content-table td {
+            padding: 0.75rem 0.5rem;
+        }
     }
 </style>
