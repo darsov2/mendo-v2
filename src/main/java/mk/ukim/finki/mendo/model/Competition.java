@@ -35,7 +35,7 @@ public class Competition extends BaseAuditedEntity<Long> {
     LocalDateTime deadline;
     Boolean requiresRegistration;
     Boolean visibleToPublic;
-    Boolean canStudentRegister;
+    Boolean canStudentr;
 
     @ManyToOne
     CompetitionCycle cycle;

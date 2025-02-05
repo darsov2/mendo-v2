@@ -1,5 +1,8 @@
 package mk.ukim.finki.mendo.web.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import mk.ukim.finki.mendo.model.dto.ActivityDTO;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.model.dto.LectureEditDTO;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -66,6 +71,28 @@ public class ActivitiesController {
   public String previewTask(Model model, @PathVariable Long activityId) {
     model.addAttribute("task", activitiesMapper.getTaskPreview(activityId));
     model.addAttribute("bodyContent", "admin/task-preview");
+    return "master";
+  }
+
+  @PostMapping("/tasks/{taskId}/cases/update-cases")
+  public String updateCases(Model model, @PathVariable Long taskId, HttpServletRequest request,
+      RedirectAttributes redirectAttributes) {
+
+    try {
+      MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+
+      Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+//      Map<String, TestGroupDTO> groups = new HashMap<>();
+    } catch (Exception ex) {
+
+    }
+    return "";
+  }
+
+  @GetMapping("/tasks/{activityId}/cases")
+  public String previewTaskForCasesEdit(Model model, @PathVariable Long activityId) {
+    model.addAttribute("task", activitiesMapper.getTaskPreview(activityId));
+    model.addAttribute("bodyContent", "admin/task-cases");
     return "master";
   }
 
