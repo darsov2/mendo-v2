@@ -1,0 +1,421 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  :root {
+    --primary: #E6AA68;
+    --primary-hover: #d99b59;
+    --background: #f5efe6;
+    --text: #2c1810;
+    --text-secondary: #666;
+    --border: #e2e8f0;
+    --white: #ffffff;
+    --shadow: rgba(44, 24, 16, 0.1);
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+  }
+
+  body {
+    background-color: var(--background);
+    min-height: 100vh;
+  }
+
+  .admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    color: var(--text);
+  }
+
+  .toolbar-top {
+    background: var(--white);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .toolbar-top h1 {
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .task-details {
+    background: var(--white);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px var(--shadow);
+  }
+
+  .task-info {
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0;
+    padding: 1rem 1.5rem;
+    background: var(--background);
+    border-radius: 0.8rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .test-groups {
+    margin-top: 2rem;
+  }
+
+  .group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .add-group-btn, .add-test-btn {
+    padding: 0.625rem 1.25rem;
+    background: var(--primary);
+    color: var(--text);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .add-group-btn:hover, .add-test-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+  }
+
+  .test-group {
+    background: var(--white);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px var(--shadow);
+  }
+
+  .group-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .group-info {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .group-info input[type="number"] {
+    width: 100px;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.4rem;
+  }
+
+  .test-cases {
+    margin-top: 1rem;
+  }
+
+  .test-case {
+    display: grid;
+    grid-template-columns: 50px 1fr 50px; /* Adjusted proportions */
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background: var(--background);
+  }
+
+
+  .test-case:last-child {
+    border-bottom: none;
+  }
+
+  .test-number {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .file-upload {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .file-upload input[type="file"] {
+    display: none;
+  }
+
+  .file-upload label {
+    padding: 0.5rem 1rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 0.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .file-upload label:hover {
+    background: var(--border);
+  }
+
+  .batch-upload {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--background);
+    border-radius: 0.6rem;
+  }
+
+  .batch-upload-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .batch-upload-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .delete-btn {
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    color: var(--danger);
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .delete-btn:hover {
+    background: #fee2e2;
+    color: var(--danger-hover);
+  }
+
+  .btn-action {
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+  }
+
+  .btn-edit:hover {
+    background: var(--background);
+    color: var(--primary);
+  }
+
+  .btn-delete:hover {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+</style>
+
+<div class="admin-container">
+  <nav class="toolbar-top">
+    <div class="d-flex align-items-center">
+      <button class="btn-action btn-edit me-2">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1>Додади тестови</h1>
+    </div>
+  </nav>
+
+  <div class="task-details">
+    <h1>Собирање на два броја</h1>
+    <div class="task-info">
+      <span>⏱️ Временско ограничување: 1000 ms</span>
+      <span>💾 Мемориско ограничување: 256 MB</span>
+    </div>
+
+    <h3>Опис на задачата</h3>
+    <p th:utext="${task.text}"></p>
+
+    <h3>Влез</h3>
+    <p th:utext="${task?.inputFormat}">Опис на влезниот формат...</p>
+
+    <h3>Излез</h3>
+    <p th:utext="${task?.outputFormat}">Опис на излезниот формат...</p>
+  </div>
+  <form method="post" enctype="multipart/form-data"
+        th:action="@{/activities/tasks/{taskId}/cases/update-cases(taskId=${task.id})}">
+
+    <div class="test-groups">
+      <div class="group-header">
+        <h2>Тест групи</h2>
+        <button type="button" class="add-group-btn" onclick="addGroup()">
+          <i class="fas fa-plus"></i>
+          Додади група
+        </button>
+      </div>
+
+      <div id="groups-container">
+        <!-- Groups will be added here -->
+      </div>
+    </div>
+    <button type="submit">SUBMIT</button>
+  </form>
+</div>
+
+<template id="group-template">
+  <div class="test-group">
+    <div class="group-title">
+      <span>Група <span class="group-number"></span></span>
+      <button type="button" class="delete-btn" onclick="deleteGroup(this)">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+
+    <div class="group-info">
+      <label>
+        Поени:
+        <input type="number" value="0" min="0" max="100">
+      </label>
+    </div>
+
+    <div class="test-cases mb-4">
+      <!-- Test cases will be added here -->
+    </div>
+
+    <button type="button" class="add-test-btn" onclick="addTest(this)">
+      <i class="fas fa-plus"></i>
+      Додади тест
+    </button>
+  </div>
+</template>
+
+<template id="test-case-template">
+  <div class="test-case mb-3">
+    <span class="test-number"></span>
+    <div>
+      <div class="d-flex justify-content-evenly mb-4">
+        <div class="file-upload">
+          <label>
+            Влез
+            <input type="file" name="" class="file-input" accept=".txt,.in"
+                   onchange="updateFileName(this)">
+          </label>
+          <span>No file chosen</span>
+        </div>
+        <div class="file-upload">
+          <label>
+            Излез
+            <input type="file" name="" class="file-output" accept=".txt,.out"
+                   onchange="updateFileName(this)">
+          </label>
+          <span>No file chosen</span>
+        </div>
+      </div>
+      <div class="test-limits d-flex justify-center" style="gap: 20px">
+        <input type="number" name="" class="test-points form-control" placeholder="Поени" min="0"
+               max="100">
+        <input type="number" name="" class="test-time form-control" placeholder="Време (ms)"
+               min="0">
+        <input type="number" name="" class="test-memory form-control" placeholder="Меморија (MB)"
+               min="0">
+      </div>
+    </div>
+    <div class="">
+      <button class="btn-action btn-delete" onclick="deleteTest(this)">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  let groupCounter = 0;
+
+  function addGroup() {
+    groupCounter++;
+    const groupsContainer = document.getElementById('groups-container');
+    const template = document.getElementById('group-template');
+    const clone = template.content.cloneNode(true);
+
+    // Update group number
+    clone.querySelector('.group-number').textContent = groupCounter;
+
+    groupsContainer.appendChild(clone);
+  }
+
+  function deleteGroup(button) {
+    const group = button.closest('.test-group');
+    group.remove();
+    updateAllNames(); // Update names after deletion
+  }
+
+  function addTest(button) {
+    const testCasesContainer = button.previousElementSibling;
+    const template = document.getElementById('test-case-template');
+    const clone = template.content.cloneNode(true);
+
+    // Update test number
+    const testNumber = testCasesContainer.children.length + 1;
+    clone.querySelector('.test-number').textContent = '#' + testNumber;
+
+    testCasesContainer.appendChild(clone);
+    updateAllNames(); // Update names after adding new test
+  }
+
+  function deleteTest(button) {
+    const testCase = button.closest('.test-case');
+    const testCasesContainer = testCase.parentElement;
+    testCase.remove();
+
+    // Update remaining test numbers
+    const testCases = testCasesContainer.querySelectorAll('.test-case');
+    testCases.forEach((test, index) => {
+      test.querySelector('.test-number').textContent = '#' + (index + 1);
+    });
+
+    updateAllNames(); // Update names after deletion
+  }
+
+  function updateFileName(input) {
+    const fileSpan = input.parentElement.nextElementSibling;
+    fileSpan.textContent = input.files[0]?.name || 'Нема прикачен фајл';
+  }
+
+  function updateAllNames() {
+    const groups = document.querySelectorAll('.test-group');
+    groups.forEach((group, groupIndex) => {
+      const groupNum = groupIndex + 1;
+      const tests = group.querySelectorAll('.test-case');
+
+      tests.forEach((test, testIndex) => {
+        const testNum = testIndex + 1;
+        const prefix = `g${groupNum}-t${testNum}`;
+
+        // Update input names
+        test.querySelector('.file-input').name = `${prefix}-fileInput`;
+        test.querySelector('.file-output').name = `${prefix}-fileOutput`;
+        test.querySelector('.test-time').name = `${prefix}-time`;
+        test.querySelector('.test-memory').name = `${prefix}-memory`;
+        test.querySelector('.test-points').name = `${prefix}-points`;
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    addGroup();
+  });
+</script>

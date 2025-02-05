@@ -18,6 +18,10 @@ public class TestCase {
     Integer executionTimeLimit; //ms
     @ManyToOne
     TestGroup testGroup;
+    @ManyToOne
+    Document inputFile;
+    @ManyToOne
+    Document outputFile;
     Boolean isExample;
     String furtherExplanation;
 }

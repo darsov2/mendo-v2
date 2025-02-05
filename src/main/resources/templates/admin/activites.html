@@ -403,6 +403,10 @@
                      class="btn-action btn-edit link-no-decor">
                     <i class="fa-solid fa-magnifying-glass"></i>
                   </a>
+                  <a th:if="${act.type == 'TASK'}" th:href="@{/activities/{type}/{id} (type=${act.type == 'TASK' ? 'tasks' : 'lectures'}, id=${act.id})}"
+                     class="btn-action btn-edit link-no-decor">
+                    <i class="fa-solid fa-list-check"></i>
+                  </a>
 
                 </div>
               </td>
