@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Article</title>
+</head>
+<style>
+  body {
+    background-color: #f5efe6;
+    min-height: 100vh;
+  }
+
+  .toolbar-top {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .mendo-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .mendo-btn-primary {
+    background-color: #E6AA68;
+    color: #2c1810;
+  }
+
+  .mendo-btn-secondary {
+    background-color: #f1f5f9;
+    color: #64748b;
+  }
+
+  .main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    color: #2c1810;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+  }
+
+  .form-control:focus {
+    border-color: #E6AA68;
+    box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.1);
+  }
+</style>
+<body>
+<nav class="toolbar-top navbar">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <button class="mendo-btn mendo-btn-secondary me-2" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="h5 mb-0">Edit Article</h1>
+    </div>
+    <div>
+      <a href="/articles" class="mendo-btn mendo-btn-secondary me-2">Cancel</a>
+      <button class="mendo-btn mendo-btn-primary" id="saveButton">Save</button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <form th:object="${article}"
+        th:action="@{/articles/edit/{id}(id=${article.id})}"
+        method="post">
+    <div class="content-card">
+      <div class="mb-4">
+        <label for="article-title" class="form-label">Article Title</label>
+        <input type="text"
+               name="title"
+               class="form-control"
+               id="article-title"
+               th:value="*{title}"
+               placeholder="Enter title...">
+      </div>
+
+      <div class="mb-4">
+        <label for="editor" class="form-label">Content</label>
+        <textarea name="text"
+                  th:utext="*{text}"
+                  id="editor"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const saveButton = document.querySelector('.mendo-btn-primary');
+    saveButton.addEventListener('click', function() {
+      tinymce.triggerSave();
+      document.querySelector('form').submit();
+    });
+  });
+
+  tinymce.init({
+    selector: 'textarea',
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
+      'preview', 'anchor', 'searchreplace', 'visualblocks',
+      'fullscreen', 'insertdatetime', 'table', 'code',
+      'codesample', 'wordcount', 'fontsize'
+    ],
+    toolbar1: 'undo redo | styles | fontsizeselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+    toolbar2: 'bullist numlist outdent indent | link image | codesample code | removeformat',
+    fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
+
+    images_upload_url: '/upload.php',
+    images_upload_base_path: '/some/basepath',
+    images_upload_credentials: true,
+
+    file_picker_types: 'image',
+    file_picker_callback: function (cb, value, meta) {
+      var input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+
+      input.onchange = function () {
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function () {
+          var id = 'blobid' + (new Date()).getTime();
+          var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+          var base64 = reader.result.split(',')[1];
+          var blobInfo = blobCache.create(id, file, base64);
+          blobCache.add(blobInfo);
+
+          cb(blobInfo.blobUri(), {title: file.name});
+        };
+        reader.readAsDataURL(file);
+      };
+
+      input.click();
+    },
+
+    image_advtab: true,
+    image_dimensions: true,
+    image_class_list: [
+      {title: 'None', value: ''},
+      {title: 'Responsive', value: 'img-fluid'},
+      {title: 'Thumbnail', value: 'img-thumbnail'}
+    ],
+
+    codesample_languages: [
+      {text: 'HTML/XML', value: 'markup'},
+      {text: 'JavaScript', value: 'javascript'},
+      {text: 'CSS', value: 'css'},
+      {text: 'PHP', value: 'php'},
+      {text: 'Python', value: 'python'},
+      {text: 'Java', value: 'java'},
+      {text: 'C', value: 'c'},
+      {text: 'C++', value: 'cpp'}
+    ],
+    height: 800,
+    content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; font-size: 16px; }'
+  });
+</script>
+</body>
+</html>

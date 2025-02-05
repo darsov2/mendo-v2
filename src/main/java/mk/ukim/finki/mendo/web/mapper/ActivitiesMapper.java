@@ -97,6 +97,11 @@ public class ActivitiesMapper {
     return TaskDTO.toDTO(task);
   }
 
+  public mk.ukim.finki.mendo.model.Thread getThread(Long lectureId){
+    mk.ukim.finki.mendo.model.Thread thread = contentService.findTaskById(lectureId).getThread();
+    return thread;
+  }
+
   public LectureEditDTO getLectureEditDto(Long lectureId) {
     return LectureEditDTO.toDTO(contentService.findLectureById(lectureId));
   }
