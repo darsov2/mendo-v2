@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompetitionMapper {
@@ -34,7 +35,28 @@ public class CompetitionMapper {
                 request.getDeadline(),
                 request.getCycleId(),
                 request.getParentId(),
-                request.getRoomIds()
+                request.getRoomIds(),
+                request.getTaskIds(),
+                request.getTaskPoints()
+        );
+    }
+
+    public Optional<Competition> editCompetition(Long id, CompetitionRequest request) {
+        return competitionService.update(
+                id,
+                request.getTitle(),
+                request.getStartDate(),
+                request.getStartDateTime(),
+                request.getEndDateTime(),
+                request.getType(),
+                request.getPlace(),
+                request.getInfo(),
+                request.getDeadline(),
+                request.getCycleId(),
+                request.getParentId(),
+                request.getRoomIds(),
+                request.getTaskIds(),
+                request.getTaskPoints()
         );
     }
 

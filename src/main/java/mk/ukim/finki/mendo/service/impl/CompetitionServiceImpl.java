@@ -7,10 +7,13 @@ import mk.ukim.finki.mendo.repository.ParticipationRepository;
 import mk.ukim.finki.mendo.repository.RoomsRepository;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
 import mk.ukim.finki.mendo.service.CompetitionService;
+import mk.ukim.finki.mendo.service.CompetitionTaskService;
+import mk.ukim.finki.mendo.service.TaskService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,34 +25,49 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final ParticipationRepository participationRepository;
     private final RoomsRepository roomsRepository;
+    private final TaskService taskService;
+    private final CompetitionTaskService competitionTaskService;
 
 
-    public CompetitionServiceImpl(CompetitionCycleService service, CompetitionRepository competitionRepository, ParticipationRepository participationRepository, RoomsRepository roomsRepository) {
+    public CompetitionServiceImpl(CompetitionCycleService service, CompetitionRepository competitionRepository, ParticipationRepository participationRepository, RoomsRepository roomsRepository, TaskService taskService, CompetitionTaskService competitionTaskService) {
         this.competitionCycleService = service;
         this.competitionRepository = competitionRepository;
         this.participationRepository = participationRepository;
         this.roomsRepository = roomsRepository;
+        this.taskService = taskService;
+        this.competitionTaskService = competitionTaskService;
     }
 
     @Override
-    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, Long parentId, List<Long> roomIds) {
+    public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, Long parentId, List<Long> roomIds, List<Long> taskIds, List<Long> taskPoints) {
 
         List<Rooms> rooms = roomsRepository.findAllById(roomIds);
+        Competition competition;
 
         if (cycleId == null && parentId == null) {
-            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, rooms));
+            competition = competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, rooms));
         }
         else if (cycleId == null) {
             Competition parent = findById(parentId);
-            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, parent, rooms));
+            competition = competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, parent, rooms));
         }
         else if (parentId == null) {
             CompetitionCycle cycle = competitionCycleService.findById(cycleId);
-            return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, rooms));
+            competition = competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, rooms));
         }
-        CompetitionCycle cycle = competitionCycleService.findById(cycleId);
-        Competition parent = findById(parentId);
-        return competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, parent, rooms));
+        else {
+            CompetitionCycle cycle = competitionCycleService.findById(cycleId);
+            Competition parent = findById(parentId);
+            competition = competitionRepository.save(new Competition(title, startDate, startTime, endTime, type, place, info, deadline, cycle, parent, rooms));
+        }
+        List<CompetitionTask> competitionTasks= new ArrayList<>();
+        for (int i = 0; i < taskIds.size(); i++) {
+            Task task = taskService.getTaskById(taskIds.get(i));
+            CompetitionTask competitionTask = new CompetitionTask(taskPoints.get(i).intValue(),type,task.getText(),competition,task);
+
+        }
+        competition.setTasks(competitionTasks);
+        return competitionRepository.save(competition);
     }
 
     @Override
@@ -107,12 +125,32 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Optional<Competition> update(Long id, String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, List<Long> rooms) {
-        List<Rooms> roomsList = rooms.stream().map(r -> roomsRepository.findById(r).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
-        return competitionRepository.findById(id)
+    public Optional<Competition> update(Long id, String title, LocalDate startDate,
+                                        LocalDateTime startTime, LocalDateTime endTime,
+                                        CompetitionTypes type, String place, String info,
+                                        LocalDateTime deadline, Long cycleId, Long parentId,
+                                        List<Long> rooms, List<Long> taskIds, List<Long> taskPoints) {
 
+        List<Rooms> roomsList = rooms.stream()
+                .map(r -> roomsRepository.findById(r)
+                        .orElseThrow(() -> new RuntimeException("Room not found: " + r)))
+                .collect(Collectors.toList());
+
+        return competitionRepository.findById(id)
                 .map(competition -> {
-                    CompetitionCycle cycle = competitionCycleService.findById(cycleId);
+                    if (cycleId != null) {
+                        CompetitionCycle cycle = competitionCycleService.findById(cycleId);
+                        competition.setCycle(cycle);
+                    } else {
+                        competition.setCycle(null);
+                    }
+
+                    if (parentId != null) {
+                        Competition parent = findById(parentId);
+                        competition.setParentCompetition(parent);
+                    } else {
+                        competition.setParentCompetition(null);
+                    }
 
                     competition.setTitle(title);
                     competition.setStartDate(startDate);
@@ -122,8 +160,21 @@ public class CompetitionServiceImpl implements CompetitionService {
                     competition.setPlace(place);
                     competition.setInfo(info);
                     competition.setDeadline(deadline);
-                    competition.setCycle(cycle);
-//                    competition.setRooms(roomsList);
+                    competition.setRooms(roomsList);
+
+                    List<CompetitionTask> competitionTasks = new ArrayList<>();
+                    for (int i = 0; i < taskIds.size(); i++) {
+                        Task task = taskService.getTaskById(taskIds.get(i));
+                        CompetitionTask competitionTask = new CompetitionTask(
+                                taskPoints.get(i).intValue(),
+                                type,
+                                task.getText(),
+                                competition,
+                                task
+                        );
+                        competitionTasks.add(competitionTask);
+                    }
+                    competition.setTasks(competitionTasks);
 
                     return competitionRepository.save(competition);
                 });

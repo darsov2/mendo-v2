@@ -20,7 +20,9 @@ public interface CompetitionService {
                                LocalDateTime deadline,
                                Long cycleId,
                                Long parentId,
-                               List<Long> roomIds
+                               List<Long> roomIds,
+                               List<Long> taskIds,
+                               List<Long> taskPoints
     );
 
     List<Competition> findAllWithoutCycle();
@@ -34,7 +36,8 @@ public interface CompetitionService {
     Optional<Competition> update(Long id, String title, LocalDate startDate,
                                  LocalDateTime startTime, LocalDateTime endTime,
                                  CompetitionTypes type, String place, String info,
-                                 LocalDateTime deadline, Long cycleId, List<Long> roomIds);
+                                 LocalDateTime deadline, Long cycleId,Long parentId, List<Long> roomIds,
+                                 List<Long> taskIds, List<Long> taskPoints);
     void deleteById(Long id);
     List<Competition> findAllOpenRegistrationCompetitions();
 
