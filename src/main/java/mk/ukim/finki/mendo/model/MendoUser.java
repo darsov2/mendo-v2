@@ -7,10 +7,13 @@ import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,10 +40,27 @@ public class MendoUser extends BaseAuditedEntity<Long> implements UserDetails {
     Boolean isAccountNonLocked = true;
     Boolean isCredentialsNonExpired = true;
     Boolean isEnabled = true;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        roles.forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+
+            role.getPermissions().forEach(permission ->
+                    authorities.add(new SimpleGrantedAuthority(permission.getName()))
+            );
+        });
+
+        return authorities;
     }
 
     @Override
