@@ -54,7 +54,8 @@ public class CompetitionController {
         model.addAttribute("competitions", competitionMapper.listCompetitions());
         model.addAttribute("rooms", roomMapper.findAllRooms());
         model.addAttribute("tasks",taskService.getAllTasks());
-        model.addAttribute("competition", competitionMapper.findById(id));
+        model.addAttribute("competition", competitionMapper.toCompetitionRequest(competitionMapper.findById(id)));
+        model.addAttribute("competitionId", id);
         model.addAttribute("bodyContent", "admin/editCompetition");
         return "master";
     }

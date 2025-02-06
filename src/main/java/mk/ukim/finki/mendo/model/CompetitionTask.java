@@ -1,5 +1,6 @@
 package mk.ukim.finki.mendo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,8 @@ public class CompetitionTask extends BaseAuditedEntity<Long> {
     CompetitionTypes types;
     String description;
     @ManyToOne
-    Competition competition;
+    @JsonBackReference("competition-tasks")
+    private Competition competition;
     @ManyToOne
     Task task;
 }

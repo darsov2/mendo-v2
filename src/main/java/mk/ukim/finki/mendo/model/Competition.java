@@ -1,5 +1,9 @@
 package mk.ukim.finki.mendo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,6 +41,19 @@ public class Competition extends BaseAuditedEntity<Long> {
     Boolean visibleToPublic;
     Boolean canStudentRegister;
 
+    @ManyToOne
+    @JsonIgnoreProperties("competitions")
+    CompetitionCycle cycle;
+    Boolean hasSchedule = false;
+
+    @ManyToOne
+    @JsonIgnoreProperties({"cycle", "parentCompetition", "tasks"})
+    Competition parentCompetition;
+
+    @OneToMany(mappedBy = "competition")
+    @JsonIgnoreProperties("competition")
+    List<CompetitionTask> tasks;
+
     @ManyToMany
     @JoinTable(
             name = "competition_room",
@@ -44,19 +61,9 @@ public class Competition extends BaseAuditedEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "room_id"))
     List<Rooms> rooms;
 
-    @ManyToOne
-    CompetitionCycle cycle;
-    Boolean hasSchedule = false;
-
-    @ManyToOne
-    Competition parentCompetition;
-
     @ManyToMany
+    @JsonIgnoreProperties("competitions")
     List<MendoUser> moderators;
-
-    @OneToMany(mappedBy = "competition")
-    List<CompetitionTask> tasks;
-
     public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, List<Rooms> rooms) {
         this.title = title;
         this.startDate = startDate;

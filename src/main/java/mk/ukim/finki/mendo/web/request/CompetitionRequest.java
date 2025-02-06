@@ -11,6 +11,7 @@ import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class CompetitionRequest {
     private Long parentId;
     private List<Long> roomIds;
 
-    private List<Long> taskIds;
-    private List<Long> taskPoints;
+    private List<Long> taskIds = new ArrayList<>();
+    private List<Long> taskPoints = new ArrayList<>();
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(

@@ -64,7 +64,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         for (int i = 0; i < taskIds.size(); i++) {
             Task task = taskService.getTaskById(taskIds.get(i));
             CompetitionTask competitionTask = new CompetitionTask(taskPoints.get(i).intValue(),type,task.getText(),competition,task);
-
+            competitionTasks.add(competitionTaskService.save(competitionTask));
         }
         competition.setTasks(competitionTasks);
         return competitionRepository.save(competition);
