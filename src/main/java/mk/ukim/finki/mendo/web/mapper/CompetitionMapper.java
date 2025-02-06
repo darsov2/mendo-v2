@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.web.mapper;
 import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.Participation;
 import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
+import mk.ukim.finki.mendo.model.dto.ResultDTO;
 import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import org.springframework.stereotype.Service;
@@ -62,4 +63,5 @@ public class CompetitionMapper {
     public List<Competition> listCompetitions(){
         return  competitionService.findAll();
     }
+
 }
