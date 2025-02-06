@@ -9,60 +9,79 @@
 <div class="main-content">
     <div class="competition-header">
         <h1 class="competition-title" th:text="'Резултати за ' + ${competition.title}">Резултати за натпревар</h1>
-        <a th:href="@{'/results/' + ${competition.id} + '/awards'}" class="btn mendo-btn border border-1" >Генерирај сертификати</a>
+        <div>
+            <a onclick="handleSubmit()" class="btn mendo-btn border border-1">Генерирај сертификати</a>
+        </div>
     </div>
 
     <div class="content-card">
         <div class="table-responsive">
-            <table class="content-table">
-                <thead>
-                <tr>
-                    <th class="rank-column">#</th>
-                    <th>Натпреварувач</th>
-                    <th>Држава</th>
-                    <th>Училиште</th>
-                    <th>Клас</th>
-                    <th th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
-                        class="task-column"
-                        th:text="'Задача #' + ${i}">
-                        зад #1
-                    </th>
-                    <th class="total-column">Вкупно</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="result, stat : ${results}">
-                    <td class="rank-column">
-                        <span class="rank-number" th:text="${stat.index + 1} + '.'"></span>
-                    </td>
-                    <td>
-                        <span class="contestant-name" th:text="${result.mendoUser.name+' '+result.mendoUser.surname}"></span>
-                    </td>
-                    <td>
-                        <div class="flag-container">
+            <form id="form" method="POST" th:action="@{'/api/certificates/' + ${competition.id}}">
+
+                <table class="content-table">
+                    <thead>
+                    <tr>
+                        <th class="rank-column">#</th>
+                        <th>Натпреварувач</th>
+                        <th>Држава</th>
+                        <th>Училиште</th>
+                        <th>Клас</th>
+                        <th th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
+                            class="task-column"
+                            th:text="'Задача #' + ${i}">
+                            зад #1
+                        </th>
+                        <th class="total-column">Вкупно</th>
+                        <th>
+                            Награда
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="result, stat : ${results}">
+                        <td class="rank-column">
+                            <span class="rank-number" th:text="${stat.index + 1} + '.'"></span>
+                        </td>
+                        <td>
+                            <span class="contestant-name"
+                                  th:text="${result.mendoUser.name+' '+result.mendoUser.surname}"></span>
+                        </td>
+                        <td>
+                            <div class="flag-container">
                             <span th:if="${result.countryFlag == null or result.countryFlag == ''}"
                                   class="flag-icon empty-flag">
                             </span>
-                            <span th:unless="${result.countryFlag == null or result.countryFlag == ''}"
-                                  class="flag-icon flag-icon-squared"
-                                  th:classappend="${'flag-icon-' + #strings.toLowerCase(result.countryFlag)}">
+                                <span th:unless="${result.countryFlag == null or result.countryFlag == ''}"
+                                      class="flag-icon flag-icon-squared"
+                                      th:classappend="${'flag-icon-' + #strings.toLowerCase(result.countryFlag)}">
                             </span>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="school-name" th:text="${result.mendoUser.studiesSchool.name}"></span>
-                    </td>
-                    <td>
-                        <span class="grade-text" th:text="${T(mk.ukim.finki.mendo.model.enums.Grade).valueOf(result.mendoUser.grade).getPrettyName()}"></span>
-                    </td>
-                    <td th:each="point : ${result.points}"
-                        th:text="${point != null ? point : '/'}"
-                        th:class="${point != null ? 'point-cell' : 'no-submission'}">
-                    </td>
-                    <td class="total-points" th:text="${result.totalPoints ?: 0}"></td>
-                </tr>
-                </tbody>
-            </table>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="school-name" th:text="${result.mendoUser.studiesSchool.name}"></span>
+                        </td>
+                        <td>
+                            <span class="grade-text"
+                                  th:text="${T(mk.ukim.finki.mendo.model.enums.Grade).valueOf(result.mendoUser.grade).getPrettyName()}"></span>
+                        </td>
+                        <td th:each="point : ${result.points}"
+                            th:text="${point != null ? point : '/'}"
+                            th:class="${point != null ? 'point-cell' : 'no-submission'}">
+                        </td>
+                        <td class="total-points" th:text="${result.totalPoints ?: 0}"></td>
+                        <td>
+                            <select class="form-select" th:name="${result.mendoUser.id}">
+                                <option th:each="rank:${ranks}" th:text="${rank}" th:name="${rank}">
+
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </form>
         </div>
     </div>
 </div>
@@ -267,3 +286,10 @@
         }
     }
 </style>
+
+<script>
+    function handleSubmit() {
+        const form = document.getElementById("form");
+        form.submit();
+    }
+</script>

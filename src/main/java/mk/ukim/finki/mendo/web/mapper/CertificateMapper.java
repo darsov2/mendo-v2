@@ -46,13 +46,13 @@ public class CertificateMapper {
     public byte[] getCertifications(Long competitionId, Map<String, String> userIdToRank) throws IOException {
         List<Participation> participations = participationMapper.getParticipantsForCompetition(competitionId);
 
-//        participations.forEach(
-//                p -> p.setRank(Rank.valueOf(userIdToRank.get(p.getMendoUser().getId().toString())))
-//        );
-
         participations.forEach(
-                p -> p.setRank(Rank.HONORABLE_PARTICIPATION)
+                p -> p.setRank(Rank.valueOf(userIdToRank.get(p.getMendoUser().getId().toString())))
         );
+
+//        participations.forEach(
+//                p -> p.setRank(Rank.HONORABLE_PARTICIPATION)
+//        );
 
 
         Path tempDir = Files.createTempDirectory("certificates");
