@@ -9,6 +9,7 @@
 <div class="main-content">
     <div class="competition-header">
         <h1 class="competition-title" th:text="'Резултати за ' + ${competition.title}">Резултати за натпревар</h1>
+        <a th:href="@{'/api/certificates/' + ${competition.id}}" class="btn mendo-btn border border-1" >Генерирај сертификати</a>
     </div>
 
     <div class="content-card">

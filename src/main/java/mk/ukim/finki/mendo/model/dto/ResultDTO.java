@@ -12,3 +12,4 @@ public class ResultDTO {
     public Integer totalPoints = 0;
     public String countryFlag;
 }
+
