@@ -53,7 +53,7 @@ public class MendoUser extends BaseAuditedEntity<Long> implements UserDetails {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         roles.forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
 
             role.getPermissions().forEach(permission ->
                     authorities.add(new SimpleGrantedAuthority(permission.getName()))
