@@ -36,4 +36,9 @@ public class RoomsServiceImpl implements RoomsService {
     public Rooms save(Integer capacity, String name, String city) {
         return roomsRepository.save(new Rooms(capacity, name, city));
     }
+
+    @Override
+    public List<Rooms> findAllByIdIn(List<Long> roomIds) {
+        return roomsRepository.findAllByIdIn(roomIds);
+    }
 }

@@ -25,6 +25,11 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    public List<School> findAllById(List<Long> ids) {
+        return schoolRepository.findAllByIdIn(ids);
+    }
+
+    @Override
     public School findById(Long schoolId) {
         return schoolRepository.findById(schoolId).orElseThrow(RuntimeException::new);
     }
@@ -33,4 +38,14 @@ public class SchoolServiceImpl implements SchoolService {
     public School save(SchoolRequest request) {
         return schoolRepository.save(new School(request.getName(), request.getAddress()));
     }
+
+    @Override
+    public School update(Long id, SchoolRequest request) {
+        School school = findById(id);
+        school.setName(request.getName());
+        school.setAddress(request.getAddress());
+        return schoolRepository.save(school);
+    }
+
+
 }

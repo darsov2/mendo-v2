@@ -1,5 +1,9 @@
 package mk.ukim.finki.mendo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -38,18 +42,29 @@ public class Competition extends BaseAuditedEntity<Long> {
     Boolean canStudentRegister;
 
     @ManyToOne
+    @JsonIgnoreProperties("competitions")
     CompetitionCycle cycle;
+    Boolean hasSchedule = false;
 
     @ManyToOne
+    @JsonIgnoreProperties({"cycle", "parentCompetition", "tasks"})
     Competition parentCompetition;
 
-    @ManyToMany
-    List<MendoUser> moderators;
-
     @OneToMany(mappedBy = "competition")
+    @JsonIgnoreProperties("competition")
     List<CompetitionTask> tasks;
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle) {
+    @ManyToMany
+    @JoinTable(
+            name = "competition_room",
+            joinColumns = @JoinColumn(name = "competition_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id"))
+    List<Rooms> rooms;
+
+    @ManyToMany
+    @JsonIgnoreProperties("competitions")
+    List<MendoUser> moderators;
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, List<Rooms> rooms) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -59,9 +74,10 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.info = info;
         this.deadline = deadline;
         this.cycle = cycle;
+        this.rooms = rooms;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, Competition parent) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, Competition parent, List<Rooms> rooms) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -72,9 +88,10 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.deadline = deadline;
         this.cycle = cycle;
         this.parentCompetition = parent;
+        this.rooms = rooms;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Competition parent) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Competition parent, List<Rooms> rooms) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -84,9 +101,10 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.info = info;
         this.deadline = deadline;
         this.parentCompetition = parent;
+        this.rooms = rooms;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, List<Rooms> rooms) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -95,10 +113,14 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.place = place;
         this.info = info;
         this.deadline = deadline;
+        this.rooms = rooms;
     }
 
 
     public Long getId(){
         return id;
     }
+
+
+
 }

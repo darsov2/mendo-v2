@@ -5,6 +5,8 @@ import mk.ukim.finki.mendo.web.request.CompetitionCycleRequest;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CompetitionCycleMapper {
     private final CompetitionCycleService competitionCycleService;
@@ -15,6 +17,10 @@ public class CompetitionCycleMapper {
 
     public CompetitionCycle addCompetitionCycle(CompetitionCycleRequest request) {
         return competitionCycleService.addCycle(request.getName(), request.getYear(), request.getRegistrationDeadline());
+    }
+
+    public List<CompetitionCycle> listCompetitionCycles(){
+        return competitionCycleService.findAll();
     }
 
 

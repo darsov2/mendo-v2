@@ -27,7 +27,7 @@ public class PostController {
         Post post = postService.addPostToThread(threadId, postRequest);
         model.addAttribute("post", post);
         model.addAttribute("thread", post.getThread());
-        return "master";
+        return "redirect:/activities/tasks/" + threadId;
     }
 
     @PostMapping("/reply/{postId}")
@@ -41,6 +41,6 @@ public class PostController {
         model.addAttribute("parentPost", parentPost);
         return "master";
     }
-    // todo
+
 
 }

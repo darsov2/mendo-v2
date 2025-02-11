@@ -89,13 +89,17 @@ public class ActivitiesMapper {
 
   public LectureDTO getLecturePreview(Long lectureId) {
     Lecture lecture = contentService.findLectureById(lectureId);
-    Topic topic = lecture.getTopic();
     return LectureDTO.toDTO(contentService.findLectureById(lectureId));
   }
 
   public TaskDTO getTaskPreview(Long lectureId) {
     Task task = contentService.findTaskById(lectureId);
     return TaskDTO.toDTO(task);
+  }
+
+  public mk.ukim.finki.mendo.model.Thread getThread(Long lectureId){
+    mk.ukim.finki.mendo.model.Thread thread = contentService.findTaskById(lectureId).getThread();
+    return thread;
   }
 
   public LectureEditDTO getLectureEditDto(Long lectureId) {

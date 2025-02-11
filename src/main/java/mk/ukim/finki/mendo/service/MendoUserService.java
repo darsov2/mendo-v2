@@ -1,6 +1,8 @@
 package mk.ukim.finki.mendo.service;
 
 import mk.ukim.finki.mendo.model.MendoUser;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface MendoUserService {
@@ -10,4 +12,6 @@ public interface MendoUserService {
     MendoUser saveUser(MendoUser user);
     MendoUser findById(Long id);
     Optional<MendoUser> findByUsername(String username);
+
+    List<MendoUser> findAllByIdIn(List<Long> list);
 }

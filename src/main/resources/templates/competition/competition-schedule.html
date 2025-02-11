@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <title>МЕНДО - Преглед на натпревари</title>
+
+    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .mendo-btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        width: 100%;
+        font-size: 1.1rem;
+        background-color: #E6AA68;
+        color: #2c1810;
+        margin-top: 1rem;
+    }
+
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        color: #2c1810;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .mendo-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
+
+
+    .form-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 3rem;
+        box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        color: #2c1810;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #E6AA68;
+        border-radius: 0.8rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff5eb;
+        color: #2c1810;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #2c1810;
+        box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    /* Table Styles */
+    .participations-table {
+        width: 100%;
+        background: white;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+        border-collapse: collapse;
+    }
+
+    .participations-table th {
+        background-color: #E6AA68;
+        color: #2c1810;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .participations-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f5efe6;
+        color: #2c1810;
+    }
+
+    .participations-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .participations-table tbody tr:hover {
+        background-color: #fff5eb;
+    }
+
+    .points-cell {
+        font-weight: 600;
+        color: #E6AA68;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+        }
+
+        .participations-table {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<body>
+<div class="container">
+    <h2 class="section-title">Преглед на распоред за натпревар</h2>
+
+    <div id="participationsList">
+        <table class="participations-table">
+            <thead>
+            <tr>
+                <th>Корисничко име</th>
+                <th>Презиме</th>
+                <th>Просторија</th>
+                <th>Поени</th>
+            </tr>
+            </thead>
+            <tbody id="participationsTableBody">
+            <tr th:each="p:${participations}">
+                <td th:text="${p.mendoUser.name}"></td>
+                <td th:text="${p.mendoUser.surname}"></td>
+                <td class="room" th:text="${p.room.name}"></td>
+                <td class="points-cell" th:text="${p?.finalPoints}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between">
+        <a th:href="@{/competition/{id}/edit/schedule(id=${competitionId})}" style="width:20%; text-decoration: none; color: black" class="mendo-btn text-center">
+            Измени
+        </a>
+
+    </div>
+
+</div>
+</body>
+</html>

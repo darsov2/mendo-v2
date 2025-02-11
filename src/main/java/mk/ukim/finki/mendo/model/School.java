@@ -14,14 +14,11 @@ import java.util.List;
 public class School extends BaseEntity<Long> {
     String name;
     String address;
-
+    String region;
 
     public School(String name, String address) {
         this.name = name;
         this.address = address;
     }
 
-    public Long getId(){
-        return id;
-    }
 }

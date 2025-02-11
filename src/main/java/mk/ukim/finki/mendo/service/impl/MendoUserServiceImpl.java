@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -74,6 +75,11 @@ public class MendoUserServiceImpl implements MendoUserService {
     @Override
     public Optional<MendoUser> findByUsername(String username) {
         return mendoUserRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<MendoUser> findAllByIdIn(List<Long> list) {
+        return mendoUserRepository.findAllByIdIn(list);
     }
 
     @Transactional
