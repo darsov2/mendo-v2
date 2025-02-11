@@ -31,5 +31,9 @@ public class SchoolMapper {
     public School findById(Long id) {
         return schoolService.findById(id);
     }
+
+    public School updateSchool(Long id, SchoolRequest request) {
+        return schoolService.update(id, request);
+    }
 }
 
