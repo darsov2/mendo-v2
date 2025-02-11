@@ -13,4 +13,5 @@ public interface RoomsService {
     List<Rooms> findAll();
     Rooms save(Integer capacity, String name, String city);
 
+    List<Rooms> findAllByIdIn(List<Long> roomIds);
 }
