@@ -11,23 +11,27 @@ import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class CompetitionRequest {
+    private String title;
+    private LocalDate startDate;
+    private String startTime;
+    private String endTime;
+    private CompetitionTypes type;
+    private String place;
+    private String info;
+    private LocalDateTime deadline;
+    private Long cycleId;
+    private Long parentId;
+    private List<Long> roomIds;
 
-    String title;
-    LocalDate startDate;
-    String startTime;
-    String endTime;
-    CompetitionTypes type;
-    String place;
-    String info;
-    LocalDateTime deadline;
-    Long cycleId;
-    Long parentId;
-    List<Long> roomIds;
+    private List<Long> taskIds = new ArrayList<>();
+    private List<Long> taskPoints = new ArrayList<>();
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(
@@ -39,9 +43,7 @@ public class CompetitionRequest {
     public LocalDateTime getEndDateTime() {
         return LocalDateTime.of(
                 startDate,
-                LocalTime.parse(startTime)
+                LocalTime.parse(endTime)
         );
     }
-
-
 }

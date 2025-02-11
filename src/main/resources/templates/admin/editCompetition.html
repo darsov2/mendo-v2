@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="mk">
-<head>
-    <meta charset="UTF-8">
-    <title>МЕНДО - Регистрација на натпревар</title>
-    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../../static/style/style.css" rel="stylesheet">
-    <script th:inline="javascript">
-        // Initialize tasks from Thymeleaf model
-        const tasks = /*[[${tasks}]]*/ [];
 
-        function addTaskRow() {
+    <title>МЕНДО - Измена на натпревар</title>
+    <script th:inline="javascript">
+        // Initialize tasks and competition from Thymeleaf model
+        const tasks = /*[[${tasks}]]*/ [];
+        const competition = /*[[${competition}]]*/ {};
+
+        function addTaskRow(selectedTaskId, points) {
             const taskContainer = document.getElementById("taskContainer");
             const lastRow = taskContainer.lastElementChild;
 
@@ -40,6 +36,9 @@
                     const option = document.createElement("option");
                     option.value = task.id;
                     option.textContent = task.title;
+                    if (selectedTaskId && task.id === selectedTaskId) {
+                        option.selected = true;
+                    }
                     select.appendChild(option);
                 });
             }
@@ -51,6 +50,9 @@
             input.required = true;
             input.min = "1";
             input.placeholder = "Поени";
+            if (points) {
+                input.value = points;
+            }
 
             const removeBtn = document.createElement("button");
             removeBtn.type = "button";
@@ -68,8 +70,45 @@
         function removeTaskRow(button) {
             button.parentElement.remove();
         }
+
+        // Single DOMContentLoaded event listener that handles everything
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize multiselect for room tags
+            var checkboxes = document.getElementById('activity-tag');
+            $(checkboxes).multiselect({
+                templates: {
+                    button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                },
+                enableCaseInsensitiveFiltering: true,
+                withSynchronizationMode: 'ifPopupIsSmaller',
+                buttonWidth: '100%',
+                numberDisplayed: 5,
+                nonSelectedText: "Немате избрано тагови за предавањето",
+                widthSynchronizationMode: 'always',
+                allSelectedText: false,
+                filterPlaceholder: 'Пребарај...',
+                includeSelectAllOption: true,
+                selectAllText: "Избери ги сите"
+            });
+
+            // Initialize tasks
+            if (competition && competition.taskIds && competition.taskPoints) {
+                for (let i = 0; i < competition.taskIds.length; i++) {
+                    addTaskRow(competition.taskIds[i], competition.taskPoints[i]);
+                }
+            }
+
+            // Add form submission handler
+            const saveButton = document.querySelector('.mendo-btn');
+            saveButton?.addEventListener('click', function() {
+                if (typeof tinymce !== 'undefined') {
+                    tinymce.triggerSave();
+                }
+                document.querySelector('form').submit();
+            });
+        });
     </script>
-    <style>
+        <style>
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -238,64 +277,70 @@
             }
         }
     </style>
-</head>
 <body>
 <div class="container">
-    <h2 class="section-title">Регистрација на натпревар</h2>
+    <h2 class="section-title">Измена на натпревар</h2>
 
     <div class="form-card">
-        <form id="competitionForm" class="form-grid" method="POST">
-            <!-- Left Column -->
+        <form id="competitionForm" class="form-grid" method="POST" th:action="@{/admin/competition/edit/{id}(id=${competitionId})}">
             <div class="form-group">
                 <label class="form-label">Наслов на натпреварот</label>
                 <input type="text" class="form-control" name="title" required
+                       th:value="${competition.title}"
                        placeholder="Внесете наслов на натпреварот">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Датум на одржување</label>
-                <input type="date" class="form-control" name="startDate" required>
+                <input type="date" class="form-control" name="startDate" required
+                       th:value="${competition.startDate}">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Време на почеток</label>
-                <input type="time" class="form-control" name="startTime" required>
+                <input type="time" class="form-control" name="startTime" required
+                       th:value="${competition.startTime}">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Време на завршување</label>
-                <input type="time" class="form-control" name="endTime" required>
+                <input type="time" class="form-control" name="endTime" required
+                       th:value="${competition.endTime}">
             </div>
 
-            <!-- Right Column -->
             <div class="form-group">
                 <label class="form-label">Тип на натпревар</label>
                 <select class="form-control" name="type" required>
                     <option value="">Изберете тип на натпревар</option>
                     <option th:each="type : ${types}"
                             th:value="${type}"
-                            th:text="${type}">
+                            th:text="${type}"
+                            th:selected="${type == competition.type}">
                     </option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Место на одржување</label>
-                <input type="text" class="form-control" name="place" required placeholder="Внесете место на одржување">
+                <input type="text" class="form-control" name="place" required
+                       th:value="${competition.place}"
+                       placeholder="Внесете место на одржување">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Краен рок за пријавување</label>
-                <input type="datetime-local" class="form-control" name="deadline" required>
+                <input type="datetime-local" class="form-control" name="deadline" required
+                       th:value="${#temporals.format(competition.deadline, 'yyyy-MM-dd''T''HH:mm')}">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Циклус на натпревари</label>
-                <select class="form-control" name="cycleId" required>
+                <select class="form-control" name="cycleId">
                     <option value="">Изберете циклус</option>
                     <option th:each="cycle : ${cycles}"
                             th:value="${cycle.id}"
-                            th:text="${cycle.name}">
+                            th:text="${cycle.name}"
+                            th:selected="${competition.cycleId != null && cycle.id == competition.cycleId}">
                     </option>
                     <option value="">Самостоен натпревар</option>
                 </select>
@@ -303,11 +348,12 @@
 
             <div class="form-group">
                 <label class="form-label">Претходен натпревар</label>
-                <select class="form-control" name="parentId" required>
+                <select class="form-control" name="parentId">
                     <option value="">Изберете претходен на натпревар</option>
                     <option th:each="parent : ${competitions}"
                             th:value="${parent.id}"
-                            th:text="${parent.title}">
+                            th:text="${parent.title}"
+                            th:selected="${competition.parentId != null && parent.id == competition.parentId}">
                     </option>
                     <option value="">Нема претоден натпревар</option>
                 </select>
@@ -315,10 +361,11 @@
 
             <div class="form-group">
                 <label for="activity-tag" class="form-label">Тагови</label>
-                <select id="activity-tag" name="roomIds[]" class="form-control form-select" multiple="multiple">
+                <select id="activity-tag" name="roomIds" class="form-control form-select" multiple="multiple">
                     <option th:each="room : ${rooms}"
                             th:value="${room.id}"
-                            th:text="|${room.name} ${room.city}|">
+                            th:text="|${room.name} ${room.city}|"
+                            th:selected="${competition.roomIds != null && competition.roomIds.contains(room.id)}">
                     </option>
                 </select>
             </div>
@@ -326,7 +373,8 @@
             <div class="form-group full-width">
                 <label class="form-label">Дополнителни информации</label>
                 <textarea class="form-control" name="info" rows="3"
-                          placeholder="Внесете дополнителни информации за натпреварот"></textarea>
+                          placeholder="Внесете дополнителни информации за натпреварот"
+                          th:text="${competition.info}"></textarea>
             </div>
 
             <div class="form-group full-width task-section">
@@ -336,40 +384,9 @@
             </div>
 
             <button type="submit" class="mendo-btn">
-                Регистрирај натпревар
+                Зачувај измени
             </button>
         </form>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var checkboxes = document.getElementById('activity-tag');
-
-        $(checkboxes).multiselect({
-            templates: {
-                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
-            },
-            enableCaseInsensitiveFiltering: true,
-            withSynchronizationMode: 'ifPopupIsSmaller',
-            buttonWidth: '100%',
-            numberDisplayed: 5,
-            nonSelectedText: "Немате избрано тагови за предавањето",
-            widthSynchronizationMode: 'always',
-            allSelectedText: false,
-            filterPlaceholder: 'Пребарај...',
-            includeSelectAllOption: true,
-            selectAllText: "Избери ги сите"
-        });
-
-        const saveButton = document.querySelector('.mendo-btn');
-        saveButton?.addEventListener('click', function () {
-            if (typeof tinymce !== 'undefined') {
-                tinymce.triggerSave();
-            }
-            document.querySelector('form').submit();
-        });
-    });
-</script>
 </body>
-</html>
