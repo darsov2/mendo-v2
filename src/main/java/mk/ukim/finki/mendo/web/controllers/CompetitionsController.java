@@ -71,7 +71,7 @@ public class CompetitionsController {
 //        return "master";
 //    }
 
-    @GetMapping("")
+    @GetMapping({"","s"})
     public String allCompetitions(Model model) {
         List<School> schools = schoolService.findAll();
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
@@ -87,8 +87,6 @@ public class CompetitionsController {
 
 //        model.addAttribute("bodyContent", "allCompetitions");
         return "master";
-
-
 
     }
 
