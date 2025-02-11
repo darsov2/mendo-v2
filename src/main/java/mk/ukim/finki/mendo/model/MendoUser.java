@@ -48,6 +48,24 @@ public class MendoUser extends BaseAuditedEntity<Long> implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+    public MendoUser(boolean isTeacher, String username, String name, String surname, String password, String city, String country, Grade grade, String email, School studiesSchool, List<School> teachesSchools, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled) {
+        this.isTeacher = isTeacher;
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.city = city;
+        this.country = country;
+        this.grade = grade;
+        this.email = email;
+        this.studiesSchool = studiesSchool;
+        this.teachesSchools = teachesSchools;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();

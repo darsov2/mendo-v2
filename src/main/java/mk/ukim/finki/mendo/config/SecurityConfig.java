@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    private final String LOGIN_PAGE = "/login";
     private final String LOGIN_PROCESSING_URL = "/api/login";
     private final String LOGOUT_URL = "/api/logout";
 
@@ -26,6 +26,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .formLogin(form -> form
+                        .loginPage(LOGIN_PAGE)
                         .loginProcessingUrl(LOGIN_PROCESSING_URL)
                         .usernameParameter("username")
                         .passwordParameter("password")
