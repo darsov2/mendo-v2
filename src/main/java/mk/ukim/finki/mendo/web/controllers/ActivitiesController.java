@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.web.controllers;
 import mk.ukim.finki.mendo.model.dto.ActivityDTO;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.model.dto.LectureEditDTO;
+import mk.ukim.finki.mendo.service.AuthorizationService;
 import mk.ukim.finki.mendo.web.mapper.ActivitiesMapper;
 import mk.ukim.finki.mendo.web.mapper.CategoryMapper;
 import mk.ukim.finki.mendo.web.mapper.UtilsMapper;
@@ -28,12 +29,14 @@ public class ActivitiesController {
   private final CategoryMapper categoryMapper;
   private final ActivitiesMapper activitiesMapper;
   private final UtilsMapper utilsMapper;
+  private final AuthorizationService authorizationService;
 
   public ActivitiesController(CategoryMapper categoryMapper, ActivitiesMapper activitiesMapper,
-      UtilsMapper utilsMapper) {
+                              UtilsMapper utilsMapper, AuthorizationService authorizationService) {
     this.categoryMapper = categoryMapper;
     this.activitiesMapper = activitiesMapper;
     this.utilsMapper = utilsMapper;
+      this.authorizationService = authorizationService;
   }
 
   @GetMapping

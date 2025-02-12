@@ -1,6 +1,7 @@
 package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.Post;
+import mk.ukim.finki.mendo.service.AuthorizationService;
 import mk.ukim.finki.mendo.service.PostService;
 import mk.ukim.finki.mendo.service.ThreadService;
 import mk.ukim.finki.mendo.web.request.PostRequest;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PostController {
     private final PostService postService;
     private final ThreadService threadService;
+    private final AuthorizationService authorizationService;
 
-    public PostController(PostService postService, ThreadService threadService) {
+    public PostController(PostService postService, ThreadService threadService, AuthorizationService authorizationService) {
         this.postService = postService;
         this.threadService = threadService;
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping("/{threadId}")

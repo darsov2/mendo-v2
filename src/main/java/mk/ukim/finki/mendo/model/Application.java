@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 

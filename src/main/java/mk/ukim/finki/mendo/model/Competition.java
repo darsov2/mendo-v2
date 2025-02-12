@@ -1,25 +1,14 @@
 package mk.ukim.finki.mendo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
-import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 
-import java.sql.SQLType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.hibernate.annotations.Type;
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @NoArgsConstructor

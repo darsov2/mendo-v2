@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 import java.util.List;
 
