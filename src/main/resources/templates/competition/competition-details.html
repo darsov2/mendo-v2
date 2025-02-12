@@ -72,7 +72,7 @@
             </div>
             <div th:if="${competition.canStudentRegister != null and competition.requiresRegistration != null and competition.canStudentRegister and competition.requiresRegistration}">
                 <div class="toolbar-actions">
-                    <th:block th:with="canRegister=${competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
+                    <th:block th:with="canRegister=${competition.cycle == null and competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
                         <th:block th:if="${canRegister}">
                             <th:block th:if="${currentUser != null}">
                                 <button class="btn-register" th:data-competition-id="${competition.id}">
@@ -85,7 +85,7 @@
                                 </a>
                             </th:block>
                         </th:block>
-                        <span th:unless="${canRegister}" class="registration-closed">
+                        <span th:if="${!canRegister and competition.cycle == null}" class="registration-closed">
                         <i class="fas fa-lock"></i> Пријавувањето е затворено
                     </span>
                     </th:block>

@@ -18,7 +18,6 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
     private LocalDate year;
     private LocalDateTime registrationDeadline;
     @OneToMany(mappedBy = "cycle")
-    @JsonIgnoreProperties("cycle") // This prevents the infinite recursion
     private List<Competition> competitions;
 
 

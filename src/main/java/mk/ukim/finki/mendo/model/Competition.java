@@ -42,16 +42,13 @@ public class Competition extends BaseAuditedEntity<Long> {
     Boolean canStudentRegister;
 
     @ManyToOne
-    @JsonIgnoreProperties("competitions")
     CompetitionCycle cycle;
     Boolean hasSchedule = false;
 
     @ManyToOne
-    @JsonIgnoreProperties({"cycle", "parentCompetition", "tasks"})
     Competition parentCompetition;
 
     @OneToMany(mappedBy = "competition")
-    @JsonIgnoreProperties("competition")
     List<CompetitionTask> tasks;
 
     @ManyToMany

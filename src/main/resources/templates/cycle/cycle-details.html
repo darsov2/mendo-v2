@@ -352,9 +352,9 @@
         <div th:each="competition : ${cycle.competitions}" class="competition-card">
             <div class="competition-header">
                 <h3 class="competition-title" th:text="${competition.title}">Натпреварски циклус</h3>
-                <span class="status-badge" th:classappend="${competition.registrationCloses.isAfter(#temporals.createNow()) ? 'status-active' : 'status-completed'}" style="white-space: nowrap">
-                        <i class="fas" th:classappend="${competition.registrationCloses.isAfter(#temporals.createNow()) ? 'fa-play-circle' : 'fa-check-circle'}"></i>
-                        <span th:text="${competition.registrationCloses.isAfter(#temporals.createNow()) ? 'Активен' : 'Завршен'}">Статус</span>
+                <span class="status-badge" th:classappend="${competition.registrationCloses!=null and competition.registrationCloses.isAfter(#temporals.createNow()) ? 'status-active' : 'status-completed'}" style="white-space: nowrap">
+                        <i class="fas" th:classappend="${competition.registrationCloses!=null and competition.registrationCloses.isAfter(#temporals.createNow()) ? 'fa-play-circle' : 'fa-check-circle'}"></i>
+                        <span th:text="${competition.registrationCloses!=null and competition.registrationCloses.isAfter(#temporals.createNow()) ? 'Активен' : 'Завршен'}">Статус</span>
                     </span>
             </div>
             <div class="competition-body">
