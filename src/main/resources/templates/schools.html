@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>МЕНДО - Листа на училишта</title>
   <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style/grid.css">
 </head>
 
 <style>
@@ -35,65 +36,6 @@
     width: 100%;
   }
 
-  .schools-list {
-    background: white;
-    border-radius: 1.5rem;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
-  }
-
-  .school-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.5rem;
-  }
-
-  .school-table th {
-    text-align: left;
-    color: #2c1810;
-    font-weight: 600;
-    padding: 1rem;
-    border-bottom: 2px solid #E6AA68;
-  }
-
-  .school-table td {
-    padding: 1rem;
-    color: #2c1810;
-    background-color: #fff5eb;
-  }
-
-  .school-table tr td:first-child {
-    border-top-left-radius: 0.8rem;
-    border-bottom-left-radius: 0.8rem;
-  }
-
-  .school-table tr td:last-child {
-    border-top-right-radius: 0.8rem;
-    border-bottom-right-radius: 0.8rem;
-  }
-
-  .mendo-btn {
-    padding: 0.8rem 1.5rem;
-    border-radius: 0.8rem;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    font-size: 1.1rem;
-    background-color: #E6AA68;
-    color: #2c1810;
-    display: inline-block;
-  }
-
-  .mendo-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-  }
-
-  .action-column {
-    text-align: right;
-  }
 
   .header-actions {
     display: flex;
@@ -135,18 +77,10 @@
       padding: 1rem;
     }
 
-    .schools-list {
-      padding: 1rem;
-    }
-
     .section-title {
       font-size: 1.8rem;
     }
 
-    .school-table {
-      display: block;
-      overflow-x: auto;
-    }
 
     .header-actions {
       flex-direction: column;
@@ -161,6 +95,7 @@
 
 <body>
 <div class="container">
+
   <div class="header-actions">
     <h2 class="section-title">Листа на училишта</h2>
     <div class="search-container">
@@ -168,33 +103,47 @@
     </div>
   </div>
 
-  <div class="schools-list">
-    <table class="school-table">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Име на училиште</th>
-        <th>Адреса</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- Check if schools list is empty -->
-      <tr th:if="${schools.isEmpty}">
-        <td colspan="4" class="no-schools">Нема регистрирани училишта</td>
-      </tr>
-      <!-- Iterate over schools if list is not empty -->
-      <tr th:each="school : ${schools}">
-        <td th:text="${school.id}">1</td>
-        <td th:text="${school.name}">School Name</td>
-        <td th:text="${school.address}">Address</td>
-        <td class="action-column">
-          <a th:href="@{'/schools/edit/' + ${school.id}}" class="mendo-btn">Измени</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
+  <div class="main-content">
+    <div class="content-card">
+      <table class="content-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Име на училиште</th>
+          <th>Адреса</th>
+          <th >Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Check if schools list is empty -->
+        <tr th:if="${schools.isEmpty}">
+          <td colspan="4" class="no-schools">Нема регистрирани училишта</td>
+        </tr>
+        <!-- Iterate over schools if list is not empty -->
+        <tr th:each="school : ${schools}">
+          <td th:text="${school.id}">1</td>
+          <td th:text="${school.name}">School Name</td>
+          <td th:text="${school.address}">Address</td>
+          <td>
+            <div class="actions">
+              <a th:href="@{'/schools/edit/' + ${school.id}}" class="btn-action btn-edit link-no-decor">
+                <i class="fas fa-pencil"></i>
+              </a>
+              <a th:href="@{'/schools/delete/' + ${school.id}}" class="btn-action btn-delete link-no-decor">
+                <i class="fas fa-trash"></i>
+              </a>
+              <a th:href="@{'/schools/' + ${school.id}}"
+                 class="btn-action btn-edit link-no-decor">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </a>
+
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

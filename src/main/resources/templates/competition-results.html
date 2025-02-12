@@ -1,5 +1,6 @@
 <!-- Navigation -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/style/grid.css">
 <nav class="toolbar-top">
     <a th:href="@{'/competition/' + ${competition.id}}" class="btn-back">
         <i class="fas fa-arrow-left"></i> Назад кон натпревар
@@ -12,8 +13,7 @@
         <a th:href="@{'/results/' + ${competition.id} + '/awards'}" class="btn mendo-btn border border-1" >Додели награди</a>
     </div>
 
-    <div class="content-card">
-        <div class="table-responsive">
+        <div class="content-card" style="width: 95%">
             <table class="content-table">
                 <thead>
                 <tr>
@@ -23,7 +23,6 @@
                     <th>Училиште</th>
                     <th>Клас</th>
                     <th th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
-                        class="task-column"
                         th:text="'Задача #' + ${i}">
                         зад #1
                     </th>
@@ -64,7 +63,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
 </div>
 
 <style>
@@ -78,7 +76,7 @@
         margin: 0 auto;
     }
 
-    .competition-header, .content-card {
+    .competition-header {
         width: 95%;
         margin: auto;
         background: white;
@@ -93,15 +91,6 @@
         font-size: 1.75rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
-    }
-
-    .toolbar-top {
-        background: white;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-        position: sticky;
-        top: 0;
-        z-index: 10;
     }
 
     .btn-back {
@@ -123,36 +112,6 @@
         color: #2c1810;
     }
 
-    .content-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin-top: 1rem;
-    }
-
-    .content-table th {
-        text-align: left;
-        padding: 1rem;
-        background-color: #fff5eb;
-        color: #2c1810;
-        font-weight: 600;
-        white-space: nowrap;
-        border-bottom: 2px solid #E6AA68;
-    }
-
-    .content-table td {
-        padding: 1rem;
-        border-bottom: 1px solid #f5efe6;
-        color: #2c1810;
-    }
-
-    .content-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .content-table tr:hover td {
-        background-color: #faf6f2;
-    }
 
     /* Enhanced Flag styles */
     .flag-container {
@@ -226,16 +185,6 @@
         min-width: 80px;
     }
 
-    .point-cell {
-        text-align: center;
-        font-weight: 500;
-    }
-
-    .no-submission {
-        color: #999;
-        text-align: center;
-        font-style: italic;
-    }
 
     .total-points {
         font-weight: 600;
@@ -256,14 +205,11 @@
             padding: 1rem;
         }
 
-        .competition-header, .content-card {
+        .competition-header {
             width: 100%;
             padding: 1rem;
         }
 
-        .content-table th,
-        .content-table td {
-            padding: 0.75rem 0.5rem;
-        }
+
     }
 </style>
