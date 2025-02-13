@@ -75,4 +75,8 @@ public class CategoryMapper {
         category.setChildren(findAllByIds(request.getChildrenId()));
         return categoryService.save(category);
     }
+
+    public void deleteCategory(Long id) {
+        categoryService.deleteById(id);
+    }
 }

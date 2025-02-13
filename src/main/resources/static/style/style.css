@@ -74,6 +74,7 @@ body {
     border-radius: 0.8rem;
     border: none;
     background-color: #E6AA68;
+    color: black;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -193,7 +194,7 @@ body {
 .main-content {
     padding: 4rem 2rem;
     margin: 0 auto;
-    width: 100%;
+    width: 80%;
 }
 
 .quick-start {
