@@ -73,6 +73,8 @@ body {
     padding: 0.6rem 1.2rem;
     border-radius: 0.8rem;
     border: none;
+    background-color: #E6AA68;
+    color: black;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -86,6 +88,21 @@ body {
 .mendo-btn-lg {
     padding: 0.5rem 1rem;
     font-size: 1.25rem;
+}
+
+.btn-results {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid #E6AA68;
+    background: white;
+    color: #2c1810;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-results:hover {
+    background-color: #fff5eb;
 }
 
 .mendo-btn-login {
@@ -176,9 +193,8 @@ body {
 /* Main Content */
 .main-content {
     padding: 4rem 2rem;
-    max-width: 1200px;
     margin: 0 auto;
-    width: 100%;
+    width: 80%;
 }
 
 .quick-start {

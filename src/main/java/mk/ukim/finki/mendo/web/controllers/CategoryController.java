@@ -36,8 +36,13 @@ public class CategoryController {
 
     @PostMapping("/add")
     public String addCategoryForm(CategoryRequest request, Model model) {
-            categoryMapper.addCategory(request);
+        categoryMapper.addCategory(request);
+        return "redirect:/category";
+    }
 
+    @GetMapping("/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
+        categoryMapper.deleteCategory(id);
         return "redirect:/category";
     }
 

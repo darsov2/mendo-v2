@@ -40,4 +40,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findAllByIds(List<Long> ids) {
         return categoryRepository.findAllByIdIn(ids);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }
