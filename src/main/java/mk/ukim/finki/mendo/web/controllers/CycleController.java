@@ -47,9 +47,8 @@ public class CycleController {
         if (cycleMapper.addCompetitionCycle(request) == null){
             throw new RuntimeException("Can't add competitionCycle");
         }
-        //todo the right path should be listing of competitions
-        model.addAttribute("bodyContent", "competitions");
-        return "master";
+
+        return "redirect:/competition";
     }
 
     @GetMapping("/{id}")

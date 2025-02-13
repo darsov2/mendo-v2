@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>Студентски пријави</title>
-</head>
-<body>
-<div class="main-content" th:fragment="applications">
-  <div class="quick-start">
-    <div class="d-flex justify-content-between align-items-center">
-      <h2 class="section-title">Студентски Пријави</h2>
-      <a href="/application/admin/usernameApply" style="
-    padding: 0.4rem 0.8rem; border-radius: 0.8rem;border: none; cursor: pointer;font-weight: 500;transition: all 0.2s ease;text-decoration: none;background-color: #E6AA68;color: #2c1810;font-weight: 600;display: inline-block;">
+<link rel="stylesheet" href="/style/grid.css">
+<link rel="stylesheet" href="/style/style.css">
+<nav class="toolbar-top navbar">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <button class="mendo-btn mendo-btn-secondary me-2">
+        <a th:href="@{/}" style="text-decoration: none"><i class="fas fa-arrow-left"></i></a>
+      </button>
+      <h1 class="h5 mb-0">Студентски Пријави</h1>
+    </div>
+
+  </div>
+</nav>
+<div class="grid-content" th:fragment="applications">
+  <div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="section-title mb-0"></h2>
+      <a href="/application/admin/usernameApply" class="mendo-btn mendo-btn-signup" style="background-color: #105679;">
         <i class="bi bi-person"></i> Пријави со username
       </a>
     </div>
+
     <div class="table-responsive">
-      <table class="competition-table">
+      <table class="content-table">
         <thead>
         <tr>
           <th>Студент</th>
@@ -28,40 +35,34 @@
         <tbody>
         <tr th:each="applicationStudent : ${applications}">
           <td>
-            <div class="d-flex flex-column">
-              <span class="competition-name" th:text="${applicationStudent.student.name}"></span>
-              <small class="text-muted" th:text="${applicationStudent.student.email}"></small>
+            <div class="lesson-title">
+              <span class="fw-semibold" th:text="${applicationStudent.student.name}"></span>
+              <small class="text-muted d-block" th:text="${applicationStudent.student.email}"></small>
             </div>
           </td>
           <td>
-            <span class="competition-name" th:text="${applicationStudent.student.studiesSchool.name}"></span>
+            <span class="status-badge status-lecture" th:text="${applicationStudent.student.studiesSchool.name}"></span>
           </td>
           <td>
-            <span class="competition-name" th:text="${applicationStudent.competition.title}"></span>
+            <span class="fw-medium" th:text="${applicationStudent.competition.title}"></span>
           </td>
           <td>
-            <div class="d-flex flex-column">
-              <span class="competition-name" th:text="${applicationStudent.competition.cycle != null ? applicationStudent.competition.cycle.name : 'Нема'}"></span>
-            </div>
+            <span class="status-badge" th:text="${applicationStudent.competition.cycle != null ? applicationStudent.competition.cycle.name : 'Нема'}"></span>
           </td>
           <td>
             <span class="text-muted" th:text="${#temporals.format(applicationStudent.date, 'MMM dd, yyyy')}"></span>
           </td>
           <td>
-            <div class="d-flex gap-2">
+            <div class="actions">
               <form th:action="@{/application/admin/approve/{id}(id=${applicationStudent.id})}"
-                    method="post">
-                <button type="submit"
-                        class="mendo-btn mendo-btn-signup"
-                        style="padding: 0.4rem 0.8rem;">
+                    method="post" class="d-inline">
+                <button type="submit" class="btn-action btn-edit">
                   <i class="bi bi-check-lg"></i> Дозволи
                 </button>
               </form>
               <form th:action="@{/application/admin/refuse/{id}(id=${applicationStudent.id})}"
-                    method="post">
-                <button type="submit"
-                        class="mendo-btn mendo-btn-login"
-                        style="padding: 0.4rem 0.8rem;">
+                    method="post" class="d-inline">
+                <button type="submit" class="btn-action btn-delete">
                   <i class="bi bi-x-lg"></i> Одбиј
                 </button>
               </form>
@@ -69,9 +70,9 @@
           </td>
         </tr>
         <tr th:if="${applications.empty}">
-          <td colspan="6" class="text-center py-4">
-            <div class="d-flex flex-column align-items-center gap-2">
-              <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+          <td colspan="6" class="text-center p-4">
+            <div class="d-flex flex-column align-items-center gap-3">
+              <i class="bi bi-inbox text-muted" style="font-size: 2.5rem;"></i>
               <span class="text-muted">Нема студентски пријави</span>
             </div>
           </td>
@@ -81,5 +82,3 @@
     </div>
   </div>
 </div>
-</body>
-</html>
