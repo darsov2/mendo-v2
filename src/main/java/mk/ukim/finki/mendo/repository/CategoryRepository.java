@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByParentCategoryIsNull();
+
+    List<Category> findAllByIdIn(List<Long> ids);
 }

@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+    }
+
+
+    .content-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        color: #2c1810;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+    }
+
+    .form-control:focus {
+        border-color: #E6AA68;
+        box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.1);
+    }
+
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+
+
+    .breadcrumb-item a {
+        color: #2c1810;
+        text-decoration: none;
+    }
+
+</style>
+<body>
+<nav class="toolbar-top">
+    <a class="btn-back" href="/category">
+        <i class="fas fa-arrow-left"></i> Назад
+    </a>
+</nav>
+
+
+<div class="container pt-5">
+    <h2 class="text-center">Листа на училишта</h2>
+</div>
+
+
+<div class="main-content">
+    <form
+            method="POST"
+            th:action="@{'/category/edit/' + ${category?.id}}">
+        <div class="content-card">
+            <div class="mb-4">
+                <label for="activity-title" class="form-label">Име на категорија</label>
+                <input type="text" name="title" th:value="${category?.name}" class="form-control" id="activity-title"
+                       placeholder="Внесете име на категоријата...">
+            </div>
+
+            <div class="options-grid mb-4">
+                <div>
+                    <label for="category" class="form-label">Родител категорија</label>
+                    <select id="category" name="parentCategoryId" th:object="${category}" class="form-control form-select">
+                        <option th:each="category:${categories}" th:value="${category.id}"
+                                th:text="${category.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="mendo-btn">Зачувај</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
