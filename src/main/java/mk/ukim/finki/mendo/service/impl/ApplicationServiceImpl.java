@@ -35,7 +35,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         MendoUser currentUser = mendoUserService.getCurrentUser()
                 .orElseThrow(() -> new RuntimeException("Not logged in!"));
 
-        return applicationRepository.findByCompetitionCycle_IdAndStudent_Id(cycleId, currentUser.getId())
+        return applicationRepository.findByCompetition_Cycle_IdAndStudent_Id(cycleId, currentUser.getId())
                 .isPresent();
     }
 

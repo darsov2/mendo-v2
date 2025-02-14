@@ -11,6 +11,8 @@ import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.ParticipationService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ParticipationServiceImpl implements ParticipationService {
     private final ParticipationRepository participationRepository;
@@ -30,5 +32,15 @@ public class ParticipationServiceImpl implements ParticipationService {
         MendoUser mendoUser = mendoUserService.findById(userId);
         Competition competition = competitionService.findById(competitionId);
         return participationRepository.save(new Participation(mendoUser,competition,null, null));
+    }
+
+    @Override
+    public List<Participation> findParticipationByCompetitionId(Long competitionId) {
+        return participationRepository.findAllByCompetition_Id(competitionId);
+    }
+
+    @Override
+    public List<Participation> saveAll(List<Participation> participations) {
+        return participationRepository.saveAll(participations);
     }
 }

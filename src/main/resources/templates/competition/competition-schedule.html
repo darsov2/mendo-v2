@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <title>МЕНДО - Преглед на натпревари</title>
+
+    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/style/grid.css" rel="stylesheet">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: #f5efe6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        color: #2c1810;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+        }
+
+
+    }
+</style>
+
+<body>
+<div class="container">
+    <h2 class="section-title">Преглед на распоред за натпревар</h2>
+
+    <div class="main-content">
+        <div class="content-card">
+            <table class="content-table">
+                <thead>
+                <tr>
+                    <th>Корисничко име</th>
+                    <th>Презиме</th>
+                    <th>Просторија</th>
+                    <th>Поени</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p:${participations}">
+                    <td th:text="${p.mendoUser.name}"></td>
+                    <td th:text="${p.mendoUser.surname}"></td>
+                    <td class="room" th:text="${p.room.name}"></td>
+                    <td class="points-cell" th:text="${p?.finalPoints}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end w-100 pt-3">
+                <a th:href="@{/competition/{id}/edit/schedule(id=${competitionId})}" class="btn-action btn-edit link-no-decor">
+                    <i class="fas fa-pencil"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+</body>
+</html>

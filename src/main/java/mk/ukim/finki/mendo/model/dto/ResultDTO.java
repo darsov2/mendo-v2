@@ -9,6 +9,7 @@ import java.util.List;
 public class ResultDTO {
     public MendoUser mendoUser;
     public List<Integer> points;
-    public Integer totalPoints = 0;
+    public Integer totalPoints;
     public String countryFlag;
 }
+

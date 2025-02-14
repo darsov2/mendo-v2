@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.web.mapper;
 import mk.ukim.finki.mendo.model.Category;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.service.CategoryService;
+import mk.ukim.finki.mendo.web.request.CategoryRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,6 +27,25 @@ public class CategoryMapper {
                 .toList();
     }
 
+    public Category addCategory(CategoryRequest request) {
+
+        Category category = findById(request.getParentCategoryId());
+        List<Category> categories = findAllByIds(request.getChildrenId());
+        return categoryService.save(new Category(request.getName(), category, categories));
+    }
+
+    public Category findById(Long id) {
+        return categoryService.findById(id);
+    }
+
+    public List<Category> findAllByIds(List<Long> ids) {
+        return categoryService.findAllByIds(ids);
+    }
+
+    public List<Category> findAllCategories(){
+        return categoryService.findAll();
+    }
+
     public static CategoryDTO toDTO(Category category, Set<Long> processedCategories) {
         if (category == null || processedCategories.contains(category.getId())) {
             return null;
@@ -47,5 +67,16 @@ public class CategoryMapper {
         }
 
         return dto;
+    }
+
+    public Category editCategory(CategoryRequest request, Long id) {
+        Category category = findById(id);
+        category.setParentCategory(findById(request.getParentCategoryId()));
+        category.setChildren(findAllByIds(request.getChildrenId()));
+        return categoryService.save(category);
+    }
+
+    public void deleteCategory(Long id) {
+        categoryService.deleteById(id);
     }
 }

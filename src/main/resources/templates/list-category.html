@@ -1,0 +1,62 @@
+<link href="/style/grid.css" rel="stylesheet">
+<html lang="en">
+
+<div class="container pt-5">
+    <h2 class="text-center">Листа на категории</h2>
+</div>
+
+<div class="main-content">
+    <div class="content-card">
+        <table class="content-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Име на категорија</th>
+                <th>Родител Категорија</th>
+                <th>Деца Категории</th>
+                <th>Акции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Check if schools list is empty -->
+            <tr th:if="${categories.isEmpty}">
+                <td colspan="4" class="no-schools">Нема Категории</td>
+            </tr>
+            <!-- Iterate over schools if list is not empty -->
+            <tr th:each="category,iter : ${categories}">
+                <td th:text="${iter.index + 1}">1</td>
+                <td th:text="${category.name}">Category name</td>
+                <td th:text="${category?.parentCategory == null? 'Нема родител' : category.parentCategory.name}">Category</td>
+                <td id="children">
+                    <th:block th:if="${category?.children != null and not #lists.isEmpty(category.children)}">
+                        <span th:each="child, iter : ${category.children}" th:text="${child.name} + (${!iter.last ? ', ' : ''})"></span>
+                    </th:block>
+                    <th:block th:unless="${category?.children != null and not #lists.isEmpty(category.children)}">
+                        <span>нема деца</span>
+                    </th:block>
+                </td>
+                <td>
+                    <div class="actions">
+                        <a th:href="@{'/category/edit/' + ${category.id}}" class="btn-action btn-edit link-no-decor">
+                            <i class="fas fa-pencil"></i>
+                        </a>
+                        <a th:href="@{'/category/delete/' + ${category.id}}" class="btn-action btn-delete link-no-decor">
+                            <i class="fas fa-trash"></i>
+                        </a>
+
+                    </div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+
+            <a href="/category/add" class="mendo-btn mt-3 me-5">
+                Додај нова категорија
+            </a>
+        </div>
+    </div>
+</div>
+
+</html>

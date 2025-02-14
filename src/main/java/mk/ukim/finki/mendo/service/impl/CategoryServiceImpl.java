@@ -30,4 +30,19 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findById(Long id) {
         return categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    @Override
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> findAllByIds(List<Long> ids) {
+        return categoryRepository.findAllByIdIn(ids);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }

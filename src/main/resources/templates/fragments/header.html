@@ -21,15 +21,131 @@
         <span class="logo-text">МЕНДО</span>
     </div>
     <div class="nav-links">
-        <a href="#home">Дома</a>
+        <a href="/">Дома</a>
         <a href="#learn">Учи</a>
         <a href="#cpp">C++</a>
         <a href="#algorithms">Алгоритми</a>
-        <a href="#competitions">Натпревари</a>
+        <a href="/competition">Натпревари</a>
         <a href="#help">Помош</a>
     </div>
     <div class="auth-buttons">
-        <a href="/auth/login" class="mendo-btn mendo-btn-login">Најава</a>
-        <a href="/auth/register" class="mendo-btn mendo-btn-signup">Регистрација</a>
+        <!-- Show login/register buttons when not authenticated -->
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login" class="mendo-btn mendo-btn-login">Најава</a>
+            <a href="/auth/register" class="mendo-btn mendo-btn-signup">Регистрација</a>
+        </div>
+
+        <!-- Show user dropdown when authenticated -->
+        <div sec:authorize="isAuthenticated()" class="user-dropdown">
+            <button class="dropdown-toggle" onclick="toggleDropdown()">
+                <i class="fas fa-user"></i>
+                <span sec:authentication="name"></span>
+            </button>
+            <div class="dropdown-menu" id="userDropdown">
+                <a href="/profile" class="dropdown-item">
+                    <i class="fas fa-user-circle"></i> Профил
+                </a>
+                <a href="/settings" class="dropdown-item">
+                    <i class="fas fa-cog"></i> Поставки
+                </a>
+                <div class="dropdown-divider"></div>
+                <form th:action="@{/api/logout}" method="post" class="dropdown-item">
+                    <button type="submit" class="dropdown-btn">
+                        <i class="fas fa-sign-out-alt"></i> Одјава
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </nav>
+
+<style>
+    .user-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        background-color: transparent;
+        border: none;
+        color: #E6AA68;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-toggle:hover {
+        color: white;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
+        min-width: 200px;
+        z-index: 1000;
+    }
+
+    .dropdown-menu.show {
+        display: block;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+        color: #2c1810;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f5efe6;
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background-color: #e2e8f0;
+        margin: 0.5rem 0;
+    }
+
+    .dropdown-btn {
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        padding: 0;
+        color: #2c1810;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .dropdown-btn:hover {
+        color: #E6AA68;
+    }
+</style>
+
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.classList.toggle('show');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.user-dropdown')) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
+</script>
