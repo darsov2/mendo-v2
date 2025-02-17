@@ -2,15 +2,11 @@ package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
+import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import mk.ukim.finki.mendo.model.enums.Grade;
-import mk.ukim.finki.mendo.service.CompetitionCycleService;
-import mk.ukim.finki.mendo.service.CompetitionService;
-import mk.ukim.finki.mendo.service.MendoUserService;
-import mk.ukim.finki.mendo.service.SchoolService;
-import mk.ukim.finki.mendo.web.mapper.CompetitionMapper;
-import mk.ukim.finki.mendo.web.mapper.ParticipationMapper;
-import mk.ukim.finki.mendo.web.mapper.QuotaMapper;
-import mk.ukim.finki.mendo.web.mapper.RoomMapper;
+import mk.ukim.finki.mendo.service.*;
+import mk.ukim.finki.mendo.web.mapper.*;
+import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +27,11 @@ public class CompetitionsController {
     private final QuotaMapper quotaMapper;
     private final ParticipationMapper participationMapper;
     private final RoomMapper roomMapper;
+    private final UtilsMapper utilsMapper;
+    private final TaskService taskService;
 
     public CompetitionsController(CompetitionService competitionService,
-                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper, QuotaMapper quotaMapper, ParticipationMapper participationMapper, RoomMapper roomMapper) {
+                                  CompetitionCycleService competitionCycleService, SchoolService schoolService, MendoUserService mendoUserService, CompetitionMapper competitionMapper, QuotaMapper quotaMapper, ParticipationMapper participationMapper, RoomMapper roomMapper, UtilsMapper utilsMapper, TaskService taskService) {
         this.competitionService = competitionService;
         this.competitionCycleService = competitionCycleService;
         this.schoolService = schoolService;
@@ -42,6 +40,8 @@ public class CompetitionsController {
         this.quotaMapper = quotaMapper;
         this.participationMapper = participationMapper;
         this.roomMapper = roomMapper;
+        this.utilsMapper = utilsMapper;
+        this.taskService = taskService;
     }
 
 //    @GetMapping
@@ -71,7 +71,7 @@ public class CompetitionsController {
 //        return "master";
 //    }
 
-    @GetMapping({"","s"})
+    @GetMapping("")
     public String allCompetitions(Model model) {
         List<School> schools = schoolService.findAll();
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
@@ -89,6 +89,54 @@ public class CompetitionsController {
         return "master";
 
     }
+
+    @GetMapping("/add")
+    public String getCompetition(Model model) {
+        model.addAttribute("cycles", utilsMapper.getAllUpcomingCyclesAsOptions());
+        model.addAttribute("types", CompetitionTypes.values());
+        model.addAttribute("competitions", competitionMapper.listCompetitions());
+        model.addAttribute("rooms", utilsMapper.getAllRoomsAsOptions());
+        model.addAttribute("tasks",utilsMapper.getAllTasksAsOptions());
+        model.addAttribute("bodyContent", "admin/addCompetition");
+
+        return "master";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String getEditCompetition(@PathVariable Long id, Model model) {
+        model.addAttribute("cycles", competitionCycleService.findAll());
+        model.addAttribute("types", CompetitionTypes.values());
+        model.addAttribute("competitions", competitionMapper.listCompetitions());
+        model.addAttribute("rooms", roomMapper.findAllRooms());
+        model.addAttribute("tasks",taskService.getAllTasks());
+        model.addAttribute("competition", competitionMapper.toCompetitionRequest(competitionMapper.findById(id)));
+        model.addAttribute("competitionId", id);
+        model.addAttribute("bodyContent", "admin/editCompetition");
+        return "master";
+    }
+
+
+    @PostMapping("/add")
+    public String addCompetition(CompetitionRequest request, Model model) {
+
+        if (competitionMapper.addCompetition(request) == null) {
+            throw new RuntimeException("Can't add competition");
+        }
+
+        return "redirect:/competition";
+    }
+
+
+    @PostMapping("/edit/{id}")
+    public String editCompetition(@PathVariable Long id,
+                                  CompetitionRequest request,
+                                  Model model) {
+        competitionMapper.editCompetition(id, request)
+                .orElseThrow(() -> new RuntimeException("Can't update competition with id: " + id));
+        return "redirect:/competition";
+    }
+
+
 
     @GetMapping("/{id}")
     public String getCompetitionDetails(@PathVariable Long id, Model model) {

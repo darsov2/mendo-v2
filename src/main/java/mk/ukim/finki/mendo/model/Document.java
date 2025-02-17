@@ -1,8 +1,6 @@
 package mk.ukim.finki.mendo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +15,8 @@ public class Document extends BaseAuditedEntity<Long> {
 
   private String fileName;
   private String contentType;
-  @Lob
-  private String base64Data;
+//  @Lob
+  @Basic(fetch = FetchType.LAZY)
+  @Column(columnDefinition = "BYTEA")
+  private byte[] base64Data;
 }

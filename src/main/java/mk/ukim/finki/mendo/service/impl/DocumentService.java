@@ -2,6 +2,8 @@ package mk.ukim.finki.mendo.service.impl;
 
 
 import jakarta.persistence.EntityNotFoundException;
+
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import mk.ukim.finki.mendo.model.Document;
@@ -18,14 +20,18 @@ public class DocumentService {
     this.documentRepository = documentRepository;
   }
 
-  public Document saveFile(MultipartFile file) throws Exception {
+  public Document saveFile(MultipartFile file) {
     Document document = new Document();
     document.setFileName(file.getOriginalFilename());
     document.setContentType(file.getContentType());
 
-    byte[] fileBytes = file.getBytes();
-    String base64String = Base64.getEncoder().encodeToString(fileBytes);
-    document.setBase64Data(base64String);
+      byte[] fileBytes = null;
+      try {
+          fileBytes = file.getBytes();
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
+    document.setBase64Data(fileBytes);
 
     return documentRepository.save(document);
   }
@@ -41,6 +47,6 @@ public class DocumentService {
 
   public byte[] getFileData(Long id) {
     Document document = getFile(id);
-    return Base64.getDecoder().decode(document.getBase64Data());
+    return document.getBase64Data();
   }
 }

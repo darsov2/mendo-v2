@@ -39,7 +39,7 @@ public class Competition extends BaseAuditedEntity<Long> {
     LocalDateTime deadline;
     Boolean requiresRegistration;
     Boolean visibleToPublic;
-    Boolean canStudentr;
+    Boolean canStudentRegister;
 
     @ManyToOne
     CompetitionCycle cycle;
@@ -48,7 +48,7 @@ public class Competition extends BaseAuditedEntity<Long> {
     @ManyToOne
     Competition parentCompetition;
 
-    @OneToMany(mappedBy = "competition")
+    @OneToMany(mappedBy = "competition", fetch = FetchType.LAZY)
     List<CompetitionTask> tasks;
 
     @ManyToMany

@@ -7,6 +7,7 @@ import mk.ukim.finki.mendo.model.dto.ActivityDTO;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.model.dto.LectureEditDTO;
 import mk.ukim.finki.mendo.model.dto.TaskDTO;
+import mk.ukim.finki.mendo.model.dto.TestGroupDTO;
 import mk.ukim.finki.mendo.service.PostService;
 import mk.ukim.finki.mendo.web.mapper.ActivitiesMapper;
 import mk.ukim.finki.mendo.web.mapper.CategoryMapper;
@@ -37,7 +38,7 @@ public class ActivitiesController {
   private final PostService postService;
 
   public ActivitiesController(CategoryMapper categoryMapper, ActivitiesMapper activitiesMapper,
-                              UtilsMapper utilsMapper, PostService postService) {
+      UtilsMapper utilsMapper, PostService postService) {
     this.categoryMapper = categoryMapper;
     this.activitiesMapper = activitiesMapper;
     this.utilsMapper = utilsMapper;
@@ -80,23 +81,18 @@ public class ActivitiesController {
   }
 
   @PostMapping("/tasks/{taskId}/cases/update-cases")
-  public String updateCases(Model model, @PathVariable Long taskId, HttpServletRequest request,
+  public String updateCases(Model model, @PathVariable Long taskId,
+      @RequestParam Map<String, MultipartFile> fileMap, @RequestParam Map<String, String> paramsMap,
       RedirectAttributes redirectAttributes) {
-
-    try {
-      MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-
-      Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-//      Map<String, TestGroupDTO> groups = new HashMap<>();
-    } catch (Exception ex) {
-
-    }
+    //gX-tY-name;
+    activitiesMapper.updateTaskTestCases(taskId, fileMap, paramsMap);
+    System.out.println();
     return "";
   }
 
   @GetMapping("/tasks/{activityId}/cases")
   public String previewTaskForCasesEdit(Model model, @PathVariable Long activityId) {
-    model.addAttribute("task", activitiesMapper.getTaskPreview(activityId));
+    model.addAttribute("task", activitiesMapper.getTaskWithCasesPreview(activityId));
     model.addAttribute("bodyContent", "admin/task-cases");
     return "master";
   }

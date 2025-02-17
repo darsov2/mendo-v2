@@ -28,10 +28,12 @@ public class CategoryMapper {
     }
 
     public Category addCategory(CategoryRequest request) {
-
-        Category category = findById(request.getParentCategoryId());
+        Category parentCategory = null;
+        if(request.getParentCategoryId() != null) {
+            parentCategory = findById(request.getParentCategoryId());
+        }
         List<Category> categories = findAllByIds(request.getChildrenId());
-        return categoryService.save(new Category(request.getName(), category, categories));
+        return categoryService.save(new Category(request.getName(), parentCategory, categories));
     }
 
     public Category findById(Long id) {

@@ -64,4 +64,9 @@ public class CompetitionCycleServiceImpl implements CompetitionCycleService {
     public List<CompetitionCycle> findAll() {
         return competitionCycleRepository.findAll();
     }
+
+    @Override
+    public List<CompetitionCycle> findAllUpcoming() {
+        return competitionCycleRepository.findAllByYearAfter(LocalDate.now().minusYears(1));
+    }
 }

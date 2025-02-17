@@ -1,421 +1,645 @@
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
 
-  :root {
-    --primary: #E6AA68;
-    --primary-hover: #d99b59;
-    --background: #f5efe6;
-    --text: #2c1810;
-    --text-secondary: #666;
-    --border: #e2e8f0;
-    --white: #ffffff;
-    --shadow: rgba(44, 24, 16, 0.1);
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-  }
+    :root {
+        --primary: #E6AA68;
+        --primary-hover: #d99b59;
+        --background: #f5efe6;
+        --text: #2c1810;
+        --text-secondary: #666;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --shadow: rgba(44, 24, 16, 0.1);
+        --danger: #ef4444;
+        --danger-hover: #dc2626;
+    }
 
-  body {
-    background-color: var(--background);
-    min-height: 100vh;
-  }
+    body {
+        background-color: var(--background);
+        min-height: 100vh;
+    }
 
-  .admin-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    color: var(--text);
-  }
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        color: var(--text);
+    }
 
-  .toolbar-top {
-    background: var(--white);
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2rem;
-  }
+    .toolbar-top {
+        background: var(--white);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+    }
 
-  .toolbar-top h1 {
-    color: var(--text);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-  }
+    .toolbar-top h1 {
+        color: var(--text);
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+    }
 
-  .task-details {
-    background: var(--white);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 4px var(--shadow);
-  }
+    .task-details {
+        background: var(--white);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px var(--shadow);
+    }
 
-  .task-info {
-    display: flex;
-    gap: 2rem;
-    margin: 1rem 0;
-    padding: 1rem 1.5rem;
-    background: var(--background);
-    border-radius: 0.8rem;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-  }
+    .task-info {
+        display: flex;
+        gap: 2rem;
+        margin: 1rem 0;
+        padding: 1rem 1.5rem;
+        background: var(--background);
+        border-radius: 0.8rem;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+    }
 
-  .test-groups {
-    margin-top: 2rem;
-  }
+    .test-groups {
+        margin-top: 2rem;
+    }
 
-  .group-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
+    .group-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-  .add-group-btn, .add-test-btn {
-    padding: 0.625rem 1.25rem;
-    background: var(--primary);
-    color: var(--text);
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-  }
+    .add-group-btn, .add-test-btn {
+        padding: 0.625rem 1.25rem;
+        background: var(--primary);
+        color: var(--text);
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+    }
 
-  .add-group-btn:hover, .add-test-btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-  }
+    .add-group-btn:hover, .add-test-btn:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+    }
 
-  .test-group {
-    background: var(--white);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px var(--shadow);
-  }
+    .test-group {
+        background: var(--white);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px var(--shadow);
+    }
 
-  .group-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .group-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-  .group-info {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
+    .group-info .row {
+        display: flex;
+        gap: 2rem;
+        width: 100%;
+    }
 
-  .group-info input[type="number"] {
-    width: 100px;
-    padding: 0.5rem;
-    border: 1px solid var(--border);
-    border-radius: 0.4rem;
-  }
+    .group-info .col-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 
-  .test-cases {
-    margin-top: 1rem;
-  }
+    .group-info label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
 
-  .test-case {
-    display: grid;
-    grid-template-columns: 50px 1fr 50px; /* Adjusted proportions */
-    gap: 1rem;
-    padding: 1rem;
-    align-items: center;
-    border: 1px solid var(--border);
-    border-radius: 0.6rem;
-    background: var(--background);
-  }
+    .group-info input[type="number"],
+    .group-info select {
+        width: 200px;
+        padding: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.4rem;
+        background-color: var(--white);
+    }
+
+    .test-cases {
+        margin-top: 1rem;
+    }
+
+    .test-case {
+        display: grid;
+        grid-template-columns: 50px 1fr 50px; /* Adjusted proportions */
+        gap: 1rem;
+        padding: 1rem;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 0.6rem;
+        background: var(--background);
+    }
 
 
-  .test-case:last-child {
-    border-bottom: none;
-  }
+    .test-case:last-child {
+        border-bottom: none;
+    }
 
-  .test-number {
-    font-weight: 600;
-    color: var(--text);
-  }
+    .test-number {
+        font-weight: 600;
+        color: var(--text);
+    }
 
-  .file-upload {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+    .file-upload {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-  .file-upload input[type="file"] {
-    display: none;
-  }
+    .file-upload input[type="file"] {
+        display: none;
+    }
 
-  .file-upload label {
-    padding: 0.5rem 1rem;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 0.4rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-  }
+    .file-upload label {
+        padding: 0.5rem 1rem;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 0.4rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
 
-  .file-upload label:hover {
-    background: var(--border);
-  }
+    .file-upload label:hover {
+        background: var(--border);
+    }
 
-  .batch-upload {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: var(--background);
-    border-radius: 0.6rem;
-  }
+    .batch-upload {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--background);
+        border-radius: 0.6rem;
+    }
 
-  .batch-upload-title {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
+    .batch-upload-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
 
-  .batch-upload-info {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
-  }
+    .batch-upload-info {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
 
-  .delete-btn {
-    padding: 0.4rem 0.8rem;
-    background: transparent;
-    color: var(--danger);
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+    .delete-btn {
+        padding: 0.4rem 0.8rem;
+        background: transparent;
+        color: var(--danger);
+        border: none;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-  .delete-btn:hover {
-    background: #fee2e2;
-    color: var(--danger-hover);
-  }
+    .delete-btn:hover {
+        background: #fee2e2;
+        color: var(--danger-hover);
+    }
 
-  .btn-action {
-    padding: 0.4rem;
-    border-radius: 0.4rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: transparent;
-  }
+    .btn-action {
+        padding: 0.4rem;
+        border-radius: 0.4rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: transparent;
+    }
 
-  .btn-edit:hover {
-    background: var(--background);
-    color: var(--primary);
-  }
+    .btn-edit:hover {
+        background: var(--background);
+        color: var(--primary);
+    }
 
-  .btn-delete:hover {
-    background: #fee2e2;
-    color: var(--danger);
-  }
+    .btn-delete:hover {
+        background: #fee2e2;
+        color: var(--danger);
+    }
+
+    .group-info div {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .badge:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    .badge-primary {
+        background: #e6f0ff;
+        color: #1a56db;
+    }
+
+    .badge-success {
+        background: #f0fff4;
+        color: #057a55;
+    }
+
+    .badge-select {
+        display: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid var(--border);
+        background: var(--white);
+        cursor: pointer;
+    }
+
+    .badge-select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(230, 170, 104, 0.3);
+    }
+
+    .group-badges-container {
+        display: flex;
+        gap: 15px;
+    }
 </style>
 
-<div class="admin-container">
-  <nav class="toolbar-top">
+<nav class="toolbar-top">
     <div class="d-flex align-items-center">
-      <button class="btn-action btn-edit me-2">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <h1>Додади тестови</h1>
-    </div>
-  </nav>
-
-  <div class="task-details">
-    <h1>Собирање на два броја</h1>
-    <div class="task-info">
-      <span>⏱️ Временско ограничување: 1000 ms</span>
-      <span>💾 Мемориско ограничување: 256 MB</span>
-    </div>
-
-    <h3>Опис на задачата</h3>
-    <p th:utext="${task.text}"></p>
-
-    <h3>Влез</h3>
-    <p th:utext="${task?.inputFormat}">Опис на влезниот формат...</p>
-
-    <h3>Излез</h3>
-    <p th:utext="${task?.outputFormat}">Опис на излезниот формат...</p>
-  </div>
-  <form method="post" enctype="multipart/form-data"
-        th:action="@{/activities/tasks/{taskId}/cases/update-cases(taskId=${task.id})}">
-
-    <div class="test-groups">
-      <div class="group-header">
-        <h2>Тест групи</h2>
-        <button type="button" class="add-group-btn" onclick="addGroup()">
-          <i class="fas fa-plus"></i>
-          Додади група
+        <button class="btn-action btn-edit me-2">
+            <i class="fas fa-arrow-left"></i>
         </button>
-      </div>
-
-      <div id="groups-container">
-        <!-- Groups will be added here -->
-      </div>
+        <h1>Додади тестови</h1>
     </div>
-    <button type="submit">SUBMIT</button>
-  </form>
+</nav>
+
+<div class="admin-container">
+
+
+    <div class="task-details">
+        <h1>Собирање на два броја</h1>
+        <div class="task-info">
+            <span>⏱️ Временско ограничување: 1000 ms</span>
+            <span>💾 Мемориско ограничување: 256 MB</span>
+        </div>
+
+        <h3>Опис на задачата</h3>
+        <p th:utext="${task.text}"></p>
+
+        <h3>Влез</h3>
+        <p th:utext="${task?.inputFormat}">Опис на влезниот формат...</p>
+
+        <h3>Излез</h3>
+        <p th:utext="${task?.outputFormat}">Опис на излезниот формат...</p>
+    </div>
+    <form method="post" enctype="multipart/form-data"
+          th:action="@{/activities/tasks/{taskId}/cases/update-cases(taskId=${task.id})}">
+
+        <div class="test-groups">
+            <div class="group-header">
+                <h2>Тест групи</h2>
+                <button type="button" class="add-group-btn" onclick="addGroup()">
+                    <i class="fas fa-plus"></i>
+                    Додади група
+                </button>
+            </div>
+            <div id="groups-preview">
+                <div th:each="group, iterStat : ${task.testGroups}" class="accordion mb-3" th:id="${'testGroup' + iterStat.index}">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-button d-flex align-items-center justify-content-between gap-2" type="button"
+                                 th:data-bs-toggle="collapse"
+                                 th:data-bs-target="${'#collapse' + iterStat.index}"
+                                 aria-expanded="true"
+                                 th:aria-controls="${'collapse' + iterStat.index}">
+                                <div th:text="${'Група ' + group.id}">Група #1</div>
+                                <div class="group-badges-container">
+
+                                    <div class="badge-container" data-group-id="${group.id}">
+                                        <div class="badge rounded-pill text-bg-primary" onclick="showSelect(this, 'points')"
+                                             th:text="${group.pointsPolicy}">EACH_TEST</div>
+                                        <select class="badge-select points-policy-select" onchange="updatePolicy(this, 'points')" style="display: none;">
+                                            <option value="EACH_TEST">Поединечно, по тест</option>
+                                            <option value="COMPLETE_GROUP">Цела група</option>
+                                        </select>
+
+                                        <div class="badge rounded-pill text-bg-success" onclick="showSelect(this, 'feedback')"
+                                             th:text="${group.feedbackPolicy}">COMPLETE</div>
+                                        <select class="badge-select feedback-policy-select" onchange="updatePolicy(this, 'feedback')" style="display: none;">
+                                            <option value="NONE">Без feedback</option>
+                                            <option value="POINTS">Само поени</option>
+                                            <option value="ICPC">ICPC</option>
+                                            <option value="COMPLETE">Целосен</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-secondary ms-auto" type="button"
+                                            th:onclick="'editGroup(' + ${group.id} + ')'"
+                                            onclick="event.stopPropagation()">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:id="${'collapse' + iterStat.index}" class="accordion-collapse collapse show p-3"
+                             th:data-bs-parent="${'#testGroup' + iterStat.index}">
+                            <div th:each="test : ${group.testCases}" class="alert alert-light">
+                                <div class="d-flex justify-content-between">
+                                    <span th:text="${'Tест ' + test.id}">Тест #1</span>
+                                    <span>⏱️ <span th:text="${test.timeLimit}"></span> ms</span>
+                                    <span>💾 <span th:text="${test.memoryLimit}"></span> MB</span>
+                                    <span><span th:text="${test.points}"></span> поени</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="groups-container">
+                <!-- Groups will be added here -->
+            </div>
+        </div>
+        <button type="submit">SUBMIT</button>
+    </form>
 </div>
 
 <template id="group-template">
-  <div class="test-group">
-    <div class="group-title">
-      <span>Група <span class="group-number"></span></span>
-      <button type="button" class="delete-btn" onclick="deleteGroup(this)">
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
+    <div class="test-group">
+        <div class="group-title">
+            <span>Група <span class="group-number"></span></span>
+            <button type="button" class="delete-btn" onclick="deleteGroup(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
 
-    <div class="group-info">
-      <label>
-        Поени:
-        <input type="number" value="0" min="0" max="100">
-      </label>
-    </div>
+        <div class="group-info">
+            <div class="row">
+                <div class="col-3">
+                    <label>
+                        Поени:
+                    </label>
+                    <input class="group-points" type="number" value="0" min="0" max="100">
+                </div>
+                <div class="col-3">
+                    <label>
+                        Распределба на поени:
+                    </label>
+                    <select class="form-select group-distribution">
+                        <option value="EACH_TEST">Поединечно, по тест</option>
+                        <option value="COMPLETE_GROUP">Цела група</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label>
+                        Feedback:
+                    </label>
+                    <select class="form-select group-feedback">
+                        <option value="NONE">Без feedback</option>
+                        <option value="POINTS">Само поени</option>
+                        <option value="ICPC">ICPC</option>
+                        <option value="COMPLETE">Целосен</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-    <div class="test-cases mb-4">
-      <!-- Test cases will be added here -->
-    </div>
+        <div class="test-cases mb-4">
+            <!-- Test cases will be added here -->
+        </div>
 
-    <button type="button" class="add-test-btn" onclick="addTest(this)">
-      <i class="fas fa-plus"></i>
-      Додади тест
-    </button>
-  </div>
+        <button type="button" class="add-test-btn" onclick="addTest(this)">
+            <i class="fas fa-plus"></i>
+            Додади тест
+        </button>
+    </div>
 </template>
 
 <template id="test-case-template">
-  <div class="test-case mb-3">
-    <span class="test-number"></span>
-    <div>
-      <div class="d-flex justify-content-evenly mb-4">
-        <div class="file-upload">
-          <label>
-            Влез
-            <input type="file" name="" class="file-input" accept=".txt,.in"
-                   onchange="updateFileName(this)">
-          </label>
-          <span>No file chosen</span>
+    <div class="test-case mb-3">
+        <span class="test-number"></span>
+        <div>
+            <div class="d-flex justify-content-evenly mb-4">
+                <div class="file-upload">
+                    <label>
+                        Влез
+                        <input type="file" name="" class="file-input" accept=".txt,.in"
+                               onchange="updateFileName(this)">
+                    </label>
+                    <span>No file chosen</span>
+                </div>
+                <div class="file-upload">
+                    <label>
+                        Излез
+                        <input type="file" name="" class="file-output" accept=".txt,.out"
+                               onchange="updateFileName(this)">
+                    </label>
+                    <span>No file chosen</span>
+                </div>
+            </div>
+            <div class="test-limits d-flex justify-center" style="gap: 20px">
+                <input type="number" name="" class="test-points form-control" placeholder="Поени" min="0"
+                       max="100">
+                <input type="number" name="" class="test-time form-control" placeholder="Време (ms)"
+                       min="0">
+                <input type="number" name="" class="test-memory form-control" placeholder="Меморија (MB)"
+                       min="0">
+            </div>
         </div>
-        <div class="file-upload">
-          <label>
-            Излез
-            <input type="file" name="" class="file-output" accept=".txt,.out"
-                   onchange="updateFileName(this)">
-          </label>
-          <span>No file chosen</span>
+        <div class="">
+            <button class="btn-action btn-delete" onclick="deleteTest(this)">
+                <i class="fas fa-trash"></i>
+            </button>
         </div>
-      </div>
-      <div class="test-limits d-flex justify-center" style="gap: 20px">
-        <input type="number" name="" class="test-points form-control" placeholder="Поени" min="0"
-               max="100">
-        <input type="number" name="" class="test-time form-control" placeholder="Време (ms)"
-               min="0">
-        <input type="number" name="" class="test-memory form-control" placeholder="Меморија (MB)"
-               min="0">
-      </div>
     </div>
-    <div class="">
-      <button class="btn-action btn-delete" onclick="deleteTest(this)">
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
 </template>
 
 <script>
-  let groupCounter = 0;
+    let groupCounter = 0;
 
-  function addGroup() {
-    groupCounter++;
-    const groupsContainer = document.getElementById('groups-container');
-    const template = document.getElementById('group-template');
-    const clone = template.content.cloneNode(true);
+    function addGroup() {
+        groupCounter++;
+        const groupsContainer = document.getElementById('groups-container');
+        const template = document.getElementById('group-template');
+        const clone = template.content.cloneNode(true);
 
-    // Update group number
-    clone.querySelector('.group-number').textContent = groupCounter;
+        clone.querySelector('.group-number').textContent = groupCounter;
 
-    groupsContainer.appendChild(clone);
-  }
+        groupsContainer.appendChild(clone);
+    }
 
-  function deleteGroup(button) {
-    const group = button.closest('.test-group');
-    group.remove();
-    updateAllNames(); // Update names after deletion
-  }
+    function deleteGroup(button) {
+        const group = button.closest('.test-group');
+        group.remove();
+        updateAllNames();
+    }
 
-  function addTest(button) {
-    const testCasesContainer = button.previousElementSibling;
-    const template = document.getElementById('test-case-template');
-    const clone = template.content.cloneNode(true);
+    function editGroup(groupId) {
+        alert('Da tibam grupata skapana da tibam pickata stopankina')
+    }
 
-    // Update test number
-    const testNumber = testCasesContainer.children.length + 1;
-    clone.querySelector('.test-number').textContent = '#' + testNumber;
+    function addTest(button) {
+        const testCasesContainer = button.previousElementSibling;
+        const template = document.getElementById('test-case-template');
+        const clone = template.content.cloneNode(true);
 
-    testCasesContainer.appendChild(clone);
-    updateAllNames(); // Update names after adding new test
-  }
+        const testNumber = testCasesContainer.children.length + 1;
+        clone.querySelector('.test-number').textContent = '#' + testNumber;
 
-  function deleteTest(button) {
-    const testCase = button.closest('.test-case');
-    const testCasesContainer = testCase.parentElement;
-    testCase.remove();
+        testCasesContainer.appendChild(clone);
+        updateAllNames();
+    }
 
-    // Update remaining test numbers
-    const testCases = testCasesContainer.querySelectorAll('.test-case');
-    testCases.forEach((test, index) => {
-      test.querySelector('.test-number').textContent = '#' + (index + 1);
+    function deleteTest(button) {
+        const testCase = button.closest('.test-case');
+        const testCasesContainer = testCase.parentElement;
+        testCase.remove();
+
+        const testCases = testCasesContainer.querySelectorAll('.test-case');
+        testCases.forEach((test, index) => {
+            test.querySelector('.test-number').textContent = '#' + (index + 1);
+        });
+
+        updateAllNames();
+    }
+
+    function updateFileName(input) {
+        const fileSpan = input.parentElement.nextElementSibling;
+        fileSpan.textContent = input.files[0]?.name || 'Нема прикачен фајл';
+    }
+
+    function addGroup() {
+        groupCounter++;
+        const groupsContainer = document.getElementById('groups-container');
+        const template = document.getElementById('group-template');
+        const clone = template.content.cloneNode(true);
+
+        clone.querySelector('.group-number').textContent = groupCounter;
+
+        groupsContainer.appendChild(clone);
+        updateAllNames();
+    }
+
+    function updateAllNames() {
+        const groups = document.querySelectorAll('.test-group');
+        groups.forEach((group, groupIndex) => {
+            const groupNum = groupIndex + 1;
+
+            const pointsInput = group.querySelector('.group-points');
+            const pointsDistributionSelect = group.querySelector('.form-select.group-distribution');
+            const feedbackSelect = group.querySelector('.form-select.group-feedback');
+
+            pointsInput.name = `g${groupNum}-points`;
+            pointsDistributionSelect.name = `g${groupNum}-distribution`;
+            feedbackSelect.name = `g${groupNum}-feedback`;
+
+            const tests = group.querySelectorAll('.test-case');
+            tests.forEach((test, testIndex) => {
+                const testNum = testIndex + 1;
+                const prefix = `g${groupNum}-t${testNum}`;
+
+                test.querySelector('.file-input').name = `${prefix}-fileInput`;
+                test.querySelector('.file-output').name = `${prefix}-fileOutput`;
+                test.querySelector('.test-time').name = `${prefix}-time`;
+                test.querySelector('.test-memory').name = `${prefix}-memory`;
+                test.querySelector('.test-points').name = `${prefix}-points`;
+            });
+        });
+    }
+
+    function showSelect(badge, type) {
+        const container = badge.closest('.badge-container');
+        const select = container.querySelector(`.${type}-policy-select`);
+        const currentValue = badge.textContent.trim();
+
+        select.value = currentValue;
+
+        badge.style.display = 'none';
+        select.style.display = 'inline-block';
+        select.focus();
+    }
+
+    function updatePolicy(select, type) {
+        const container = select.closest('.badge-container');
+        const badge = container.querySelector(`.${type}-policy-badge`);
+        const groupId = container.dataset.groupId;
+        const newValue = select.value;
+
+        badge.textContent = newValue;
+
+        select.style.display = 'none';
+        badge.style.display = 'inline-block';
+
+        const data = {
+            groupId: groupId,
+            policyType: type,
+            newValue: newValue
+        };
+
+        fetch(`/api/groups/${groupId}/update-policy`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                badge.textContent = select.querySelector(`option[value="${select.value}"]`).textContent;
+            });
+    }
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.classList.contains('badge') &&
+            !event.target.classList.contains('badge-select')) {
+            const allSelects = document.querySelectorAll('.badge-select');
+            const allBadges = document.querySelectorAll('.badge');
+
+            allSelects.forEach(select => {
+                select.style.display = 'none';
+            });
+            allBadges.forEach(badge => {
+                badge.style.display = 'inline-block';
+            });
+        }
     });
 
-    updateAllNames(); // Update names after deletion
-  }
 
-  function updateFileName(input) {
-    const fileSpan = input.parentElement.nextElementSibling;
-    fileSpan.textContent = input.files[0]?.name || 'Нема прикачен фајл';
-  }
-
-  function updateAllNames() {
-    const groups = document.querySelectorAll('.test-group');
-    groups.forEach((group, groupIndex) => {
-      const groupNum = groupIndex + 1;
-      const tests = group.querySelectorAll('.test-case');
-
-      tests.forEach((test, testIndex) => {
-        const testNum = testIndex + 1;
-        const prefix = `g${groupNum}-t${testNum}`;
-
-        // Update input names
-        test.querySelector('.file-input').name = `${prefix}-fileInput`;
-        test.querySelector('.file-output').name = `${prefix}-fileOutput`;
-        test.querySelector('.test-time').name = `${prefix}-time`;
-        test.querySelector('.test-memory').name = `${prefix}-memory`;
-        test.querySelector('.test-points').name = `${prefix}-points`;
-      });
+    document.addEventListener('DOMContentLoaded', () => {
+        addGroup();
     });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    addGroup();
-  });
 </script>

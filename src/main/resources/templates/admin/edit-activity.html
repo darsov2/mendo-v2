@@ -108,11 +108,13 @@
         </div>
     </div>
 </nav>
+<div th:replace="fragments/_toolbar :: toolbar('Уредување предавање')"></div>
+
 
 <div class="main-container">
     <form th:object="${lecture}"
-          th:method="${lecture.id != null} ? 'put' : 'post'"
-          th:action="${lecture.id != null} ? '/activities/lectures/' + ${lecture.id} : '/activities/lectures'">
+          th:method="${lecture?.id != null} ? 'put' : 'post'"
+          th:action="${lecture?.id != null} ? '/activities/lectures/' + ${lecture?.id} : '/activities/lectures'">
     <div class="content-card">
         <div class="mb-4">
             <label for="activity-title" class="form-label">Наслов на предавањето</label>

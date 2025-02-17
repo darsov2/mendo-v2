@@ -17,7 +17,8 @@ public class CompetitionCycle extends BaseAuditedEntity<Long> {
     private String name;
     private LocalDate year;
     private LocalDateTime registrationDeadline;
-    @OneToMany(mappedBy = "cycle")
+    @OneToMany(mappedBy = "cycle", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("cycle")
     private List<Competition> competitions;
 
 

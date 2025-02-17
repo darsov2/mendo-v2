@@ -1,0 +1,17 @@
+
+<th:block th:fragment="toolbar(title)">
+    <nav class="toolbar-top navbar">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <button class="mendo-btn mendo-btn-secondary me-2">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="h5 mb-0" th:text="${title}">Default Title</h1>
+            </div>
+            <div>
+                <button class="mendo-btn mendo-btn-secondary me-2">Откажи</button>
+                <button class="mendo-btn mendo-btn-primary">Зачувај</button>
+            </div>
+        </div>
+    </nav>
+</th:block>
