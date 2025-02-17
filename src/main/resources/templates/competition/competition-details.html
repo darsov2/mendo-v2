@@ -54,6 +54,8 @@
     }
 </script>
 
+<link href="/style/grid.css" rel="stylesheet">
+
 <nav class="toolbar-top">
     <a th:href="@{/competition}" class="btn-back">
         <i class="fas fa-arrow-left"></i> Натпревари
@@ -62,16 +64,20 @@
 
 <div class="main-content">
     <!-- Competition Header -->
-    <div class="competition-header">
+    <div class="competition-header d-flex justify-content-between">
         <h1 class="competition-title" th:text="${competition.title}">Regional Competition 2024</h1>
-        <div class="header-actions">
-            <div class="toolbar-actions" th:if="${competition.endTime.isBefore(currentDateTime)}">
-                <form th:action="@{/results/competitionId={id}(id=${competition.id})}">
-                    <button type="submit" class="btn-results">Види резултати</button>
-                </form>
+        <div >
+            <div th:if="${competition.endTime.isBefore(currentDateTime)}" class="d-flex justify-content-end ">
+                <a class="btn-results link-no-decor" th:href="@{/results/competitionId={id}(id=${competition.id})}">
+                    Види резултати
+                </a>
+                <a th:href="@{${competition.hasSchedule} ? '/competition/' + ${competition.id} + '/schedule' : '/competition/' + ${competition.id} + '/generate'}"
+                   class="btn-results mx-3 link-no-decor ">
+                    <span th:text="${competition.hasSchedule} ? 'Види список' : 'Генерирај Список'"><i class="fa-solid fa-table"></i></span>
+                </a>
             </div>
             <div th:if="${competition.canStudentRegister != null and competition.requiresRegistration != null and competition.canStudentRegister and competition.requiresRegistration}">
-                <div class="toolbar-actions">
+                <div >
                     <th:block
                             th:with="canRegister=${competition.cycle == null and competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
                         <th:block th:if="${canRegister}">
@@ -100,15 +106,11 @@
     <div class="content-card">
         <div class="competition-info">
             <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-map-marker-alt"></i>
-                        Локација
-                    </span>
-                <span class="info-value" th:text="${competition?.place}">FINKI, Skopje</span>
+
                 <span class="info-label">
                     <i class="fas fa-map-marker-alt"></i> Локација
                 </span>
-                <span class="info-value" th:text="${competition.place}"></span>
+                <span class="info-value" th:text="${competition?.place}"></span>
             </div>
             <div class="info-item">
                 <span class="info-label">
@@ -165,20 +167,13 @@
     </div>
 
     <!-- Competition Description -->
-    <div class="content-card">
+    <div class="content-card my-4">
         <div class="competition-description">
             <h3>Опис на натпреварот</h3>
             <div th:utext="${competition.info}"></div>
         </div>
     </div>
 
-
-    <div style="width: 80%" class="m-auto d-flex justify-content-end">
-        <a th:href="@{${competition.hasSchedule} ? '/competition/' + ${competition.id} + '/schedule' : '/competition/' + ${competition.id} + '/generate'}"
-           class="mendo-btn mb-4 link-no-decor">
-            <span th:text="${competition.hasSchedule} ? 'Види список' : 'Генерирај Список'"><i class="fa-solid fa-table"></i></span>
-        </a>
-    </div>
 
     <!-- Registration Modal -->
     <div th:if="${currentUser != null}" class="modal fade" id="registrationModal" tabindex="-1">
@@ -234,8 +229,8 @@
                 <button class="mendo-btn" type="button" onclick="changeDataToInput(event)">Смени квоти</button>
 
             </div>
-            <div class="table-responsive">
-                <table class="content-table quota-table">
+            <div >
+                <table class="content-table ">
                     <thead>
                     <tr>
                         <th>Училиште</th>
@@ -338,23 +333,15 @@
 
 <style>
     .competition-header {
-        width: 80%;
         margin: auto;
         background: white;
         border-radius: 1rem;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
         box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
 
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
+
 
     .competition-title {
         color: #2c1810;
@@ -398,40 +385,6 @@
         gap: 0.5rem;
     }
 
-    .table-responsive {
-        overflow-x: auto;
-        margin: 0 -1.5rem;
-        padding: 0 1.5rem;
-    }
-
-    .quota-table {
-        min-width: 600px;
-    }
-
-    .quota-table {
-        min-width: 600px;
-        border-spacing: 2rem 1rem;
-        border-collapse: separate;
-    }
-
-    .quota-table th:first-child {
-        width: 70%;
-    }
-
-    .quota-table th:last-child {
-        width: 30%;
-    }
-
-    .quota-table th {
-        padding: 1rem 2.5rem;
-        background-color: #fff5eb;
-    }
-
-    .quota-table td {
-        padding: 1rem 1.5rem;
-        background-color: white;
-    }
-
     .text-center {
         text-align: center;
     }
@@ -449,63 +402,7 @@
 
 
 
-    .competition-header, .content-card {
-        width: 80%;
-        margin: auto;
-    }
 
-    .competition-header {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .competition-title {
-        color: #2c1810;
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
-
-    .content-card {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
-
-    .content-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .content-table th {
-        text-align: left;
-        padding: 1rem;
-        background-color: #f5efe6;
-        color: #2c1810;
-        font-weight: 600;
-        border-radius: 0.5rem 0.5rem 0 0;
-    }
-
-    .content-table td {
-        padding: 1rem;
-        border-bottom: 1px solid #f5efe6;
-        color: #2c1810;
-    }
-
-    .content-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .content-table tr:hover td {
-        background-color: #f8f9fa;
-    }
 
     .competition-info {
         display: grid;
@@ -599,33 +496,6 @@
         min-height: 100vh;
     }
 
-
-    .competition-header, .content-card {
-        width: 80%;
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
-
-    .competition-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .toolbar-top {
-        background: white;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .competition-title {
-        color: #2c1810;
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
 
     .btn-register {
         background-color: #E6AA68;
