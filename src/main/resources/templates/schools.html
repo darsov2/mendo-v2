@@ -92,18 +92,12 @@
   }
 </style>
 
+
+<div th:replace="fragments/_toolbar :: toolbar('Листа на училишта', '/')"></div>
+
 <body>
-<div class="container">
 
-  <div class="header-actions">
-    <h2 class="section-title">Листа на училишта</h2>
-    <div class="search-container">
-      <input type="text" class="search-input" placeholder="Пребарувај училишта...">
-    </div>
-  </div>
-
-</div>
-  <div class="main-content">
+<div class="main-content">
     <div class="content-card">
       <table class="content-table">
         <thead>
@@ -126,14 +120,14 @@
           <td th:text="${school.address}">Address</td>
           <td>
             <div class="actions">
-              <a th:href="@{'/schools/edit/' + ${school.id}}" class="btn-action btn-edit link-no-decor">
+              <a th:href="@{'/schools/edit/' + ${school.id}}" class="btn-edit btn-edit link-no-decor">
                 <i class="fas fa-pencil"></i>
               </a>
-              <a th:href="@{'/schools/delete/' + ${school.id}}" class="btn-action btn-delete link-no-decor">
+              <a th:href="@{'/schools/delete/' + ${school.id}}" class="btn-edit btn-delete link-no-decor">
                 <i class="fas fa-trash"></i>
               </a>
               <a th:href="@{'/schools/' + ${school.id}}"
-                 class="btn-action btn-edit link-no-decor">
+                 class="btn-edit btn-edit link-no-decor">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </a>
 

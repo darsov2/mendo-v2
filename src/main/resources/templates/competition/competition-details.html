@@ -56,11 +56,8 @@
 
 <link href="/style/grid.css" rel="stylesheet">
 
-<nav class="toolbar-top">
-    <a th:href="@{/competition}" class="btn-back">
-        <i class="fas fa-arrow-left"></i> Натпревари
-    </a>
-</nav>
+
+<div th:replace="fragments/_toolbar :: toolbar('Детали за натпревар', '/competition')"></div>
 
 <div class="main-content">
     <!-- Competition Header -->
