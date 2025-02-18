@@ -189,10 +189,10 @@
         <div class="sidebar-header">
           <span class="sidebar-title">Категории</span>
           <div>
-            <a style="color: unset" href="/activities" class="btn-action btn-edit">
+            <a style="color: unset" href="/activities" class="btn-edit btn-edit">
               <i class="fa-solid fa-filter-circle-xmark"></i>
             </a>
-            <a style="color: unset" href="/category/add" class="btn-action btn-edit">
+            <a style="color: unset" href="/category/add" class="btn-edit btn-edit">
               <i class="fas fa-plus"></i>
             </a>
           </div>
@@ -216,10 +216,10 @@
                 </a>
                 <div class="col-4 d-flex justify-content-between align-items-center">
                   <div class="tree-actions">
-                    <button class="btn-action btn-edit">
+                    <button class="btn-edit btn-edit">
                       <i class="fas fa-pencil"></i>
                     </button>
-                    <button class="btn-action btn-delete">
+                    <button class="btn-edit btn-delete">
                       <i class="fas fa-trash"></i>
                     </button>
                   </div>
@@ -234,10 +234,10 @@
                 <i class="fas fa-folder tree-icon"></i>
                 <span th:text="${child.name}">SubCategory Name</span>
                 <div class="tree-actions">
-                  <button class="btn-action btn-edit">
+                  <button class="btn-edit btn-edit">
                     <i class="fas fa-pencil"></i>
                   </button>
-                  <button class="btn-action btn-delete">
+                  <button class="btn-edit btn-delete">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -295,18 +295,18 @@
                         th:text="${tag}">предавање</span></td>
               <td>
                 <div class="actions">
-                  <a th:href="@{/activities/lectures/edit/{id} (id=${act.id})}" class="btn-action btn-edit link-no-decor">
+                  <a th:href="@{/activities/lectures/edit/{id} (id=${act.id})}" class="btn-edit btn-edit link-no-decor">
                     <i class="fas fa-pencil"></i>
                   </a>
-                  <a class="btn-action btn-delete link-no-decor">
+                  <a class="btn-edit btn-delete link-no-decor">
                     <i class="fas fa-trash"></i>
                   </a>
                   <a th:href="@{/activities/{type}/{id} (type=${act.type == 'TASK' ? 'tasks' : 'lectures'}, id=${act.id})}"
-                     class="btn-action btn-edit link-no-decor">
+                     class="btn-edit btn-edit link-no-decor">
                     <i class="fa-solid fa-magnifying-glass"></i>
                   </a>
                   <a th:if="${act.type == 'TASK'}" th:href="@{/activities/{type}/{id} (type=${act.type == 'TASK' ? 'tasks' : 'lectures'}, id=${act.id})}"
-                     class="btn-action btn-edit link-no-decor">
+                     class="btn-edit btn-edit link-no-decor">
                     <i class="fa-solid fa-list-check"></i>
                   </a>
 
