@@ -1,568 +1,317 @@
 <style>
-    :root {
-        --primary-color: #105679;
-        --secondary-color: #E6AA68;
-        --text-dark: #2c1810;
-        --text-light: #666;
-        --bg-light: #f5efe6;
-        --bg-lighter: #fff5eb;
-        --shadow-sm: 0 2px 4px rgba(44, 24, 16, 0.1);
-        --shadow-md: 0 4px 8px rgba(44, 24, 16, 0.15);
-        --radius-lg: 1.5rem;
-        --radius-md: 1rem;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
     }
 
     body {
-        background-color: var(--bg-light);
-        font-family: 'Poppins', sans-serif;
-        color: var(--text-dark);
+        background-color: #f5efe6;
+        min-height: 100vh;
     }
 
-    .page-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
 
-    .page-title {
-        color: var(--primary-color);
-        font-size: 2.5rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 3rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .competition-section {
-        background: white;
-        border-radius: var(--radius-lg);
-        margin-bottom: 1.5rem;
-        overflow: hidden;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .competition-section:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-    }
-
-    .section-header {
-        padding: 1.5rem 2rem;
-        background: white;
-        cursor: pointer;
-        border: none;
-        width: 100%;
-        text-align: left;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        transition: background-color 0.2s ease;
-    }
-
-    .section-header:hover {
-        background-color: var(--bg-lighter);
-    }
-
-    .header-content {
-        flex: 1;
-    }
-
-    .cycle-title {
-        color: var(--primary-color);
-        font-size: 1.4rem;
-        font-weight: 600;
-        text-decoration: none;
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .cycle-title:hover {
-        color: var(--secondary-color);
-    }
-
-    .cycle-info {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-        margin-top: 1rem;
-    }
-
-    .deadline-info {
+    .competition-title {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--text-light);
-        font-size: 0.95rem;
     }
 
-    .deadline-info i {
-        color: var(--primary-color);
+    .competition-title i {
+        color: #E6AA68;
     }
 
-    .registration-status {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .register-btn {
-        background-color: var(--secondary-color);
-        color: var(--text-dark);
-        padding: 0.7rem 1.4rem;
-        border-radius: var(--radius-md);
-        border: none;
-        font-weight: 500;
+    .competition-title a {
+        color: #2c1810;
         text-decoration: none;
-        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .competition-title a:hover {
+        color: #E6AA68;
+    }
+
+    .meta-icon {
+        color: #E6AA68;
+        width: 16px;
+        margin-right: 0.5rem;
+    }
+
+    .status-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        background-color: #f3f4f6;
     }
 
-    .register-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-        color: var(--text-dark);
-    }
-
-    .register-btn.disabled {
-        background-color: #e2e8f0;
-        color: var(--text-light);
-        cursor: not-allowed;
-    }
-
-    .registration-closed {
-        color: #999;
-        font-style: italic;
+    /* Cycle actions container */
+    .cycle-actions {
         display: flex;
-        align-items: center;
+        justify-content: flex-end;
         gap: 0.5rem;
     }
 
-    .toggle-icon {
-        color: var(--secondary-color);
-        transition: transform 0.3s ease;
-        font-size: 1.2rem;
-        width: 24px;
-        height: 24px;
+    /* Hide this row from the normal table flow */
+    .nested-competitions-row td{
+        font-size: 0.80rem;
+        padding: 0.4rem 1rem !important;
+    }
+
+
+
+    /* Nested competitions section */
+    .nested-competitions {
+        margin-left: 2rem;
+        /*padding-top: 0.5rem;*/
+        /*padding-bottom: 0.5rem;*/
+    }
+
+    .nested-table {
+        width: 100%;
+        border-collapse: separate;
+        border-left: 2px solid #E6AA68;
+        border-spacing: 0;
+    }
+
+    .nested-competition-row {
+        transition: background-color 0.2s;
+    }
+
+
+    .nested-competition-row:hover {
+        background-color: #f9f7f5;
+    }
+
+    .nested-competition {
+        padding-left: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .nested-competition i {
+        color: #88a07c;
+    }
+
+    /* Status indicators */
+    .competition-status {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .active-status {
+        background-color: #e6f4ea;
+        color: #137333;
+    }
+
+    .inactive-status {
+        background-color: #f3f4f6;
+        color: #5f6368;
+    }
+
+    .nested-actions {
         display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .section-header.active .toggle-icon {
-        transform: rotate(180deg);
-    }
-
-    .section-content {
-        background: white;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
-    }
-
-    .section-content.active {
-        max-height: 2000px;
-        transition: max-height 0.5s ease-in;
-    }
-
-    .competitions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        padding: 1.5rem 2rem;
-    }
-
-    .competition-card {
-        background: #E6F1FE;
-        padding: 1.5rem;
-        border-radius: var(--radius-md);
-        border: 1px solid #94C1D8;
-        transition: all 0.2s ease;
-    }
-
-    .competition-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .competition-name {
-        color: var(--primary-color);
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-decoration: none;
-        margin-bottom: 1rem;
-        display: block;
-    }
-
-    .competition-name:hover {
-        color: var(--secondary-color);
-    }
-
-    .competition-meta {
-        display: flex;
-        flex-direction: column;
+        justify-content: flex-end;
         gap: 0.5rem;
-        margin-top: 1rem;
     }
 
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--text-light);
-        font-size: 0.9rem;
-    }
-
-    .meta-item i {
-        color: var(--primary-color);
-        width: 16px;
-    }
-
-    /* Modal Styles */
-    .custom-modal .modal-content {
-        border-radius: var(--radius-lg);
-        border: none;
-    }
-
-    .custom-modal .modal-header {
-        background-color: var(--bg-lighter);
-        border-bottom: 1px solid #e2e8f0;
-        padding: 1.5rem 2rem;
-    }
-
-    .custom-modal .modal-body {
-        padding: 2rem;
-    }
-
-    .custom-modal .modal-footer {
-        padding: 1.5rem 2rem;
-        background-color: var(--bg-lighter);
-        border-top: 1px solid #e2e8f0;
-    }
-
-    .custom-modal .btn-submit {
-        background-color: var(--secondary-color);
-        border: none;
-        color: var(--text-dark);
-        padding: 0.7rem 1.5rem;
-        border-radius: var(--radius-md);
-        font-weight: 500;
-    }
-
-    .custom-modal .btn-cancel {
-        background-color: transparent;
-        border: 2px solid var(--secondary-color);
-        color: var(--text-dark);
-    }
-
-    /* Toast Styles */
-    .toast-container {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1050;
-    }
-
-    .toast {
-        background: white;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-md);
-        border: none;
-        margin-bottom: 0.5rem;
-    }
-
-    .toast.success {
-        border-left: 4px solid #10B981;
-    }
-
-    .toast.error {
-        border-left: 4px solid #EF4444;
-    }
-
-    @media (max-width: 768px) {
-        .page-container {
-            margin: 1rem auto;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .section-header {
-            padding: 1rem 1.5rem;
-        }
-
-        .cycle-info {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .competitions-grid {
-            grid-template-columns: 1fr;
-            padding: 1rem 1.5rem;
-        }
-
-        .register-btn {
-            width: 100%;
-            justify-content: center;
-        }
-    }
 </style>
-<body>
-<div class="page-container">
-    <h1 class="page-title">Листа на натпревари</h1>
+<link href="/style/grid.css" rel="stylesheet">
 
-    <div class="competitions-list">
-        <div th:each="item : ${cyclesOrCompetitions}">
-            <!-- Competition Cycle Section -->
-            <th:block th:if="${item.competitionCycle != null}">
-                <div class="competition-section">
-                    <button class="section-header">
-                        <div class="header-content">
-                            <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}"
-                               class="cycle-title"
-                               th:text="${item.competitionCycle.name}">
-                            </a>
-                            <div class="cycle-info">
-                                <div class="deadline-info"
-                                     th:if="${item.competitionCycle.registrationDeadline != null}">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span th:text="'Рок за пријавување: ' + ${#temporals.format(item.competitionCycle.registrationDeadline, 'dd.MM.yyyy, HH:mm')} + ' CET'"></span>
+<main>
+    <div th:replace="fragments/_toolbar :: toolbar('Листа на натпревари', '/')"></div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-start">
+            <div th:if="${currentUser != null}">
+                <a href="#" class="mendo-btn">
+                    <i class="fas fa-plus"></i>
+                    Додади натпревар
+                </a>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <table class="content-table">
+                <thead>
+                <tr>
+                    <th>Натпревар</th>
+                    <th>Датум</th>
+                    <th>Време</th>
+                    <th>Статус</th>
+                    <th>Акции</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="item : ${cyclesOrCompetitions}">
+                    <tr>
+                        <!-- Competition Cycle Section -->
+                        <th:block th:if="${item.competitionCycle != null}">
+                            <!-- Main cycle information (aligned with individual competitions) -->
+                            <td>
+                                <div class="competition-title">
+                                    <i class="fas fa-trophy"></i>
+                                    <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}"
+                                       th:text="${item.competitionCycle.name}">
+                                    </a>
                                 </div>
-                                <div class="registration-status">
-                                    <th:block th:if="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}">
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar-alt meta-icon"></i>
+                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'dd.MM.yyyy')}"></span>
+                            </td>
+                            <td>
+                                <i class="fas fa-clock meta-icon"></i>
+                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'HH:mm')} + ' CET'"></span>
+                            </td>
+                            <td>
+                            <span class="status-badge"
+                                  th:if="${item.competitionCycle?.registrationDeadline?.isAfter(currentDateTime)}">
+                              <i class="fas fa-check-circle"></i>
+                              Отворено
+                            </span>
+                                <span class="status-badge"
+                                      th:unless="${item.competitionCycle?.registrationDeadline?.isAfter(currentDateTime)}">
+                              <i class="fas fa-times-circle"></i>
+                              Затворено
+                            </span>
+                            </td>
+                            <td>
+                                <div class="cycle-actions">
+                                    <th:block
+                                            th:if="${item.competitionCycle?.registrationDeadline?.isAfter(currentDateTime)}">
                                         <a th:if="${currentUser != null}"
                                            th:data-cycle-id="${item.competitionCycle.id}"
-                                           class="register-btn">
+                                           class="btn-edit"
+                                           title="Пријави се">
                                             <i class="fas fa-user-plus"></i>
-                                            Пријави се
-                                        </a>
-                                        <a th:if="${currentUser == null}"
-                                           class="register-btn disabled">
-                                            <i class="fas fa-lock"></i>
-                                            Најавете се
                                         </a>
                                     </th:block>
-                                    <span th:unless="${item.competitionCycle.registrationDeadline.isAfter(currentDateTime)}"
-                                          class="registration-closed">
-                                            <i class="fas fa-ban"></i>
-                                            Пријавувањето е затворено
-                                        </span>
+                                    <a th:href="@{'/cycle/' + ${item.competitionCycle.id}}"
+                                       class="btn-edit"
+                                       title="Прегледај">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <th:block th:if="${currentUser?.isAdmin()}">
+                                        <a class="btn-edit"
+                                           title="Измени">
+                                            <i class="fas fa-pencil"></i>
+                                        </a>
+                                        <a class="btn-edit"
+                                           title="Избриши">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </th:block>
                                 </div>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </button>
-                    <div class="section-content">
-                        <div class="competitions-grid">
-                            <div th:each="comp : ${item.competitionCycle.competitions}"
-                                 class="competition-card">
-                                <a th:href="@{'/competition/' + ${comp.id}}"
-                                   class="competition-name"
-                                   th:text="${comp.title}">
-                                </a>
-                                <div class="competition-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span th:text="${#temporals.format(comp.startTime, 'dd.MM.yyyy')}"></span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-clock"></i>
-                                        <span th:text="${#temporals.format(comp.startTime, 'HH:mm')} + ' CET'"></span>
-                                    </div>
+                            </td>
+                        </th:block>
+                        <th:block th:if="${item?.competition != null}">
+                            <td>
+                                <div class="competition-title">
+                                    <i class="fas fa-flag-checkered"></i>
+                                    <a th:href="@{'/competition/' + ${item.competition.id}}"
+                                       th:text="${item.competition.title}">
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </th:block>
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar-alt meta-icon"></i>
+                                <span th:text="${#temporals.format(item.competition.startTime, 'dd.MM.yyyy')}"></span>
+                            </td>
+                            <td>
+                                <i class="fas fa-clock meta-icon"></i>
+                                <span th:text="${#temporals.format(item.competition.startTime, 'HH:mm')} + ' CET'"></span>
+                            </td>
+                            <td>
+                <span class="status-badge">
+                  <i class="fas fa-info-circle"></i>
+                  Индивидуален
+                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <a th:href="@{'/competition/' + ${item.competition.id}}"
+                                       class="btn-edit"
+                                       title="Прегледај">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <th:block th:if="${currentUser?.isAdmin()}">
+                                        <a class="btn-edit"
+                                           title="Измени">
+                                            <i class="fas fa-pencil"></i>
+                                        </a>
+                                        <a class="btn-edit"
+                                           title="Избриши">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </th:block>
+                                </div>
+                            </td>
+                        </th:block>
+                    </tr>
 
-            <!-- Individual Competition Section -->
-            <th:block th:if="${item.competition != null}">
-                <div class="competition-section">
-                    <div class="competitions-grid">
-                        <div class="competition-card">
-                            <a th:href="@{'/competition/' + ${item.competition.id}}"
-                               class="competition-name"
-                               th:text="${item.competition.title}">
-                            </a>
-                            <div class="competition-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span th:text="${#temporals.format(item.competition.startTime, 'dd.MM.yyyy')}"></span>
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span th:text="${#temporals.format(item.competition.startTime, 'HH:mm')} + ' CET'"></span>
-                                </div>
+                    <!-- Additional row for nested competitions if they exist -->
+                    <tr th:if="${item.competitionCycle != null && !item.competitionCycle.competitions.isEmpty()}"
+                        class="nested-competitions-row">
+                        <td colspan="5" class="p-0" style="padding: 0 !important; border-bottom: 0">
+                            <div class="nested-competitions">
+                                <table class="nested-table">
+                                    <tbody>
+                                    <tr th:each="competition : ${item.competitionCycle.competitions}"
+                                        class="nested-competition-row">
+                                        <td>
+                                            <div class="competition-title nested-competition">
+                                                <i class="fas fa-flag-checkered"></i>
+                                                <a th:href="@{'/competition/' + ${competition.id}}"
+                                                   th:text="${competition.title}">
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fas fa-calendar-alt meta-icon"></i>
+                                            <span th:text="${#temporals.format(competition?.startTime, 'dd.MM.yyyy')}"></span>
+                                        </td>
+                                        <td>
+                                            <i class="fas fa-clock meta-icon"></i>
+                                            <span th:text="${#temporals.format(competition?.startTime, 'HH:mm')} + ' CET'"></span>
+                                        </td>
+                                        <td>
+                            <span class="status-badge competition-status"
+                                  th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'active-status' : 'inactive-status'">
+                                <i class="fas"
+                                   th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'fa-play-circle' : 'fa-pause-circle'"></i>
+                                <span th:text="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'Активен' : 'Неактивен'"></span>
+                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="nested-actions">
+                                                <a th:href="@{'/competition/' + ${competition.id}}"
+                                                   class="btn-edit"
+                                                   title="Прегледај">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <th:block th:if="${currentUser?.isAdmin()}">
+                                                    <a class="btn-edit"
+                                                       title="Измени">
+                                                        <i class="fas fa-pencil"></i>
+                                                    </a>
+                                                </th:block>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </th:block>
+                        </td>
+                    </tr>
+                    <!-- Individual Competition Section -->
+
+                </th:block>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<!-- Registration Modal -->
-<div th:if="${currentUser != null}" class="modal fade custom-modal" id="applicationModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form id="applicationForm">
-                <input type="hidden" id="cycleIdInput" name="cycleId">
-                <div class="modal-header">
-                    <h5 class="modal-title">Потврди регистрација</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="mb-4">Ве молиме проверете ги следните информации пред да продолжите:</p>
-                    <div class="mb-4">
-                        <div class="p-3 bg-light rounded">
-                            <div class="mb-2">
-                                <strong>Натпревар:</strong>
-                                <span id="cycleName" class="text-primary"></span>
-                            </div>
-                            <div>
-                                <strong>Рок:</strong>
-                                <span id="cycleDeadline" class="text-secondary"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="userGrade" class="form-label">
-                            <strong>Одделение:</strong>
-                        </label>
-                        <select id="userGrade" name="grade" class="form-select">
-                            <option th:each="grade : ${grades}"
-                                    th:value="${grade}"
-                                    th:text="${grade.prettyName}"
-                                    th:selected="${grade == currentUser.grade}">
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="userSchool" class="form-label">
-                            <strong>Училиште:</strong>
-                        </label>
-                        <select id="userSchool" name="schoolId" class="form-select">
-                            <option th:each="school : ${schools}"
-                                    th:value="${school.id}"
-                                    th:text="${school.name}"
-                                    th:selected="${currentUser.studiesSchool!=null ? school.id == currentUser.studiesSchool.id : false}">
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-submit">
-                        <i class="fas fa-check me-2"></i>Пријави се
-                    </button>
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Откажи
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Toast Container -->
-<div class="toast-container">
-    <div id="registrationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <i id="toastIcon" class="fas me-2"></i>
-            <strong class="me-auto" id="toastTitle"></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-        </div>
-        <div class="toast-body" id="toastMessage"></div>
-    </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Custom Script -->
-<script>
-    // Section expansion
-    document.querySelectorAll('.section-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const content = header.nextElementSibling;
-            header.classList.toggle('active');
-            content.classList.toggle('active');
-        });
-    });
-
-    // Registration button handling
-    document.querySelectorAll('.register-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            const cycleId = button.getAttribute('data-cycle-id');
-            const headerContent = button.closest('.header-content');
-            const cycleName = headerContent.querySelector('.cycle-title').textContent.trim();
-            const deadlineInfo = headerContent.querySelector('.deadline-info span').textContent.trim();
-
-            document.getElementById('cycleIdInput').value = cycleId;
-            document.getElementById('cycleName').textContent = cycleName;
-            document.getElementById('cycleDeadline').textContent = deadlineInfo;
-
-            const modal = new bootstrap.Modal(document.getElementById('applicationModal'));
-            modal.show();
-        });
-    });
-
-    // Form submission
-    document.getElementById('applicationForm')?.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const cycleId = document.getElementById('cycleIdInput').value;
-        const formData = new FormData(this);
-
-        fetch(`/application/cycle/${cycleId}`, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('applicationModal'));
-                modal.hide();
-                showToast(data.message, data.success);
-                if (data.success) {
-                    setTimeout(() => window.location.reload(), 2000);
-                }
-            })
-            .catch(() => {
-                showToast('Се случи грешка. Обидете се повторно.', false);
-            });
-    });
-
-    // Toast notification
-    function showToast(message, isSuccess = true) {
-        const toast = document.getElementById('registrationToast');
-        const toastTitle = document.getElementById('toastTitle');
-        const toastMessage = document.getElementById('toastMessage');
-        const toastIcon = document.getElementById('toastIcon');
-
-        toast.classList.remove('success', 'error');
-        toast.classList.add(isSuccess ? 'success' : 'error');
-
-        toastIcon.className = `fas ${isSuccess ? 'fa-check' : 'fa-exclamation-circle'} me-2`;
-        toastIcon.style.color = isSuccess ? '#10B981' : '#EF4444';
-        toastTitle.textContent = isSuccess ? 'Успешна регистрација' : 'Грешка';
-        toastMessage.textContent = message;
-
-        const bsToast = new bootstrap.Toast(toast, {
-            autohide: true,
-            delay: 3000
-        });
-        bsToast.show();
-    }
-</script>
-</body>
+</main>

@@ -8,12 +8,14 @@ import mk.ukim.finki.mendo.model.Category;
 import mk.ukim.finki.mendo.model.Content;
 import mk.ukim.finki.mendo.model.Lecture;
 import mk.ukim.finki.mendo.model.Task;
+import mk.ukim.finki.mendo.model.TestGroup;
 import mk.ukim.finki.mendo.model.Thread;
 import mk.ukim.finki.mendo.model.Topic;
 import mk.ukim.finki.mendo.model.enums.ContentType;
 import mk.ukim.finki.mendo.repository.ContentRepository;
 import mk.ukim.finki.mendo.repository.LectureRepository;
 import mk.ukim.finki.mendo.repository.TaskRepository;
+import mk.ukim.finki.mendo.repository.TestGroupRepository;
 import mk.ukim.finki.mendo.repository.ThreadRepository;
 import mk.ukim.finki.mendo.service.CategoryService;
 import mk.ukim.finki.mendo.service.ContentService;
@@ -29,15 +31,17 @@ public class ContentServiceImpl implements ContentService {
   private final LectureRepository lectureRepository;
   private final TaskRepository taskRepository;
   private final ThreadRepository threadRepository;
+  private final TestGroupRepository testGroupRepository;
 
   public ContentServiceImpl(ContentRepository contentRepository, CategoryService categoryService,
       LectureRepository lectureRepository, TaskRepository taskRepository,
-      ThreadRepository threadRepository) {
+      ThreadRepository threadRepository, TestGroupRepository testGroupRepository) {
     this.contentRepository = contentRepository;
     this.categoryService = categoryService;
     this.lectureRepository = lectureRepository;
     this.taskRepository = taskRepository;
     this.threadRepository = threadRepository;
+    this.testGroupRepository = testGroupRepository;
   }
 
   @Override
@@ -129,6 +133,11 @@ public class ContentServiceImpl implements ContentService {
 
   @Override
   public Task findTaskById(Long id) {
-    return taskRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+      return taskRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+  }
+
+  @Override
+  public List<TestGroup> saveTestGroups(List<TestGroup> testGroups) {
+    return testGroupRepository.saveAllAndFlush(testGroups);
   }
 }

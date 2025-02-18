@@ -15,4 +15,5 @@ public interface CompetitionCycleService {
     void deleteById(Long id);
     Optional<CompetitionCycle> update(Long id, String name, LocalDate year, LocalDateTime registrationDeadline);
     List<CompetitionCycle> findAll();
+    List<CompetitionCycle> findAllUpcoming();
 }

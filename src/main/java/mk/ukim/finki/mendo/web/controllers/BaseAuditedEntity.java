@@ -1,9 +1,6 @@
 package mk.ukim.finki.mendo.web.controllers;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 import mk.ukim.finki.mendo.model.BaseEntity;
 import mk.ukim.finki.mendo.model.MendoUser;
@@ -25,10 +22,10 @@ public class BaseAuditedEntity<T> extends BaseEntity<T> {
     @LastModifiedDate
     protected LocalDateTime dateModified;
     @CreatedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     protected MendoUser createdBy;
     @LastModifiedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     protected MendoUser lastModifiedBy;
 
 }

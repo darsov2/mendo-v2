@@ -7,6 +7,7 @@ import mk.ukim.finki.mendo.model.Content;
 import java.util.List;
 import mk.ukim.finki.mendo.model.Lecture;
 import mk.ukim.finki.mendo.model.Task;
+import mk.ukim.finki.mendo.model.TestGroup;
 import mk.ukim.finki.mendo.model.Topic;
 
 public interface ContentService {
@@ -26,4 +27,6 @@ public interface ContentService {
     Lecture findLectureById(Long id);
 
     Task findTaskById(Long id);
+
+    List<TestGroup> saveTestGroups(List<TestGroup> testGroups);
 }

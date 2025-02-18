@@ -47,7 +47,6 @@ public class CycleController {
         if (cycleMapper.addCompetitionCycle(request) == null){
             throw new RuntimeException("Can't add competitionCycle");
         }
-
         return "redirect:/competition";
     }
 

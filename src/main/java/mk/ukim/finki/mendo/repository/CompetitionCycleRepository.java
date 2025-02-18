@@ -11,4 +11,5 @@ import java.util.List;
 public interface CompetitionCycleRepository extends JpaRepository<CompetitionCycle, Long> {
     List<CompetitionCycle> findAllByOrderByYearDesc();
     boolean existsByNameAndYear(String name, LocalDate year);
+    List<CompetitionCycle> findAllByYearAfter(LocalDate year);
 }

@@ -1,0 +1,13 @@
+
+<th:block th:fragment="toolbar(title, url)">
+    <nav class="toolbar-top navbar">
+        <div class="container-fluid my-2">
+            <div class="d-flex align-items-center">
+                <a class="btn-back me-2 link-no-decor" th:href="${url}">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1 class="h5 mb-0" th:text="${title}">Default Title</h1>
+            </div>
+        </div>
+    </nav>
+</th:block>

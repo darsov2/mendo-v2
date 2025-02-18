@@ -31,7 +31,7 @@
                 input.type = "number"
                 input.value = Number.parseInt(data.innerHTML)
 
-                input.name=data.previousElementSibling.id
+                input.name = data.previousElementSibling.id
 
                 values.push(Number.parseInt(data.innerHTML))
                 input.className = "quota-input"
@@ -54,25 +54,29 @@
     }
 </script>
 
-<nav class="toolbar-top">
-    <a th:href="@{/competition}" class="btn-back">
-        <i class="fas fa-arrow-left"></i> Натпревари
-    </a>
-</nav>
+<link href="/style/grid.css" rel="stylesheet">
+
+
+<div th:replace="fragments/_toolbar :: toolbar('Детали за натпревар', '/competition')"></div>
 
 <div class="main-content">
     <!-- Competition Header -->
-    <div class="competition-header">
+    <div class="competition-header d-flex justify-content-between">
         <h1 class="competition-title" th:text="${competition.title}">Regional Competition 2024</h1>
-        <div class="header-actions">
-            <div class="toolbar-actions" th:if="${competition.endTime.isBefore(currentDateTime)}">
-                <form th:action="@{/results/competitionId={id}(id=${competition.id})}">
-                    <button type="submit" class="btn-results">Види резултати</button>
-                </form>
+        <div >
+            <div th:if="${competition.endTime.isBefore(currentDateTime)}" class="d-flex justify-content-end ">
+                <a class="btn-results link-no-decor" th:href="@{/results/competitionId={id}(id=${competition.id})}">
+                    Види резултати
+                </a>
+                <a th:href="@{${competition.hasSchedule} ? '/competition/' + ${competition.id} + '/schedule' : '/competition/' + ${competition.id} + '/generate'}"
+                   class="btn-results mx-3 link-no-decor ">
+                    <span th:text="${competition.hasSchedule} ? 'Види список' : 'Генерирај Список'"><i class="fa-solid fa-table"></i></span>
+                </a>
             </div>
             <div th:if="${competition.canStudentRegister != null and competition.requiresRegistration != null and competition.canStudentRegister and competition.requiresRegistration}">
-                <div class="toolbar-actions">
-                    <th:block th:with="canRegister=${competition.cycle == null and competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
+                <div >
+                    <th:block
+                            th:with="canRegister=${competition.cycle == null and competition?.requiresRegistration and competition?.visibleToPublic and competition?.canStudentRegister and competition.registrationCloses != null and currentDateTime != null and competition.registrationCloses.isAfter(currentDateTime)}">
                         <th:block th:if="${canRegister}">
                             <th:block th:if="${currentUser != null}">
                                 <button class="btn-register" th:data-competition-id="${competition.id}">
@@ -99,15 +103,11 @@
     <div class="content-card">
         <div class="competition-info">
             <div class="info-item">
-                    <span class="info-label">
-                        <i class="fas fa-map-marker-alt"></i>
-                        Локација
-                    </span>
-                <span class="info-value" th:text="${competition?.place}">FINKI, Skopje</span>
+
                 <span class="info-label">
                     <i class="fas fa-map-marker-alt"></i> Локација
                 </span>
-                <span class="info-value" th:text="${competition.place}"></span>
+                <span class="info-value" th:text="${competition?.place}"></span>
             </div>
             <div class="info-item">
                 <span class="info-label">
@@ -164,104 +164,99 @@
     </div>
 
     <!-- Competition Description -->
-    <div class="content-card">
+    <div class="content-card my-4">
         <div class="competition-description">
             <h3>Опис на натпреварот</h3>
             <div th:utext="${competition.info}"></div>
         </div>
     </div>
-</div>
 
-<div style="width: 80%" class="m-auto d-flex justify-content-end">
-    <a th:href="@{${competition.hasSchedule} ? '/competition/' + ${competition.id} + '/schedule' : '/competition/' + ${competition.id} + '/generate'}"
-       class="mendo-btn mb-4"
-       style="background-color: #E6AA68; text-decoration: none; color: black">
-        <span th:text="${competition.hasSchedule} ? 'Види список' : 'Генерирај Список'"></span>
-    </a>
-</div>
 
-<!-- Registration Modal -->
-<div th:if="${currentUser != null}" class="modal fade" id="registrationModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form th:action="@{/register}" method="post" id="registrationForm">
-                <input type="hidden" id="competitionIdInput" name="competitionId">
-                <div class="modal-header">
-                    <h5 class="modal-title">Потврди регистрација</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <ul class="list-group mb-3">
-                        <li class="list-group-item"><strong>Натпревар:</strong> <span id="competitionName"></span></li>
-                        <li class="list-group-item"><strong>Краен рок:</strong> <span id="registrationDeadline"></span>
-                        </li>
-                    </ul>
-                    <div class="mb-3">
-                        <label for="userGrade" class="form-label">Одделение:</label>
-                        <select id="userGrade" name="grade" class="form-select" required>
-                            <option th:each="grade : ${grades}"
-                                    th:value="${grade}"
-                                    th:text="${grade.prettyName}"
-                                    th:selected="${grade == currentUser.grade}">
-                            </option>
-                        </select>
+    <!-- Registration Modal -->
+    <div th:if="${currentUser != null}" class="modal fade" id="registrationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/register}" method="post" id="registrationForm" >
+                    <input type="hidden" id="competitionIdInput" name="competitionId">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Потврди регистрација</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="userSchool" class="form-label">Училиште:</label>
-                        <select id="userSchool" name="schoolId" class="form-select" required>
-                            <option th:each="school : ${schools}"
-                                    th:value="${school.id}"
-                                    th:text="${school.name}"
-                                    th:selected="${currentUser.studiesSchool != null and school.id == currentUser.studiesSchool.id}">
-                            </option>
-                        </select>
+                    <div class="modal-body">
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item"><strong>Натпревар:</strong> <span id="competitionName"></span>
+                            </li>
+                            <li class="list-group-item"><strong>Краен рок:</strong> <span
+                                    id="registrationDeadline"></span>
+                            </li>
+                        </ul>
+                        <div class="mb-3">
+                            <label for="userGrade" class="form-label">Одделение:</label>
+                            <select id="userGrade" name="grade" class="form-select" required>
+                                <option th:each="grade : ${grades}"
+                                        th:value="${grade}"
+                                        th:text="${grade.prettyName}"
+                                        th:selected="${grade == currentUser.grade}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userSchool" class="form-label">Училиште:</label>
+                            <select id="userSchool" name="schoolId" class="form-select" required>
+                                <option th:each="school : ${schools}"
+                                        th:value="${school.id}"
+                                        th:text="${school.name}"
+                                        th:selected="${currentUser.studiesSchool != null and school.id == currentUser.studiesSchool.id}">
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn-submit">Пријави се</button>
-                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Откажи</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-submit">Пријави се</button>
+                        <button type="button" class="btn-cancel" data-bs-dismiss="modal">Откажи</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<form th:action="@{/quotas/edit/{id}(id=${competition.id})}" method="POST">
-    <div class="content-card" th:if="${not #lists.isEmpty(quotas)}">
-        <div class="d-flex justify-content-between mb-3">
-            <h3>Квоти по училишта</h3>
-            <button class="mendo-btn" type="button" onclick="changeDataToInput(event)">Смени квоти</button>
+    <form th:action="@{/quotas/edit/{id}(id=${competition.id})}" method="POST" class="w-100">
+        <div class="content-card" th:if="${not #lists.isEmpty(quotas)}">
+            <div class="d-flex justify-content-between mb-3">
+                <h3>Квоти по училишта</h3>
+                <button class="mendo-btn" type="button" onclick="changeDataToInput(event)">Смени квоти</button>
+
+            </div>
+            <div >
+                <table class="content-table ">
+                    <thead>
+                    <tr>
+                        <th>Училиште</th>
+                        <th class="text-center">Максимален број на учесници</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="quota : ${quotas}">
+                        <td th:id="${quota.school.id}" th:text="${quota.school.name}">School Name</td>
+                        <td class="text-center changeToInput" th:text="${quota.limit}">50</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="quotas-button" class="d-flex justify-content-end pb-4 m-auto w-75">
 
         </div>
-        <div class="table-responsive">
-            <table class="content-table quota-table">
-                <thead>
-                <tr>
-                    <th>Училиште</th>
-                    <th class="text-center">Максимален број на учесници</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="quota : ${quotas}">
-                    <td th:id="${quota.school.id}" th:text="${quota.school.name}">School Name</td>
-                    <td class="text-center changeToInput" th:text="${quota.limit}">50</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div id="quotas-button" class="d-flex justify-content-end pb-4 m-auto w-75">
+    </form>
 
-    </div>
-</form>
-
-<!-- Toast Container -->
-<div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="registrationToast" class="toast" role="alert">
-        <div class="toast-header">
-            <strong class="me-auto" id="toastTitle"></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="registrationToast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastTitle"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
         </div>
-        <div class="toast-body" id="toastMessage"></div>
     </div>
 </div>
 
@@ -335,23 +330,15 @@
 
 <style>
     .competition-header {
-        width: 80%;
         margin: auto;
         background: white;
         border-radius: 1rem;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
         box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
 
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
+
 
     .competition-title {
         color: #2c1810;
@@ -374,20 +361,6 @@
         transition: all 0.2s ease;
     }
 
-    .btn-results {
-        padding: 0.4rem 0.8rem;
-        border-radius: 0.5rem;
-        border: 1px solid #E6AA68;
-        background: white;
-        color: #2c1810;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .btn-results:hover {
-        background-color: #fff5eb;
-    }
 
     .btn-register:hover {
         transform: translateY(-2px);
@@ -408,39 +381,6 @@
         align-items: center;
         gap: 0.5rem;
     }
-    .table-responsive {
-        overflow-x: auto;
-        margin: 0 -1.5rem;
-        padding: 0 1.5rem;
-    }
-
-    .quota-table {
-        min-width: 600px;
-    }
-
-    .quota-table {
-        min-width: 600px;
-        border-spacing: 2rem 1rem;
-        border-collapse: separate;
-    }
-
-    .quota-table th:first-child {
-        width: 70%;
-    }
-
-    .quota-table th:last-child {
-        width: 30%;
-    }
-
-    .quota-table th {
-        padding: 1rem 2.5rem;
-        background-color: #fff5eb;
-    }
-
-    .quota-table td {
-        padding: 1rem 1.5rem;
-        background-color: white;
-    }
 
     .text-center {
         text-align: center;
@@ -457,116 +397,9 @@
         min-height: 100vh;
     }
 
-    .main-content {
-        padding: 2rem 2rem 0 2rem !important;
-        max-width: unset !important;
-        margin: unset !important;
-        background-color: #f5efe6;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .competition-header, .content-card {
-        width: 80%;
-        margin: auto;
-    }
 
-    .toolbar-top {
-        background: white;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
 
-    .toolbar-title {
-        color: #2c1810;
-        font-weight: 600;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .competition-header {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .competition-title {
-        color: #2c1810;
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
-
-    .content-card {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
-
-    .content-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .content-table th {
-        text-align: left;
-        padding: 1rem;
-        background-color: #f5efe6;
-        color: #2c1810;
-        font-weight: 600;
-        border-radius: 0.5rem 0.5rem 0 0;
-    }
-
-    .content-table td {
-        padding: 1rem;
-        border-bottom: 1px solid #f5efe6;
-        color: #2c1810;
-    }
-
-    .content-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .content-table tr:hover td {
-        background-color: #f8f9fa;
-    }
-
-    .status-badge {
-        padding: 0.3rem 0.8rem;
-        border-radius: 1rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    .status-easy {
-        background-color: #dcfce7;
-        color: #166534;
-    }
-
-    .status-medium {
-        background-color: #fff7ed;
-        color: #c2410c;
-    }
-
-    .status-hard {
-        background-color: #fee2e2;
-        color: #dc2626;
-    }
 
     .competition-info {
         display: grid;
@@ -648,23 +481,6 @@
         line-height: 1.6;
     }
 
-    .btn-back {
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        border: 1px solid #e2e8f0;
-        background: white;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .btn-back:hover {
-        background-color: #f5efe6;
-    }
 
     * {
         margin: 0;
@@ -677,60 +493,6 @@
         min-height: 100vh;
     }
 
-    .main-content {
-        padding: 2rem;
-        max-width: unset !important;
-        margin: unset !important;
-        background-color: #f5efe6;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .competition-header, .content-card {
-        width: 80%;
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(44, 24, 16, 0.1);
-    }
-
-    .competition-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .toolbar-top {
-        background: white;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .btn-back {
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        border: 1px solid #e2e8f0;
-        background: white;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .btn-back:hover {
-        background-color: #f5efe6;
-    }
-
-    .competition-title {
-        color: #2c1810;
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
 
     .btn-register {
         background-color: #E6AA68;
@@ -832,25 +594,6 @@
         transition: all 0.2s ease;
     }
 
-    .quota-input .mendo-btn {
-        padding: 0.8rem 1.5rem;
-        border-radius: 0.8rem;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        width: 100%;
-        font-size: 1.1rem;
-        background-color: #E6AA68;
-        color: #2c1810;
-        margin-top: 1rem;
-    }
-
-    .quota-input .mendo-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-    }
 
     .btn-submit:hover {
         transform: translateY(-2px);
@@ -870,22 +613,6 @@
 
     .btn-cancel:hover {
         background-color: #f5efe6;
-    }
-
-    .quota-input {
-        width: 100px;
-        padding: 0.5rem;
-        border: 2px solid #E6AA68;
-        border-radius: 0.5rem;
-        text-align: center;
-        font-size: 1rem;
-        background-color: #fff5eb;
-    }
-
-    .quota-input:focus {
-        outline: none;
-        border-color: #2c1810;
-        box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
     }
 
 

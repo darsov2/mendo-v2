@@ -25,7 +25,8 @@
                 <th>Држава</th>
                 <th>Училиште</th>
                 <th class="text-center">Клас</th>
-                <th class="text-center" th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
+                <th class="text-center"
+                    th:each="i : ${#numbers.sequence(1, competition.tasks.size())}"
                     th:text="'Задача #' + ${i}">
                     зад #1
                 </th>

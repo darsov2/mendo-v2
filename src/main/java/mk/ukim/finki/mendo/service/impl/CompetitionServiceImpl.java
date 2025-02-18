@@ -1,5 +1,6 @@
 package mk.ukim.finki.mendo.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import mk.ukim.finki.mendo.repository.CompetitionRepository;
@@ -39,9 +40,12 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
+    @Transactional
     public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, Long parentId, List<Long> roomIds, List<Long> taskIds, List<Long> taskPoints) {
-
-        List<Rooms> rooms = roomsRepository.findAllById(roomIds);
+        List<Rooms> rooms = new ArrayList<>();
+        if(roomIds != null) {
+            rooms = roomsRepository.findAllById(roomIds);
+        }
         Competition competition;
 
         if (cycleId == null && parentId == null) {

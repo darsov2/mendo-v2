@@ -20,10 +20,10 @@ public abstract class Content extends BaseAuditedEntity<Long> {
     @Column(columnDefinition = "TEXT")
     String text;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     List<ActivityTag> tags;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Category category;
 
     Boolean visible = true;
@@ -31,6 +31,6 @@ public abstract class Content extends BaseAuditedEntity<Long> {
     @Column(name = "content_order")
     Integer order;
     String source;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Topic topic;
 }
