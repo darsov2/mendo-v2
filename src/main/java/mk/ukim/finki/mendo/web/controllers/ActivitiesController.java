@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,15 +36,16 @@ public class ActivitiesController {
   private final ActivitiesMapper activitiesMapper;
   private final UtilsMapper utilsMapper;
   private final PostService postService;
+  private final AuthorizationService authorizationService;
 
   public ActivitiesController(CategoryMapper categoryMapper, ActivitiesMapper activitiesMapper,
-                              UtilsMapper utilsMapper, AuthorizationService authorizationService) {
+                               AuthorizationService authorizationService,
       UtilsMapper utilsMapper, PostService postService) {
     this.categoryMapper = categoryMapper;
     this.activitiesMapper = activitiesMapper;
     this.utilsMapper = utilsMapper;
     this.postService = postService;
-      this.authorizationService = authorizationService;
+    this.authorizationService = authorizationService;
   }
 
   @GetMapping
@@ -82,8 +85,8 @@ public class ActivitiesController {
 
   @PostMapping("/tasks/{taskId}/cases/update-cases")
   public String updateCases(Model model, @PathVariable Long taskId,
-      @RequestParam Map<String, MultipartFile> fileMap, @RequestParam Map<String, String> paramsMap,
-      RedirectAttributes redirectAttributes) {
+                            @RequestParam Map<String, MultipartFile> fileMap, @RequestParam Map<String, String> paramsMap,
+                            RedirectAttributes redirectAttributes) {
     //gX-tY-name;
     activitiesMapper.updateTaskTestCases(taskId, fileMap, paramsMap);
     System.out.println();
