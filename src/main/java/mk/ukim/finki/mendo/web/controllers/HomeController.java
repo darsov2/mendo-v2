@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final ArticleService articleService;
-    private final SchoolMapper schoolMapper;
 
     public HomeController(ArticleService articleService, SchoolMapper schoolMapper) {
         this.articleService = articleService;
-        this.schoolMapper = schoolMapper;
     }
 
     @GetMapping("")
@@ -34,11 +32,6 @@ public class HomeController {
         return "master";
     }
 
-    @GetMapping("register")
-    public String register(Model model) {
-        model.addAttribute("bodyContent","register");
-        model.addAttribute("schools", schoolMapper.listSchools());
-        model.addAttribute("grades", Grade.values());
-        return "master";
-    }
+
+
 }

@@ -77,6 +77,7 @@ public class CompetitionsController {
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
 
         List<CycleOrCompetitionDTO> cyclesOrCompetitions = competitionMapper.getCyclesOrCompetitions();
+        //todo не го листа циклусот ако нема натпревар во него
         model.addAttribute("currentDateTime", LocalDateTime.now());
         model.addAttribute( "cyclesOrCompetitions", cyclesOrCompetitions);
         model.addAttribute("bodyContent", "competitions");

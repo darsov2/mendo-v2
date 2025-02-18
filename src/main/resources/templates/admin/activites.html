@@ -177,11 +177,8 @@
 <main>
 
 
-  <nav class="toolbar-top">
-    <a th:href="@{/}" class="btn-back">
-      <i class="fas fa-arrow-left"></i> Достапни содржини
-    </a>
-  </nav>
+
+  <div th:replace="fragments/_toolbar :: toolbar('Достапни содржини', '/')"></div>
 
   <div class="row">
     <div class="col-md-2">
