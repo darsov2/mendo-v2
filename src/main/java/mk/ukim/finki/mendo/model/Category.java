@@ -2,6 +2,7 @@ package mk.ukim.finki.mendo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @JsonIgnoreProperties({"parentCategory", "children"})
 public class Category extends BaseEntity<Long> {
@@ -20,4 +22,6 @@ public class Category extends BaseEntity<Long> {
     @ToString.Exclude
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> children;
+
+
 }

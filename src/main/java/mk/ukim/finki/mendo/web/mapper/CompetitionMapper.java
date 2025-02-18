@@ -25,7 +25,6 @@ public class CompetitionMapper {
     }
 
     public Competition addCompetition(CompetitionRequest request) {
-        System.out.println(request.getCycleId());
         return competitionService.addCompetition(
                 request.getTitle(),
                 request.getStartDate(),

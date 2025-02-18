@@ -4,6 +4,9 @@ import mk.ukim.finki.mendo.model.dto.ActivityDTO;
 import mk.ukim.finki.mendo.model.dto.CategoryDTO;
 import mk.ukim.finki.mendo.model.dto.LectureEditDTO;
 import mk.ukim.finki.mendo.service.AuthorizationService;
+import mk.ukim.finki.mendo.model.dto.TaskDTO;
+import mk.ukim.finki.mendo.model.dto.TestGroupDTO;
+import mk.ukim.finki.mendo.service.PostService;
 import mk.ukim.finki.mendo.web.mapper.ActivitiesMapper;
 import mk.ukim.finki.mendo.web.mapper.CategoryMapper;
 import mk.ukim.finki.mendo.web.mapper.UtilsMapper;
@@ -15,11 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -29,13 +33,15 @@ public class ActivitiesController {
   private final CategoryMapper categoryMapper;
   private final ActivitiesMapper activitiesMapper;
   private final UtilsMapper utilsMapper;
-  private final AuthorizationService authorizationService;
+  private final PostService postService;
 
   public ActivitiesController(CategoryMapper categoryMapper, ActivitiesMapper activitiesMapper,
                               UtilsMapper utilsMapper, AuthorizationService authorizationService) {
+      UtilsMapper utilsMapper, PostService postService) {
     this.categoryMapper = categoryMapper;
     this.activitiesMapper = activitiesMapper;
     this.utilsMapper = utilsMapper;
+    this.postService = postService;
       this.authorizationService = authorizationService;
   }
 
@@ -67,8 +73,27 @@ public class ActivitiesController {
 
   @GetMapping("/tasks/{activityId}")
   public String previewTask(Model model, @PathVariable Long activityId) {
-    model.addAttribute("task", activitiesMapper.getTaskPreview(activityId));
+    TaskDTO task = activitiesMapper.getTaskPreview(activityId);
+    model.addAttribute("task", task);
+    model.addAttribute("posts", postService.findAllPostsByThreadId(task.getThread().getId()));
     model.addAttribute("bodyContent", "admin/task-preview");
+    return "master";
+  }
+
+  @PostMapping("/tasks/{taskId}/cases/update-cases")
+  public String updateCases(Model model, @PathVariable Long taskId,
+      @RequestParam Map<String, MultipartFile> fileMap, @RequestParam Map<String, String> paramsMap,
+      RedirectAttributes redirectAttributes) {
+    //gX-tY-name;
+    activitiesMapper.updateTaskTestCases(taskId, fileMap, paramsMap);
+    System.out.println();
+    return "";
+  }
+
+  @GetMapping("/tasks/{activityId}/cases")
+  public String previewTaskForCasesEdit(Model model, @PathVariable Long activityId) {
+    model.addAttribute("task", activitiesMapper.getTaskWithCasesPreview(activityId));
+    model.addAttribute("bodyContent", "admin/task-cases");
     return "master";
   }
 

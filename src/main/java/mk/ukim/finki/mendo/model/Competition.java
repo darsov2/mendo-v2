@@ -37,7 +37,7 @@ public class Competition extends BaseAuditedEntity<Long> {
     @ManyToOne
     Competition parentCompetition;
 
-    @OneToMany(mappedBy = "competition")
+    @OneToMany(mappedBy = "competition", fetch = FetchType.LAZY)
     List<CompetitionTask> tasks;
 
     @ManyToMany

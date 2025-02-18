@@ -13,8 +13,8 @@ import java.util.List;
 public class Task extends Content {
     @OneToOne
     Thread thread;
-    @OneToMany
-    List<TestCase> testCases;
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    List<TestGroup> testGroups;
 
     @Column(columnDefinition = "text")
     String inputFormat;

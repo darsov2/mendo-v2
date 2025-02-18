@@ -15,6 +15,7 @@ public class CompetitionTask extends BaseAuditedEntity<Long> {
     Integer points;
     @Enumerated(EnumType.STRING)
     CompetitionTypes types;
+    @Column(columnDefinition = "TEXT")
     String description;
     @ManyToOne
     @JsonBackReference("competition-tasks")

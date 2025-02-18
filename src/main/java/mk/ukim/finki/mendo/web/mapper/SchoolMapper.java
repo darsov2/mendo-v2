@@ -21,7 +21,7 @@ public class SchoolMapper {
         return schoolService.save(request);
     }
 
-    public Object listSchools() {
+    public List<School> listSchools() {
         return schoolService.findAll();
     }
     public List<School> findAllById(List<Long> ids){

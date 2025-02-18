@@ -1,7 +1,9 @@
 package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.Article;
+import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.service.ArticleService;
+import mk.ukim.finki.mendo.web.mapper.SchoolMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ public class HomeController {
 
     private final ArticleService articleService;
 
-    public HomeController(ArticleService articleService) {
+    public HomeController(ArticleService articleService, SchoolMapper schoolMapper) {
         this.articleService = articleService;
     }
 
@@ -30,9 +32,6 @@ public class HomeController {
         return "master";
     }
 
-    @GetMapping("register")
-    public String register(Model model) {
-        model.addAttribute("bodyContent","register");
-        return "master";
-    }
+
+
 }

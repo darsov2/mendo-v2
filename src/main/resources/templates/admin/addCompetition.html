@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>МЕНДО - Регистрација на натпревар</title>
-    <link href="https://fonts.cdnjs.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="../../static/style/style.css" rel="stylesheet">
     <script th:inline="javascript">
-        // Initialize tasks from Thymeleaf model
         const tasks = /*[[${tasks}]]*/ [];
 
         function addTaskRow() {
@@ -39,7 +37,7 @@
                 tasks.forEach(task => {
                     const option = document.createElement("option");
                     option.value = task.id;
-                    option.textContent = task.title;
+                    option.textContent = task.value;
                     select.appendChild(option);
                 });
             }
@@ -295,7 +293,7 @@
                     <option value="">Изберете циклус</option>
                     <option th:each="cycle : ${cycles}"
                             th:value="${cycle.id}"
-                            th:text="${cycle.name}">
+                            th:text="${cycle.value}">
                     </option>
                     <option value="">Самостоен натпревар</option>
                 </select>
@@ -318,7 +316,7 @@
                 <select id="activity-tag" name="roomIds[]" class="form-control form-select" multiple="multiple">
                     <option th:each="room : ${rooms}"
                             th:value="${room.id}"
-                            th:text="|${room.name} ${room.city}|">
+                            th:text="${room.value}">
                     </option>
                 </select>
             </div>

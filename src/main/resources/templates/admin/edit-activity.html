@@ -108,11 +108,13 @@
         </div>
     </div>
 </nav>
+<div th:replace="fragments/_toolbar :: toolbar('Уредување предавање', '/activities')"></div>
+
 
 <div class="main-container">
     <form th:object="${lecture}"
-          th:method="${lecture.id != null} ? 'put' : 'post'"
-          th:action="${lecture.id != null} ? '/activities/lectures/' + ${lecture.id} : '/activities/lectures'">
+          th:method="${lecture?.id != null} ? 'put' : 'post'"
+          th:action="${lecture?.id != null} ? '/activities/lectures/' + ${lecture?.id} : '/activities/lectures'">
     <div class="content-card">
         <div class="mb-4">
             <label for="activity-title" class="form-label">Наслов на предавањето</label>
@@ -219,9 +221,8 @@
         toolbar2: 'bullist numlist outdent indent | link image | codesample code | removeformat',
         fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
 
-        // Image upload settings
-        images_upload_url: '/upload.php', // Replace with your server-side upload handler URL
-        images_upload_base_path: '/some/basepath', // Replace with your base path
+        //Settings for pasting/uploading images. Separate REST API controller used for this, with specific response in format {location: "actualLink"/}
+        images_upload_url: '/api/documents/upload-mce',
         images_upload_credentials: true,  // Enable credentials for cross-origin uploads
 
         // Optional: File picker settings

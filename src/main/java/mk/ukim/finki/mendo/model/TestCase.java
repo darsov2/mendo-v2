@@ -14,10 +14,17 @@ public class TestCase {
     String input;
     String output;
     Integer executionTime; //ms
-    String memoryLimit;
+    Integer memoryLimit;
     Integer executionTimeLimit; //ms
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     TestGroup testGroup;
+    @ManyToOne(cascade = CascadeType.ALL)
+    Document inputFile;
+    @ManyToOne(cascade = CascadeType.ALL)
+    Document outputFile;
     Boolean isExample;
     String furtherExplanation;
+    @Column(name = "case_order")
+    Integer order;
+    Integer points;
 }

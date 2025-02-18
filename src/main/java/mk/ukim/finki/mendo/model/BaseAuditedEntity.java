@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.model;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,10 +22,10 @@ public class BaseAuditedEntity<T> extends BaseEntity<T> {
     @LastModifiedDate
     protected LocalDateTime dateModified;
     @CreatedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     protected MendoUser createdBy;
     @LastModifiedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     protected MendoUser lastModifiedBy;
 
 }
