@@ -70,6 +70,7 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.place = place;
         this.info = info;
         this.deadline = deadline;
+        this.registrationCloses = deadline;
         this.cycle = cycle;
         this.rooms = rooms;
     }
@@ -83,6 +84,7 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.place = place;
         this.info = info;
         this.deadline = deadline;
+        this.registrationCloses = deadline;
         this.cycle = cycle;
         this.parentCompetition = parent;
         this.rooms = rooms;
@@ -97,6 +99,7 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.place = place;
         this.info = info;
         this.deadline = deadline;
+        this.registrationCloses = deadline;
         this.parentCompetition = parent;
         this.rooms = rooms;
     }
@@ -110,6 +113,7 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.place = place;
         this.info = info;
         this.deadline = deadline;
+        this.registrationCloses = deadline;
         this.rooms = rooms;
     }
 

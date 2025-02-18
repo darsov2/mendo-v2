@@ -19,7 +19,7 @@
 <!-- Main Content -->
 <div class="grid-content py-4">
     <div class="content-card mx-auto" style="max-width: 1000px;">
-        <form id="competitionForm" method="POST" th:action="@{/admin/competition/edit/{id}(id=${competitionId})}" class="p-4">
+        <form id="competitionForm" method="POST" th:action="@{/competition/edit/{id}(id=${competitionId})}" class="p-4">
 
             <!-- Basic Information Section -->
             <div class="mb-5">
@@ -231,10 +231,24 @@
         </form>
     </div>
 </div>
-<script>
-    // Initialize tasks and competition from Thymeleaf model
+<script th:inline="javascript">
+    // Initialize tasks and competition data from Thymeleaf
     const tasks = /*[[${tasks}]]*/ [];
     const competition = /*[[${competition}]]*/ {};
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeMultiselect();
+        initializeFormSubmission();
+
+        if (competition && competition.taskIds && competition.taskPoints) {
+            const taskContainer = document.getElementById("taskContainer");
+            taskContainer.innerHTML = ''; // Clear existing tasks
+
+            for (let i = 0; i < competition.taskIds.length; i++) {
+                addTaskRow(competition.taskIds[i], competition.taskPoints[i]);
+            }
+        }
+    });
 
     function addTaskRow(selectedTaskId, points) {
         const taskContainer = document.getElementById("taskContainer");
@@ -283,13 +297,13 @@
         defaultOption.textContent = "Изберете задача";
         select.appendChild(defaultOption);
 
-        // Add task options
+        // Add task options from the tasks array
         if (tasks && tasks.length) {
             tasks.forEach(task => {
                 const option = document.createElement("option");
                 option.value = task.id;
                 option.textContent = task.title;
-                if (selectedTaskId && task.id === selectedTaskId) {
+                if (selectedTaskId && task.id === parseInt(selectedTaskId)) {
                     option.selected = true;
                 }
                 select.appendChild(option);
@@ -324,7 +338,6 @@
         removeBtn.onclick = function() { removeTaskRow(this); };
         removeBtn.style.cssText = "padding: 0.8rem; border: none; border-radius: 8px; background: #fee2e2; color: #dc2626; cursor: pointer; transition: all 0.2s ease;";
 
-        // Add hover effect
         removeBtn.addEventListener('mouseover', function() {
             this.style.backgroundColor = '#fca5a5';
         });
@@ -338,13 +351,6 @@
     function removeTaskRow(button) {
         button.closest('.task-row').remove();
     }
-
-    // Initialize form when document is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeMultiselect();
-        initializeExistingTasks();
-        initializeFormSubmission();
-    });
 
     function initializeMultiselect() {
         const checkboxes = document.getElementById('activity-tag');
@@ -364,26 +370,15 @@
         }
     }
 
-    function initializeExistingTasks() {
-        if (competition && competition.taskIds && competition.taskPoints) {
-            for (let i = 0; i < competition.taskIds.length; i++) {
-                addTaskRow(competition.taskIds[i], competition.taskPoints[i]);
-            }
-        }
-    }
-
     function initializeFormSubmission() {
-        const saveButton = document.querySelector('.mendo-btn');
-        if (saveButton) {
-            saveButton.addEventListener('click', function(e) {
+        const form = document.getElementById('competitionForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (typeof tinymce !== 'undefined') {
                     tinymce.triggerSave();
                 }
-                const form = document.querySelector('form');
-                if (form) {
-                    form.submit();
-                }
+                this.submit();
             });
         }
     }

@@ -1,132 +1,82 @@
-<!DOCTYPE html>
-<html lang="mk">
-<head>
-    <meta charset="UTF-8">
-    <title>МЕНДО - Регистрација на циклус</title>
-    <link href="style/style.css" rel="stylesheet">
-</head>
+<link rel="stylesheet" href="/style/grid.css">
+<link rel="stylesheet" href="/style/style.css">
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
+<!-- Navigation -->
+<nav class="toolbar-top">
+    <div class="d-flex align-items-center justify-content-between px-4">
+        <div class="d-flex align-items-center gap-3">
+            <a href="/" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Назад</span>
+            </a>
+            <h1 class="h4 mb-0 fw-semibold text-dark">Регистрација на циклус</h1>
+        </div>
+    </div>
+</nav>
 
-    body {
-        background-color: #f5efe6;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        /*padding: 2rem;*/
-    }
+<!-- Main Content -->
+<div class="grid-content py-4">
+    <div class="content-card mx-auto" style="max-width: 600px;">
+        <form id="competitionCycleForm" method="POST" action="/cycle/add" class="p-4">
+            <!-- Basic Information Section -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Основни информации</h3>
 
+                <div class="form-group mb-4">
+                    <label class="form-label d-block mb-2">
+                        <span class="fw-medium">Име на циклусот</span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="text"
+                           class="form-control"
+                           name="name"
+                           required
+                           placeholder="Внесете име на циклусот"
+                           style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; background-color: white;">
+                </div>
 
+                <div class="form-group mb-4">
+                    <label class="form-label d-block mb-2">
+                        <span class="fw-medium">Датум</span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="date"
+                           class="form-control"
+                           name="year"
+                           required
+                           style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; background-color: white;">
+                    <small class="d-block mt-2 text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Изберете датум за циклусот
+                    </small>
+                </div>
 
-    .form-card {
-        background: white;
-        border-radius: 1.5rem;
-        padding: 3rem;
-        box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-
-    .form-control {
-        width: 100%;
-        padding: 0.8rem 1rem;
-        border: 2px solid #E6AA68;
-        border-radius: 0.8rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background-color: #fff5eb;
-        color: #2c1810;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #2c1810;
-        box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
-    }
-
-    .helper-text {
-        color: #666;
-        font-size: 0.9rem;
-        margin-top: 0.5rem;
-    }
-
-
-
-    @media (max-width: 768px) {
-        body {
-            padding: 1rem;
-        }
-
-        .form-card {
-            padding: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-        }
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 2rem auto;
-        width: 100%;
-    }
-</style>
-
-
-<body>
-<div class="container">
-    <h2 class="section-title">Регистрација на нов циклус</h2>
-
-    <div class="form-card">
-        <form id="competitionCycleForm" method="POST" action="/cycle/add">
-            <div class="form-group">
-                <label class="form-label">Име на циклусот</label>
-                <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        required
-                        placeholder="Внесете име на циклусот"
-                >
+                <div class="form-group mb-4">
+                    <label class="form-label d-block mb-2">
+                        <span class="fw-medium">Краен рок за регистрација</span>
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="datetime-local"
+                           class="form-control"
+                           name="registrationDeadline"
+                           required
+                           style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; background-color: white;">
+                    <small class="d-block mt-2 text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Внесете краен рок за регистрација
+                    </small>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Година</label>
-                <input
-                        type="date"
-                        class="form-control"
-                        name="year"
-                        required
-                >
-                <div class="helper-text">Изберете година за циклусот</div>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end">
+                <button type="submit"
+                        class="mendo-btn mendo-btn-signup"
+                        style="width: auto; padding: 0.8rem 2rem;">
+                    <i class="fas fa-save me-2"></i>
+                    Регистрирај циклус
+                </button>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">Краен рок за регистрација</label>
-                <input
-                        type="datetime-local"
-                        class="form-control"
-                        name="registrationDeadline"
-                        required
-                >
-                <div class="helper-text">Внесете краен рок за регистрација</div>
-            </div>
-
-            <button type="submit" class="mendo-btn">
-                Регистрирај циклус
-            </button>
         </form>
     </div>
 </div>
-</body>
-</html>

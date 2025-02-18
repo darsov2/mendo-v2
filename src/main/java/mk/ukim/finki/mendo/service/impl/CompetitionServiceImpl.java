@@ -164,6 +164,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                     competition.setPlace(place);
                     competition.setInfo(info);
                     competition.setDeadline(deadline);
+                    competition.setRegistrationCloses(deadline);
                     competition.setRooms(roomsList);
 
                     Set<Long> existingTaskIds = competition.getTasks().stream()
