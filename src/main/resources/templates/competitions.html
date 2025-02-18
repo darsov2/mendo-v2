@@ -57,7 +57,6 @@
 
     /* Hide this row from the normal table flow */
     .nested-competitions-row td{
-        font-size: 0.80rem;
         padding: 0.4rem 1rem !important;
     }
 
@@ -117,6 +116,56 @@
         gap: 0.5rem;
     }
 
+    /* Updated nested competitions styling */
+    .nested-competitions {
+        margin-left: 0; /* Remove the left margin */
+        width: 100%;
+    }
+
+    .nested-table {
+        width: 100%;
+        border-collapse: separate;
+        border-left: 2px solid #E6AA68;
+        border-spacing: 0;
+        table-layout: fixed; /* Fixed table layout for consistent column widths */
+    }
+
+    /* Make nested table match parent table column widths */
+    .nested-table td {
+        width: 20%; /* 5 columns = 20% each */
+    }
+
+    /* First column styling with indentation */
+    .nested-table td:first-child {
+        padding-left: 2rem !important; /* Use padding instead of margin for indentation */
+    }
+
+    /* Ensure column alignment matches parent table */
+    .content-table {
+        table-layout: fixed; /* Fixed table layout for parent table */
+        width: 100%;
+    }
+
+    .content-table th:nth-child(1),
+    .content-table td:nth-child(1) {
+        width: 33%; /* Competition name column */
+    }
+
+    .content-table th:nth-child(2),
+    .content-table td:nth-child(2),
+    .content-table th:nth-child(3),
+    .content-table td:nth-child(3),
+    .content-table th:nth-child(4),
+    .content-table td:nth-child(4) {
+        width: 14%; /* Date, Time, Status columns */
+    }
+
+    .content-table th:nth-child(5),
+    .content-table td:nth-child(5) {
+        width: 25%; /* Actions column */
+    }
+
+
 </style>
 <link href="/style/grid.css" rel="stylesheet">
 
@@ -141,7 +190,7 @@
                     <th>Датум</th>
                     <th>Време</th>
                     <th>Статус</th>
-                    <th>Акции</th>
+                    <th >Акции</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -159,12 +208,12 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fas fa-calendar-alt meta-icon"></i>
-                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'dd.MM.yyyy')}"></span>
+<!--                                <i class="fas fa-calendar-alt meta-icon"></i>-->
+<!--                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'dd.MM.yyyy')}"></span>-->
                             </td>
                             <td>
-                                <i class="fas fa-clock meta-icon"></i>
-                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'HH:mm')} + ' CET'"></span>
+<!--                                <i class="fas fa-clock meta-icon"></i>-->
+<!--                                <span th:text="${#temporals.format(item.competitionCycle?.registrationDeadline, 'HH:mm')} + ' CET'"></span>-->
                             </td>
                             <td>
                             <span class="status-badge"
@@ -278,12 +327,12 @@
                                             <span th:text="${#temporals.format(competition?.startTime, 'HH:mm')} + ' CET'"></span>
                                         </td>
                                         <td>
-                            <span class="status-badge competition-status"
-                                  th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'active-status' : 'inactive-status'">
-                                <i class="fas"
-                                   th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'fa-play-circle' : 'fa-pause-circle'"></i>
-                                <span th:text="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'Активен' : 'Неактивен'"></span>
-                            </span>
+                        <span class="status-badge competition-status"
+                              th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'active-status' : 'inactive-status'">
+                            <i class="fas"
+                               th:classappend="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'fa-play-circle' : 'fa-pause-circle'"></i>
+                            <span th:text="${competition?.registrationCloses?.isAfter(currentDateTime)} ? 'Активен' : 'Неактивен'"></span>
+                        </span>
                                         </td>
                                         <td>
                                             <div class="nested-actions">
@@ -306,7 +355,6 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- Individual Competition Section -->
 
                 </th:block>
                 </tbody>
