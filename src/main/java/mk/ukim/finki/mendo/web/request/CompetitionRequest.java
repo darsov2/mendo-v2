@@ -30,6 +30,15 @@ public class CompetitionRequest {
     private Long parentId;
     private List<Long> roomIds;
 
+
+    private Boolean requiresRegistration;
+    private Boolean visibleToPublic;
+    private Boolean canStudentRegister;
+
+    private LocalDateTime registrationOpens;
+    private LocalDateTime registrationCloses;
+
+
     private List<Long> taskIds = new ArrayList<>();
     private List<Long> taskPoints = new ArrayList<>();
 

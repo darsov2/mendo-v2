@@ -22,16 +22,16 @@ public interface CompetitionService {
                                Long parentId,
                                List<Long> roomIds,
                                List<Long> taskIds,
-                               List<Long> taskPoints
-    );
+                               List<Long> taskPoints,
+                               Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses);
 
     List<Competition> findAllWithoutCycle();
     List<Participation> distributeStudentsForCompetition(Long id);
     List<Competition> findAll();
     List<Competition> findAllByCycleId(Long cycleId);
-    Competition create(String title, LocalDate startDate, LocalDateTime startTime,
-                       LocalDateTime endTime, CompetitionTypes type, String place,
-                       String info, LocalDateTime deadline, Long cycleId, List<Long> roomIds);
+//    Competition create(String title, LocalDate startDate, LocalDateTime startTime,
+//                       LocalDateTime endTime, CompetitionTypes type, String place,
+//                       String info, LocalDateTime deadline, Long cycleId, List<Long> roomIds);
     Competition findById(Long id);
     Optional<Competition> update(Long id, String title, LocalDate startDate,
                                  LocalDateTime startTime, LocalDateTime endTime,
