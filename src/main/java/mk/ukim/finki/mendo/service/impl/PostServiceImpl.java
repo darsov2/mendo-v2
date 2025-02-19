@@ -56,6 +56,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAllPostsByThreadId(Long id) {
-        return postRepository.findAllByThread_Id(id);
+        return postRepository.findAllByThread_IdAndParentIsNull(id);
     }
 }

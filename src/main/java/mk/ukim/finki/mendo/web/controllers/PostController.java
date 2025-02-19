@@ -33,16 +33,22 @@ public class PostController {
         return "redirect:/activities/tasks/" + threadId;
     }
 
-    @PostMapping("/reply/{postId}")
-    public String createReply(@PathVariable Long postId,
-                              PostRequest postRequest,
-                              Model model) {
-        Post parentPost = postService.findById(postId);
-        Post replyToPost = postService.replyToPost(postId, postRequest);
+//    @PostMapping("/reply/{postId}")
+//    public String createReply(@PathVariable Long postId,
+//                              PostRequest postRequest,
+//                              Model model) {
+//        Post parentPost = postService.findById(postId);
+//        Post replyToPost = postService.replyToPost(postId, postRequest);
+//
+//        model.addAttribute("post", replyToPost);
+//        model.addAttribute("parentPost", parentPost);
+//        return "master";
+//    }
 
-        model.addAttribute("post", replyToPost);
-        model.addAttribute("parentPost", parentPost);
-        return "master";
+    @PostMapping("/reply/{postId}")
+    public String createReply(@PathVariable Long postId, @ModelAttribute PostRequest postRequest) {
+        Post replyToPost = postService.replyToPost(postId, postRequest);
+        return "redirect:/activities/tasks/" + replyToPost.getThread().getId(); // Redirect to the same thread
     }
 
 

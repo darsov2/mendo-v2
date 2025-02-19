@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -16,6 +17,9 @@ public class Post extends BaseAuditedEntity<Long> {
     String description;
     @ManyToOne
     Post parent;
+
+    @OneToMany(mappedBy = "parent")
+    List<Post> childrenPosts;
     @ManyToOne
     MendoUser mendoUser;
     @ManyToOne
