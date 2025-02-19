@@ -38,7 +38,12 @@ public class CompetitionMapper {
                 request.getParentId(),
                 request.getRoomIds(),
                 request.getTaskIds(),
-                request.getTaskPoints()
+                request.getTaskPoints(),
+                request.getRequiresRegistration(),
+                request.getVisibleToPublic(),
+                request.getCanStudentRegister(),
+                request.getRegistrationOpens(),
+                request.getRegistrationCloses()
         );
     }
 

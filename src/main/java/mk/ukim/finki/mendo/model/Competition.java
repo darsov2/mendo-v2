@@ -50,7 +50,8 @@ public class Competition extends BaseAuditedEntity<Long> {
     @ManyToMany
     @JsonIgnoreProperties("competitions")
     List<MendoUser> moderators;
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, List<Rooms> rooms) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, List<Rooms> rooms,
+                       Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -62,9 +63,15 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.registrationCloses = deadline;
         this.cycle = cycle;
         this.rooms = rooms;
+        this.requiresRegistration = requiresRegistration;
+        this.visibleToPublic = visibleToPublic;
+        this.canStudentRegister = canStudentRegister;
+        this.registrationOpens = registrationOpens;
+        this.registrationCloses = registrationCloses;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, Competition parent, List<Rooms> rooms) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, CompetitionCycle cycle, Competition parent, List<Rooms> rooms,
+                       Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -77,9 +84,15 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.cycle = cycle;
         this.parentCompetition = parent;
         this.rooms = rooms;
+        this.requiresRegistration = requiresRegistration;
+        this.visibleToPublic = visibleToPublic;
+        this.canStudentRegister = canStudentRegister;
+        this.registrationOpens = registrationOpens;
+        this.registrationCloses = registrationCloses;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Competition parent, List<Rooms> rooms) {
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Competition parent, List<Rooms> rooms,
+                       Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -91,9 +104,18 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.registrationCloses = deadline;
         this.parentCompetition = parent;
         this.rooms = rooms;
+
+        this.requiresRegistration = requiresRegistration;
+        this.visibleToPublic = visibleToPublic;
+        this.canStudentRegister = canStudentRegister;
+        this.registrationOpens = registrationOpens;
+        this.registrationCloses = registrationCloses;
     }
 
-    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, List<Rooms> rooms) {
+
+
+    public Competition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, List<Rooms> rooms,
+                       Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses) {
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -104,6 +126,12 @@ public class Competition extends BaseAuditedEntity<Long> {
         this.deadline = deadline;
         this.registrationCloses = deadline;
         this.rooms = rooms;
+
+        this.requiresRegistration = requiresRegistration;
+        this.visibleToPublic = visibleToPublic;
+        this.canStudentRegister = canStudentRegister;
+        this.registrationOpens = registrationOpens;
+        this.registrationCloses = registrationCloses;
     }
 
 
