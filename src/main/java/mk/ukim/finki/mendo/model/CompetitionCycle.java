@@ -1,10 +1,8 @@
 package mk.ukim.finki.mendo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mk.ukim.finki.mendo.web.controllers.BaseAuditedEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

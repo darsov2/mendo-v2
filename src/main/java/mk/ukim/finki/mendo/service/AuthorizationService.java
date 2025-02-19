@@ -101,4 +101,12 @@ public interface AuthorizationService {
     // Topic
     void canViewTopics();
     void canManageTopics();
+
+    void canViewSchedule();
+
+    void canManageSchedule();
+
+    void canViewResults();
+
+    void canManageResults();
 }

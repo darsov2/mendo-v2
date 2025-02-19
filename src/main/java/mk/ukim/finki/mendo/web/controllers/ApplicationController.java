@@ -2,10 +2,7 @@ package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.enums.Grade;
-import mk.ukim.finki.mendo.service.ApplicationService;
-import mk.ukim.finki.mendo.service.CompetitionService;
-import mk.ukim.finki.mendo.service.MendoUserService;
-import mk.ukim.finki.mendo.service.ParticipationService;
+import mk.ukim.finki.mendo.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +18,15 @@ public class ApplicationController {
     private final MendoUserService mendoUserService;
     private final ParticipationService participationService;
     private final CompetitionService competitionService;
+    private final AuthorizationService authorizationService;
 
 
-    public ApplicationController(ApplicationService applicationService, MendoUserService mendoUserService, ParticipationService participationService, CompetitionService competitionService) {
+    public ApplicationController(ApplicationService applicationService, MendoUserService mendoUserService, ParticipationService participationService, CompetitionService competitionService, AuthorizationService authorizationService) {
         this.applicationService = applicationService;
         this.mendoUserService = mendoUserService;
         this.participationService = participationService;
         this.competitionService = competitionService;
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping("/cycle/{cycleId}")
@@ -89,29 +88,31 @@ public class ApplicationController {
 
     @GetMapping("/admin/view")
     public String getAllApplicationsForSchool(Model model) {
-//        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
-        School school = new School("name", "add");
-        school.setId((long) 1);
-        MendoUser currentUser = new MendoUser(
-                true,                   // isTeacher
-                "teacher123",           // username
-                "John",                 // name
-                "Doe",                  // surname
-                "password123",          // password
-                "Skopje",              // city
-                "Macedonia",           // country
-                null,                  // grade (null since it's a teacher)
-                "john.doe@school.edu", // email
-                null,                  // studiesSchool (null since it's a teacher)
-                List.of(school), // teachesSchools (school with id 1)
-                true,                  // isAccountNonExpired
-                true,                  // isAccountNonLocked
-                true,                  // isCredentialsNonExpired
-                true                   // isEnabled
-        );
-        if (!currentUser.getIsTeacher()) {
-            throw new RuntimeException("User is not teacher");
-        }
+        authorizationService.canManageApplications();
+
+        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
+//        School school = new School("name", "add");
+//        school.setId((long) 1);
+//        MendoUser currentUser = new MendoUser(
+//                true,                   // isTeacher
+//                "teacher123",           // username
+//                "John",                 // name
+//                "Doe",                  // surname
+//                "password123",          // password
+//                "Skopje",              // city
+//                "Macedonia",           // country
+//                null,                  // grade (null since it's a teacher)
+//                "john.doe@school.edu", // email
+//                null,                  // studiesSchool (null since it's a teacher)
+//                List.of(school), // teachesSchools (school with id 1)
+//                true,                  // isAccountNonExpired
+//                true,                  // isAccountNonLocked
+//                true,                  // isCredentialsNonExpired
+//                true                   // isEnabled
+//        );
+//        if (!currentUser.getIsTeacher()) {
+//            throw new RuntimeException("User is not teacher");
+//        }
 
         List<School> schoolsWhereTeaches = currentUser.getTeachesSchools();
 
@@ -126,6 +127,8 @@ public class ApplicationController {
     @GetMapping("/admin/usernameApply")
     public String applyForStudentsWithUsername(Model model,
                                                @ModelAttribute("results") Map<String, String> results) {
+        authorizationService.canManageApplications();
+
         List<Competition> competitions = competitionService.findAll();
 
         model.addAttribute("competitions", competitions);
@@ -140,29 +143,31 @@ public class ApplicationController {
     public String studentUsernameApply(RedirectAttributes redirectAttributes,
                                        @RequestParam("competition") Long competitionId,
                                        @RequestParam("usernames") String usernames) {
-//        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
-        School school = new School("name", "add");
-        school.setId((long) 1);
-        MendoUser currentUser = new MendoUser(
-                true,                   // isTeacher
-                "teacher123",           // username
-                "John",                 // name
-                "Doe",                  // surname
-                "password123",          // password
-                "Skopje",              // city
-                "Macedonia",           // country
-                null,                  // grade (null since it's a teacher)
-                "john.doe@school.edu", // email
-                null,                  // studiesSchool (null since it's a teacher)
-                List.of(school), // teachesSchools (school with id 1)
-                true,                  // isAccountNonExpired
-                true,                  // isAccountNonLocked
-                true,                  // isCredentialsNonExpired
-                true                   // isEnabled
-        );
-        if (!currentUser.getIsTeacher()) {
-            throw new RuntimeException("User is not teacher");
-        }
+        authorizationService.canManageApplications();
+
+        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
+//        School school = new School("name", "add");
+//        school.setId((long) 1);
+//        MendoUser currentUser = new MendoUser(
+//                true,                   // isTeacher
+//                "teacher123",           // username
+//                "John",                 // name
+//                "Doe",                  // surname
+//                "password123",          // password
+//                "Skopje",              // city
+//                "Macedonia",           // country
+//                null,                  // grade (null since it's a teacher)
+//                "john.doe@school.edu", // email
+//                null,                  // studiesSchool (null since it's a teacher)
+//                List.of(school), // teachesSchools (school with id 1)
+//                true,                  // isAccountNonExpired
+//                true,                  // isAccountNonLocked
+//                true,                  // isCredentialsNonExpired
+//                true                   // isEnabled
+//        );
+//        if (!currentUser.getIsTeacher()) {
+//            throw new RuntimeException("User is not teacher");
+//        }
         currentUser = mendoUserService.saveUser(currentUser);
 
         List<String> usernameList = Arrays.stream(usernames.split(","))
@@ -200,6 +205,8 @@ public class ApplicationController {
 
     @PostMapping("/admin/approve/{id}")
     public String approveApplication(@PathVariable Long id) {
+        authorizationService.canManageApplications();
+
         Application application = applicationService.getApplicationById(id);
 
         application.setConfirmed(true);
@@ -213,6 +220,8 @@ public class ApplicationController {
 
     @PostMapping("/admin/refuse/{id}")
     public String refuseApplication(@PathVariable Long id) {
+        authorizationService.canManageApplications();
+
         Application application = applicationService.getApplicationById(id);
 
         application.setConfirmed(true);

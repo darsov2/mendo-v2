@@ -462,4 +462,24 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             throw new AccessDeniedException("User is not authorized to manage topics");
         }
     }
+
+    @Override
+    public void canViewSchedule() {
+
+    }
+
+    @Override
+    public void canManageSchedule() {
+
+    }
+
+    @Override
+    public void canViewResults() {
+
+    }
+
+    @Override
+    public void canManageResults() {
+
+    }
 }

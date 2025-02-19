@@ -5,6 +5,7 @@ import mk.ukim.finki.mendo.model.CompetitionCycle;
 import mk.ukim.finki.mendo.model.MendoUser;
 import mk.ukim.finki.mendo.model.School;
 import mk.ukim.finki.mendo.model.enums.Grade;
+import mk.ukim.finki.mendo.service.AuthorizationService;
 import mk.ukim.finki.mendo.service.CompetitionCycleService;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.SchoolService;
@@ -27,16 +28,19 @@ public class CycleController {
     private final CompetitionCycleService cycleService;
     private final MendoUserService mendoUserService;
     private final SchoolService schoolService;
+    private final AuthorizationService authorizationService;
 
-    public CycleController(CompetitionCycleMapper cycleMapper, CompetitionCycleService cycleService, MendoUserService mendoUserService, SchoolService schoolService) {
+    public CycleController(CompetitionCycleMapper cycleMapper, CompetitionCycleService cycleService, MendoUserService mendoUserService, SchoolService schoolService, AuthorizationService authorizationService) {
         this.cycleMapper = cycleMapper;
         this.cycleService = cycleService;
         this.mendoUserService = mendoUserService;
         this.schoolService = schoolService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping("/add")
     public String getCycle(Model model){
+        authorizationService.canManageCompetitionCycles();
 
         model.addAttribute("bodyContent", "admin/addCompetitionCycle");
         return "master";
@@ -44,6 +48,8 @@ public class CycleController {
 
     @PostMapping("/add")
     public String addCycle(CompetitionCycleRequest request, Model model){
+        authorizationService.canManageCompetitionCycles();
+
         if (cycleMapper.addCompetitionCycle(request) == null){
             throw new RuntimeException("Can't add competitionCycle");
         }
@@ -52,6 +58,8 @@ public class CycleController {
 
     @GetMapping("/{id}")
     public String getCycleDetails(@PathVariable Long id, Model model) {
+        authorizationService.canViewCompetitionCycles();
+
         CompetitionCycle cycle = cycleService.findById(id);
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
         List<School> schools = schoolService.findAll();

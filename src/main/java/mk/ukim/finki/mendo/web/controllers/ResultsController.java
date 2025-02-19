@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.web.controllers;
 import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.dto.ResultDTO;
 import mk.ukim.finki.mendo.model.enums.Rank;
+import mk.ukim.finki.mendo.service.AuthorizationService;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import mk.ukim.finki.mendo.service.ResultsService;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,12 @@ import java.util.List;
 public class ResultsController {
     private final ResultsService resultsService;
     private final CompetitionService competitionService;
+    private final AuthorizationService authorizationService;
 
-    public ResultsController(ResultsService resultsService, CompetitionService competitionService) {
+    public ResultsController(ResultsService resultsService, CompetitionService competitionService, AuthorizationService authorizationService) {
         this.resultsService = resultsService;
         this.competitionService = competitionService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping("/competitionId={id}")
@@ -29,6 +32,8 @@ public class ResultsController {
             @PathVariable Long id,
             Model model
     ) {
+        authorizationService.canViewResults();
+
         List<ResultDTO> results = resultsService.getResultOfCompetition(id);
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
@@ -44,6 +49,8 @@ public class ResultsController {
             @PathVariable Long id,
             Model model
     ) {
+        authorizationService.canManageResults();
+
         List<ResultDTO> results = resultsService.getResultOfCompetition(id);
         Competition competition = competitionService.findById(id);
         model.addAttribute("competition", competition);
