@@ -482,4 +482,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     public void canManageResults() {
 
     }
+
+    @Override
+    public void isAuthenticated() {
+        if(userService.getCurrentUser().isEmpty()) {
+            throw new AccessDeniedException("User is not authenticated");
+        }
+    }
 }

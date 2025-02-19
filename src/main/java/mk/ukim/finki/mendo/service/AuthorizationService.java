@@ -109,4 +109,6 @@ public interface AuthorizationService {
     void canViewResults();
 
     void canManageResults();
+
+    void isAuthenticated();
 }
