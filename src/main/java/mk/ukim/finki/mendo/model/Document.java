@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.BaseAuditedEntity;
 
 @Entity
 @Table(name = "documents")

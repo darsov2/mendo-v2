@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/application")
@@ -228,5 +229,78 @@ public class ApplicationController {
         applicationService.save(application);
 
         return "redirect:/application/admin/view";
+    }
+
+    @GetMapping("allApplications")
+    public String allApplications(
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Long competitionId,
+            @RequestParam(required = false) Boolean confirmationStatus,
+            Model model) {
+        authorizationService.canViewApplications();
+
+        MendoUser currentUser = mendoUserService.getCurrentUser().orElseThrow(RuntimeException::new);
+
+        // Get all applications the user can see
+        List<Application> allApplications = applicationService.getAllApplicationsWhereMentorTeaches(currentUser.getId());
+//        List<Application> allApplications = applicationService.getAllApplications();
+        // Apply filters if provided
+        List<Application> filteredApplications = allApplications;
+
+        // Filter by search term
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            String search = searchTerm.toLowerCase();
+            filteredApplications = filteredApplications.stream()
+                    .filter(app ->
+                            app.getStudent().getFullName().toLowerCase().contains(search) ||
+                                    app.getStudent().getStudiesSchool().getName().toLowerCase().contains(search) ||
+                                    app.getStudent().getEmail().toLowerCase().contains(search))
+                    .collect(Collectors.toList());
+        }
+
+        // Filter by competition
+        if (competitionId != null) {
+            filteredApplications = filteredApplications.stream()
+                    .filter(app -> app.getCompetition().getId().equals(competitionId))
+                    .collect(Collectors.toList());
+        }
+
+        // Filter by confirmation status
+        if (confirmationStatus != null) {
+            filteredApplications = filteredApplications.stream()
+                    .filter(app -> app.getConfirmed() == confirmationStatus)
+                    .collect(Collectors.toList());
+        }
+
+        // Calculate statistics based on filtered applications
+        long confirmedCount = filteredApplications.stream()
+                .filter(Application::getConfirmed)
+                .count();
+
+        long unconfirmedCount = filteredApplications.size() - confirmedCount;
+
+        long uniqueSchoolsCount = filteredApplications.stream()
+                .map(a -> a.getStudent().getStudiesSchool().getId())
+                .distinct()
+                .count();
+
+        // Get all competitions for the dropdown
+        List<Competition> competitions = competitionService.findAll();
+
+        // Add all attributes to the model
+        model.addAttribute("applications", filteredApplications);
+        model.addAttribute("competitions", competitions);
+        model.addAttribute("confirmedCount", confirmedCount);
+        model.addAttribute("unconfirmedCount", unconfirmedCount);
+        model.addAttribute("uniqueSchoolsCount", uniqueSchoolsCount);
+
+        // Add filter params to maintain state
+        model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("competitionId", competitionId);
+        model.addAttribute("confirmationStatus", confirmationStatus);
+
+        model.addAttribute("bodyContent", "admin/application/allApplications");
+
+        return "master";
     }
 }

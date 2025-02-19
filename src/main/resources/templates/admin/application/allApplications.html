@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-<div th:replace="fragments/_toolbar :: toolbar('Пријавени ученици за натпревари', '/')"></div>
+<div th:replace="fragments/_toolbar :: toolbar('Пријавени ученици за натпревари', 'application/admin/view')"></div>
 <div class="main-content" th:fragment="allApplications">
     <div class="quick-start">
         <div class="header d-flex justify-content-between align-items-center mb-4">
-            <form action="/applications" method="get" class="search-filter-container d-flex gap-3">
+            <form th:action="@{/application/allApplications}" method="get" class="search-filter-container d-flex gap-3">
                 <div class="input-group">
                     <span class="input-group-text bg-white">
                         <i class="fas fa-search" style="color: #105679;"></i>
@@ -18,8 +18,8 @@
                     <input
                             type="text"
                             id="searchInput"
-                            name="search"
-                            th:value="${param.search}"
+                            name="searchTerm"
+                            th:value="${searchTerm}"
                             class="form-control"
                             placeholder="Пребарувај по име или училиште"
                             style="border-left: none; padding-left: 0;">
@@ -29,17 +29,17 @@
                     <option th:each="comp : ${competitions}"
                             th:value="${comp.id}"
                             th:text="${comp.title}"
-                            th:selected="${param.competitionId != null && param.competitionId[0] == comp.id}"></option>
+                            th:selected="${competitionId != null && competitionId == comp.id}"></option>
                 </select>
-                <select id="statusFilter" name="confirmed" class="form-select" style="width: auto;">
+                <select id="statusFilter" name="confirmationStatus" class="form-select" style="width: auto;">
                     <option value="">Сите статуси</option>
-                    <option value="true" th:selected="${param.confirmed != null && param.confirmed[0] == 'true'}">Потврдени</option>
-                    <option value="false" th:selected="${param.confirmed != null && param.confirmed[0] == 'false'}">Непотврдени</option>
+                    <option value="true" th:selected="${confirmationStatus != null && confirmationStatus == true}">Потврдени</option>
+                    <option value="false" th:selected="${confirmationStatus != null && confirmationStatus == false}">Непотврдени</option>
                 </select>
-                <button type="submit" class="btn btn-primary" style="background-color: #105679; border: none;">
+                <button type="submit" class="btn" style="background-color: #105679; color: white; border: none;">
                     <i class="fas fa-filter me-2"></i> Филтрирај
                 </button>
-                <a th:href="@{/applications}" class="btn btn-secondary" style="background-color: #E6AA68; border: none;">
+                <a th:href="@{/application/allApplications}" class="btn" style="background-color: #E6AA68; color: white; border: none;">
                     <i class="fas fa-sync-alt me-2"></i> Ресетирај
                 </a>
             </form>
@@ -60,58 +60,41 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="competitionapplication : ${applications}">
+                    <tr th:each="competitionApplication : ${applications}">
                         <td>
                             <div class="d-flex flex-column">
-                                <span class="fw-medium" th:text="${competitionapplication.student.getFullName()}"></span>
-                                <small class="text-secondary" th:text="${competitionapplication.student.email}"></small>
+                                <span class="fw-medium" th:text="${competitionApplication.student.getFullName()}"></span>
+                                <small class="text-secondary" th:text="${competitionApplication.student.email}"></small>
                             </div>
                         </td>
                         <td>
                             <div class="school-info">
-                                <span th:text="${competitionapplication.student.studiesSchool.name}"></span>
-                                <small class="text-secondary d-block" th:if="${competitionapplication.student.studiesSchool.region}" th:text="${competitionapplication.student.studiesSchool.region}"></small>
+                                <span th:text="${competitionApplication.student.studiesSchool.name}"></span>
+                                <small class="text-secondary d-block" th:if="${competitionApplication.student.studiesSchool.region}" th:text="${competitionApplication.student.studiesSchool.region}"></small>
                             </div>
                         </td>
                         <td>
-                            <span class="competition-name" th:text="${competitionapplication.competition.title}"></span>
-                            <small class="text-secondary d-block" th:text="${competitionapplication.competition.type}"></small>
+                            <span class="competition-name" th:text="${competitionApplication.competition.title}"></span>
+                            <small class="text-secondary d-block" th:text="${competitionApplication.competition.type}"></small>
                         </td>
                         <td>
-                            <span th:if="${competitionapplication.competition.cycle != null}" th:text="${competitionapplication.competition.cycle.name}"></span>
-                            <span th:unless="${competitionapplication.competition.cycle != null}" class="text-secondary">Нема циклус</span>
+                            <span th:if="${competitionApplication.competition.cycle != null}" th:text="${competitionApplication.competition.cycle.name}"></span>
+                            <span th:unless="${competitionApplication.competition.cycle != null}" class="text-secondary">Нема циклус</span>
                         </td>
                         <td>
-                            <span th:text="${#temporals.format(competitionapplication.date, 'dd MMM yyyy')}"></span>
+                            <span th:text="${#temporals.format(competitionApplication.date, 'dd MMM yyyy')}"></span>
                         </td>
                         <td>
-                            <span th:if="${competitionapplication.confirmed}" class="status-badge status-lecture" style="background-color: #E6F1FE; color: #105679;">
+                            <span th:if="${competitionApplication.confirmed}" class="status-badge status-lecture" style="background-color: #E6F1FE; color: #105679;">
                               <i class="fas fa-check-circle me-1"></i> Потврдена
                             </span>
-                            <span th:unless="${competitionapplication.confirmed}" class="status-badge" style="background-color: #fff5eb; color: #E6AA68;">
+                            <span th:unless="${competitionApplication.confirmed}" class="status-badge" style="background-color: #fff5eb; color: #E6AA68;">
                               <i class="fas fa-clock me-1"></i> Непотврдена
                             </span>
                         </td>
                         <td>
                             <div class="actions">
-                                <div th:if="${!competitionapplication.confirmed}" class="d-flex gap-2">
-                                    <form th:action="@{/application/admin/approve/{id}(id=${competitionapplication.id})}" method="post">
-                                        <button type="submit" class="btn-edit" title="Потврди">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </form>
-                                    <form th:action="@{/application/admin/refuse/{id}(id=${competitionapplication.id})}" method="post">
-                                        <button type="submit" class="btn-delete" title="Одбиј">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                                <div th:if="${competitionapplication.confirmed}" class="d-flex gap-2">
-                                    <button class="btn-edit" disabled title="Веќе потврдена">
-                                        <i class="fas fa-check-double"></i>
-                                    </button>
-                                </div>
-                                <button class="btn-edit view-details" th:data-id="${competitionapplication.id}" title="Детали">
+                                <button class="btn-edit view-details" th:data-id="${competitionApplication.id}" title="Детали">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
@@ -122,7 +105,7 @@
                             <div class="d-flex flex-column align-items-center gap-3">
                                 <i class="fas fa-search text-secondary" style="font-size: 2.5rem;"></i>
                                 <span class="fs-5 text-secondary">Нема пронајдени резултати</span>
-                                <a th:href="@{/applications}" class="btn-add" style="background-color: #E6AA68; border: none; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.5rem; color: white;">
+                                <a th:href="@{/application/allApplications}" class="btn-add" style="background-color: #E6AA68; border: none; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.5rem; color: white;">
                                     <i class="fas fa-sync-alt me-2"></i> Ресетирај филтри
                                 </a>
                             </div>
@@ -138,7 +121,7 @@
             <div class="col-md-3">
                 <div class="content-card d-flex flex-column p-4">
                     <span class="text-secondary mb-2">Вкупно пријави</span>
-                    <span class="fs-2 fw-bold" style="color: #105679;" th:text="${totalCount}">0</span>
+                    <span class="fs-2 fw-bold" style="color: #105679;" th:text="${applications.size()}">0</span>
                 </div>
             </div>
             <div class="col-md-3">
@@ -312,7 +295,7 @@
 
     .status-badge {
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: center;
         display: flex;
         padding: 6px 12px;
         border-radius: 20px;
@@ -385,28 +368,16 @@
         }
     }
 
-    /* Pagination styles */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 2rem;
+    /* Button styles */
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
     }
 
-    .pagination .page-item .page-link {
-        color: #105679;
-        border-color: #E6F1FE;
-        margin: 0 0.2rem;
-        border-radius: 0.4rem;
-        transition: all 0.2s;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #105679;
-        border-color: #105679;
-    }
-
-    .pagination .page-item .page-link:hover {
-        background-color: #E6F1FE;
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 </style>
 </body>

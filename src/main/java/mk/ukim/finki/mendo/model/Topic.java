@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.BaseAuditedEntity;
 import org.hibernate.annotations.Fetch;
 
 @Data

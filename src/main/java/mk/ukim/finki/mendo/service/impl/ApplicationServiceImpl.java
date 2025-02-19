@@ -69,6 +69,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<Application> getAllApplicationsWhereMentorTeaches(Long teacherId) {
+        return applicationRepository.findApplicationsWhereStudentsStudyAtMentorTeachingSchools(teacherId);
+    }
+
+    @Override
+    public List<Application> getAllApplications() {
+        return applicationRepository.findAll();
+    }
+
+    @Override
     @Transactional
     public Application registerForCompetitionCycle(Long cycleId, Grade grade, Long schoolId) {
         MendoUser currentUser = mendoUserService.getCurrentUser().isPresent() ? mendoUserService.getCurrentUser().get() : null;
