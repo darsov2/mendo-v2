@@ -3,6 +3,7 @@ package mk.ukim.finki.mendo.service.impl;
 import mk.ukim.finki.mendo.model.Post;
 import mk.ukim.finki.mendo.model.Thread;
 import mk.ukim.finki.mendo.repository.PostRepository;
+import mk.ukim.finki.mendo.service.AuthorizationService;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.service.PostService;
 import mk.ukim.finki.mendo.service.ThreadService;
@@ -18,11 +19,13 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final ThreadService threadService;
     private final MendoUserService user;
+    private final AuthorizationService authorizationService;
 
-    public PostServiceImpl(PostRepository postRepository, ThreadService threadService, MendoUserService user) {
+    public PostServiceImpl(PostRepository postRepository, ThreadService threadService, MendoUserService user, AuthorizationService authorizationService) {
         this.postRepository = postRepository;
         this.threadService = threadService;
         this.user = user;
+        this.authorizationService = authorizationService;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post addPostToThread(Long threadId, PostRequest postRequest) {
+        authorizationService.isAuthenticated();
 
         Thread thread = threadService.findById(threadId);
         Post post = postRepository.save(new Post(postRequest.getDescription(), postRequest.getParent(), thread, user.getCurrentUser().orElse(null)));
@@ -40,6 +44,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post replyToPost(Long postId, PostRequest postRequest) {
+        authorizationService.isAuthenticated();
         Post parentPost = postRepository.findById(postId).orElse(null);
 
         Post replyPost = new Post();
