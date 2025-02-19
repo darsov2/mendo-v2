@@ -7,10 +7,7 @@ import mk.ukim.finki.mendo.repository.CompetitionRepository;
 import mk.ukim.finki.mendo.repository.CompetitionTaskRepository;
 import mk.ukim.finki.mendo.repository.ParticipationRepository;
 import mk.ukim.finki.mendo.repository.RoomsRepository;
-import mk.ukim.finki.mendo.service.CompetitionCycleService;
-import mk.ukim.finki.mendo.service.CompetitionService;
-import mk.ukim.finki.mendo.service.CompetitionTaskService;
-import mk.ukim.finki.mendo.service.TaskService;
+import mk.ukim.finki.mendo.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,9 +24,10 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final TaskService taskService;
     private final CompetitionTaskService competitionTaskService;
     private final CompetitionTaskRepository competitionTaskRepository;
+    private final MendoUserService mendoUserService;
 
 
-    public CompetitionServiceImpl(CompetitionCycleService service, CompetitionRepository competitionRepository, ParticipationRepository participationRepository, RoomsRepository roomsRepository, TaskService taskService, CompetitionTaskService competitionTaskService, CompetitionTaskRepository competitionTaskRepository) {
+    public CompetitionServiceImpl(CompetitionCycleService service, CompetitionRepository competitionRepository, ParticipationRepository participationRepository, RoomsRepository roomsRepository, TaskService taskService, CompetitionTaskService competitionTaskService, CompetitionTaskRepository competitionTaskRepository, MendoUserService mendoUserService) {
         this.competitionCycleService = service;
         this.competitionRepository = competitionRepository;
         this.participationRepository = participationRepository;
@@ -37,16 +35,22 @@ public class CompetitionServiceImpl implements CompetitionService {
         this.taskService = taskService;
         this.competitionTaskService = competitionTaskService;
         this.competitionTaskRepository = competitionTaskRepository;
+        this.mendoUserService = mendoUserService;
     }
 
     @Override
     @Transactional
     public Competition addCompetition(String title, LocalDate startDate, LocalDateTime startTime, LocalDateTime endTime, CompetitionTypes type, String place, String info, LocalDateTime deadline, Long cycleId, Long parentId, List<Long> roomIds, List<Long> taskIds, List<Long> taskPoints,
-                                      Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses) {
+                                      Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses, List<Long> moderators) {
         List<Rooms> rooms = new ArrayList<>();
+        List<MendoUser> mendoModerators = new ArrayList<>();
         if(roomIds != null) {
             rooms = roomsRepository.findAllById(roomIds);
         }
+        if(moderators != null){
+            mendoModerators = mendoUserService.findAllByIdIn(moderators);
+        }
+
         Competition competition;
 
         if (requiresRegistration == null){
@@ -82,6 +86,7 @@ public class CompetitionServiceImpl implements CompetitionService {
             competitionTasks.add(competitionTaskService.save(competitionTask));
         }
         competition.setTasks(competitionTasks);
+        competition.setModerators(mendoModerators);
         return competitionRepository.save(competition);
     }
 

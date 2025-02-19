@@ -14,4 +14,5 @@ public interface MendoUserService {
     Optional<MendoUser> findByUsername(String username);
 
     List<MendoUser> findAllByIdIn(List<Long> list);
+    List<MendoUser> findAllByRoleModerator();
 }

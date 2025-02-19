@@ -1,8 +1,6 @@
 <link rel="stylesheet" href="/style/grid.css">
 <link rel="stylesheet" href="/style/style.css">
 
-
-
 <!-- Navigation -->
 <nav class="toolbar-top">
     <div class="d-flex align-items-center justify-content-between px-4">
@@ -18,7 +16,7 @@
 
 <!-- Main Content -->
 <div class="grid-content py-4">
-    <div class="content-card mx-auto" style="max-width: 1000px;">
+    <div class="content-card mx-auto" style="max-width: 1200px;">
         <form id="competitionForm" method="POST" th:action="@{/competition/edit/{id}(id=${competitionId})}" class="p-4">
 
             <!-- Basic Information Section -->
@@ -114,6 +112,29 @@
                                th:value="${#temporals.format(competition.deadline, 'yyyy-MM-dd''T''HH:mm')}"
                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
                     </div>
+
+                    <!-- New registration datetime fields -->
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Отворање на регистрации</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               name="registrationOpens"
+                               th:value="${competition.registrationOpens != null ? #temporals.format(competition.registrationOpens, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Затворање на регистрации</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               name="registrationCloses"
+                               th:value="${competition.registrationCloses != null ? #temporals.format(competition.registrationCloses, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
                 </div>
             </div>
 
@@ -145,7 +166,7 @@
                             <option value="">Изберете циклус</option>
                             <option th:each="cycle : ${cycles}"
                                     th:value="${cycle.id}"
-                                    th:text="${cycle.name}"
+                                    th:text="${cycle.value}"
                                     th:selected="${competition.cycleId != null && cycle.id == competition.cycleId}">
                             </option>
                             <option value="">Самостоен натпревар</option>
@@ -171,7 +192,7 @@
 
                     <div class="form-group">
                         <label class="form-label d-block mb-2">
-                            <span class="fw-medium">Тагови</span>
+                            <span class="fw-medium">Лаборатории</span>
                         </label>
                         <select id="activity-tag"
                                 name="roomIds"
@@ -180,8 +201,66 @@
                                 style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
                             <option th:each="room : ${rooms}"
                                     th:value="${room.id}"
-                                    th:text="|${room.name} ${room.city}|"
+                                    th:text="${room.value}"
                                     th:selected="${competition.roomIds != null && competition.roomIds.contains(room.id)}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Registration Options -->
+                <div class="d-grid gap-4 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Опции за регистрација</span>
+                        </label>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="requiresRegistration"
+                                       id="requireRegistration"
+                                       th:checked="${competition?.requiresRegistration == true}">
+                                <label class="form-check-label" for="requireRegistration">
+                                    Потребна регистрација
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="visibleToPublic"
+                                       id="visible"
+                                       th:checked="${competition.visibleToPublic == true}">
+                                <label class="form-check-label" for="visible">
+                                    Видливо за јавноста
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="canStudentRegister"
+                                       id="canRegister"
+                                       th:checked="${competition.canStudentRegister == true}">
+                                <label class="form-check-label" for="canRegister">
+                                    Може да се регистрира
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Модератори</span>
+                        </label>
+                        <select id="activity-tag1"
+                                name="moderators[]"
+                                class="form-control"
+                                multiple="multiple"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option th:each="moderator : ${moderators}"
+                                    th:value="${moderator?.id}"
+                                    th:text="${moderator?.value}"
+                                    th:selected="${competition.moderators != null && competition.moderators.contains(moderator.id)}">
                             </option>
                         </select>
                     </div>
@@ -353,6 +432,7 @@
     }
 
     function initializeMultiselect() {
+        // Initialize laboratories multiselect
         const checkboxes = document.getElementById('activity-tag');
         if (checkboxes) {
             $(checkboxes).multiselect({
@@ -362,7 +442,28 @@
                 enableCaseInsensitiveFiltering: true,
                 buttonWidth: '100%',
                 numberDisplayed: 5,
-                nonSelectedText: "Немате избрано тагови",
+                nonSelectedText: "Немате избрано лаборатории за натпреварот",
+                widthSynchronizationMode: 'always',
+                allSelectedText: false,
+                filterPlaceholder: 'Пребарај...',
+                includeSelectAllOption: true,
+                selectAllText: "Избери ги сите"
+            });
+        }
+
+        // Initialize moderators multiselect
+        const moderatorsSelect = document.getElementById('activity-tag1');
+        if (moderatorsSelect) {
+            $(moderatorsSelect).multiselect({
+                templates: {
+                    button: '<button type="button" class="multiselect form-control text-start dropdown-toggle" style="text-align: left !important; padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                },
+                enableCaseInsensitiveFiltering: true,
+                buttonWidth: '100%',
+                numberDisplayed: 5,
+                nonSelectedText: "Немате избрано модератори за натпреварот",
+                widthSynchronizationMode: 'always',
+                allSelectedText: false,
                 filterPlaceholder: 'Пребарај...',
                 includeSelectAllOption: true,
                 selectAllText: "Избери ги сите"

@@ -2,6 +2,7 @@ package mk.ukim.finki.mendo.web.controllers;
 
 import mk.ukim.finki.mendo.model.*;
 import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
+import mk.ukim.finki.mendo.model.dto.OptionDTO;
 import mk.ukim.finki.mendo.model.enums.CompetitionTypes;
 import mk.ukim.finki.mendo.model.enums.Grade;
 import mk.ukim.finki.mendo.service.*;
@@ -93,11 +94,13 @@ public class CompetitionsController {
 
     @GetMapping("/add")
     public String getCompetition(Model model) {
+        List<OptionDTO<Long>> moderators = utilsMapper.getAllModeratorUsersAsOptions();
         model.addAttribute("cycles", utilsMapper.getAllUpcomingCyclesAsOptions());
         model.addAttribute("types", CompetitionTypes.values());
         model.addAttribute("competitions", competitionMapper.listCompetitions());
         model.addAttribute("rooms", utilsMapper.getAllRoomsAsOptions());
         model.addAttribute("tasks",utilsMapper.getAllTasksAsOptions());
+        model.addAttribute("moderators", moderators);
         model.addAttribute("bodyContent", "admin/addCompetition");
 
         return "master";
@@ -105,13 +108,14 @@ public class CompetitionsController {
 
     @GetMapping("/edit/{id}")
     public String getEditCompetition(@PathVariable Long id, Model model) {
-        model.addAttribute("cycles", competitionCycleService.findAll());
+        model.addAttribute("cycles", utilsMapper.getAllUpcomingCyclesAsOptions());
         model.addAttribute("types", CompetitionTypes.values());
         model.addAttribute("competitions", competitionMapper.listCompetitions());
-        model.addAttribute("rooms", roomMapper.findAllRooms());
-        model.addAttribute("tasks",taskService.getAllTasks());
+        model.addAttribute("rooms", utilsMapper.getAllRoomsAsOptions());
+        model.addAttribute("tasks",utilsMapper.getAllTasksAsOptions());
         model.addAttribute("competition", competitionMapper.toCompetitionRequest(competitionMapper.findById(id)));
         model.addAttribute("competitionId", id);
+        model.addAttribute("moderators", utilsMapper.getAllModeratorUsersAsOptions());
         model.addAttribute("bodyContent", "admin/editCompetition");
         return "master";
     }
