@@ -15,4 +15,6 @@ public interface ApplicationService {
     public Application getApplicationById(Long applicationId);
     public Application save(Application application);
     public boolean isUserAlreadyRegisteredOnCompetition(Long competitionId, String username);
+    public List<Application> getAllApplicationsWhereMentorTeaches(Long teacherId);
+    public List<Application> getAllApplications();
 }
