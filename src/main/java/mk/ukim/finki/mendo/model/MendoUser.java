@@ -39,7 +39,7 @@ public class MendoUser extends BaseAuditedEntity<Long> implements UserDetails {
     Boolean isAccountNonLocked = true;
     Boolean isCredentialsNonExpired = true;
     Boolean isEnabled = true;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

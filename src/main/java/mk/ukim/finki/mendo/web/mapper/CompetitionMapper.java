@@ -5,6 +5,7 @@ import mk.ukim.finki.mendo.model.Competition;
 import mk.ukim.finki.mendo.model.Participation;
 import mk.ukim.finki.mendo.model.dto.CycleOrCompetitionDTO;
 import mk.ukim.finki.mendo.model.dto.ResultDTO;
+import mk.ukim.finki.mendo.service.MendoUserService;
 import mk.ukim.finki.mendo.web.request.CompetitionRequest;
 import mk.ukim.finki.mendo.service.CompetitionService;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class CompetitionMapper {
 
     private final CompetitionService competitionService;
+    private final MendoUserService mendoUserService;
 
 
-    public CompetitionMapper(CompetitionService competitionService) {
+    public CompetitionMapper(CompetitionService competitionService, MendoUserService mendoUserService) {
         this.competitionService = competitionService;
+        this.mendoUserService = mendoUserService;
     }
 
     public Competition addCompetition(CompetitionRequest request) {
@@ -43,7 +46,8 @@ public class CompetitionMapper {
                 request.getVisibleToPublic(),
                 request.getCanStudentRegister(),
                 request.getRegistrationOpens(),
-                request.getRegistrationCloses()
+                request.getRegistrationCloses(),
+                request.getModerators()
         );
     }
 
@@ -93,7 +97,6 @@ public class CompetitionMapper {
 
     public CompetitionRequest toCompetitionRequest(Competition competition) {
         CompetitionRequest request = new CompetitionRequest();
-
         request.setTitle(competition.getTitle());
         request.setStartDate(competition.getStartDate());
         // Convert LocalDateTime to String time format
@@ -103,7 +106,12 @@ public class CompetitionMapper {
         request.setPlace(competition.getPlace());
         request.setInfo(competition.getInfo());
         request.setDeadline(competition.getDeadline());
-
+        request.setRegistrationCloses(competition.getRegistrationCloses());
+        request.setRegistrationOpens(competition.getRegistrationOpens());
+        request.setModerators(competition.getModerators().stream().map(BaseEntity::getId).toList());
+        request.setCanStudentRegister(competition.getCanStudentRegister());
+        request.setRequiresRegistration(competition.getRequiresRegistration());
+        request.setVisibleToPublic(competition.getVisibleToPublic());
         // Handle potential null values for relationships
         if (competition.getCycle() != null) {
             request.setCycleId(competition.getCycle().getId());

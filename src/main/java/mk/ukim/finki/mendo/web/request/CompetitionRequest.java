@@ -29,6 +29,7 @@ public class CompetitionRequest {
     private Long cycleId;
     private Long parentId;
     private List<Long> roomIds;
+    private List<Long> moderators;
 
 
     private Boolean requiresRegistration;

@@ -23,7 +23,8 @@ public interface CompetitionService {
                                List<Long> roomIds,
                                List<Long> taskIds,
                                List<Long> taskPoints,
-                               Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses);
+                               Boolean requiresRegistration, Boolean visibleToPublic, Boolean canStudentRegister, LocalDateTime registrationOpens, LocalDateTime registrationCloses,
+                               List<Long> moderators);
 
     List<Competition> findAllWithoutCycle();
     List<Participation> distributeStudentsForCompetition(Long id);

@@ -2,6 +2,7 @@ package mk.ukim.finki.mendo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.mendo.model.MendoUser;
+import mk.ukim.finki.mendo.model.enums.RoleNames;
 import mk.ukim.finki.mendo.repository.MendoUserRepository;
 import mk.ukim.finki.mendo.service.MendoUserService;
 import org.slf4j.Logger;
@@ -80,6 +81,11 @@ public class MendoUserServiceImpl implements MendoUserService {
     @Override
     public List<MendoUser> findAllByIdIn(List<Long> list) {
         return mendoUserRepository.findAllByIdIn(list);
+    }
+
+    @Override
+    public List<MendoUser> findAllByRoleModerator() {
+        return mendoUserRepository.findAllByRole(RoleNames.ROLE_MODERATOR);
     }
 
     @Transactional
