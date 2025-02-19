@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <title>МЕНДО - Регистрација на натпревар</title>
     <link href="../../static/style/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/style.css">
     <script th:inline="javascript">
         const tasks = /*[[${tasks}]]*/ [];
 
-        function addTaskRow() {
+        function addTaskRow(selectedTaskId, points) {
             const taskContainer = document.getElementById("taskContainer");
-            const lastRow = taskContainer.lastElementChild;
 
+            // Validate last row if it exists
+            const lastRow = taskContainer.lastElementChild;
             if (lastRow) {
                 const lastTask = lastRow.querySelector("select").value;
                 const lastPoints = lastRow.querySelector("input").value;
@@ -20,28 +23,56 @@
                 }
             }
 
+            // Create new row container
             const newRow = document.createElement("div");
-            newRow.classList.add("form-group", "task-row");
+            newRow.classList.add("d-flex", "gap-3", "align-items-center", "mb-3", "task-row");
 
+            // Create task select
+            const select = createTaskSelect(selectedTaskId);
+
+            // Create points input
+            const input = createPointsInput(points);
+
+            // Create remove button
+            const removeBtn = createRemoveButton();
+
+            // Assemble row
+            newRow.appendChild(select);
+            newRow.appendChild(input);
+            newRow.appendChild(removeBtn);
+            taskContainer.appendChild(newRow);
+        }
+
+        function createTaskSelect(selectedTaskId) {
             const select = document.createElement("select");
             select.classList.add("form-control");
             select.name = "taskIds[]";
             select.required = true;
+            select.style.cssText = "padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; flex: 2;";
 
+            // Add default option
             const defaultOption = document.createElement("option");
             defaultOption.value = "";
             defaultOption.textContent = "Изберете задача";
             select.appendChild(defaultOption);
 
+            // Add task options from the tasks array
             if (tasks && tasks.length) {
                 tasks.forEach(task => {
                     const option = document.createElement("option");
                     option.value = task.id;
-                    option.textContent = task.value;
+                    option.textContent = task.title;
+                    if (selectedTaskId && task.id === parseInt(selectedTaskId)) {
+                        option.selected = true;
+                    }
                     select.appendChild(option);
                 });
             }
 
+            return select;
+        }
+
+        function createPointsInput(points) {
             const input = document.createElement("input");
             input.type = "number";
             input.classList.add("form-control");
@@ -49,46 +80,75 @@
             input.required = true;
             input.min = "1";
             input.placeholder = "Поени";
+            input.style.cssText = "padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; flex: 1;";
 
+            if (points) {
+                input.value = points;
+            }
+
+            return input;
+        }
+
+        function createRemoveButton() {
             const removeBtn = document.createElement("button");
             removeBtn.type = "button";
-            removeBtn.classList.add("remove-btn");
-            removeBtn.textContent = "X";
+            removeBtn.classList.add("btn-action", "btn-delete");
+            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
             removeBtn.onclick = function() { removeTaskRow(this); };
+            removeBtn.style.cssText = "padding: 0.8rem; border: none; border-radius: 8px; background: #fee2e2; color: #dc2626; cursor: pointer; transition: all 0.2s ease;";
 
-            newRow.appendChild(select);
-            newRow.appendChild(input);
-            newRow.appendChild(removeBtn);
+            removeBtn.addEventListener('mouseover', function() {
+                this.style.backgroundColor = '#fca5a5';
+            });
+            removeBtn.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '#fee2e2';
+            });
 
-            taskContainer.appendChild(newRow);
+            return removeBtn;
         }
 
         function removeTaskRow(button) {
-            button.parentElement.remove();
+            button.closest('.task-row').remove();
         }
     </script>
     <style>
-        .container {
+        /* Grid layout */
+        .grid-content {
+            width: 100%;
             max-width: 1200px;
-            margin: 2rem auto;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
 
-        .section-title {
-            font-weight: 600;
+        /* Navigation toolbar */
+        .toolbar-top {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .form-card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 3rem;
-            box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
@@ -96,278 +156,405 @@
             color: #2c1810;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #E6AA68;
-            border-radius: 0.8rem;
+            padding: 0.8rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background-color: #fff5eb;
-            color: #2c1810;
+            background-color: #fff;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #2c1810;
+            border-color: #E6AA68;
             box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
         }
 
-        .helper-text {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+        /* Section headings */
+        .section-heading {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c1810;
+            font-size: 1.25rem;
         }
 
+        /* Grid layouts */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Task section */
+        .task-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .task-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        /* Buttons */
         .mendo-btn {
             padding: 0.8rem 1.5rem;
-            border-radius: 0.8rem;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s ease;
             text-decoration: none;
-            width: 100%;
-            font-size: 1.1rem;
             background-color: #E6AA68;
             color: #2c1810;
-            margin-top: 1rem;
-            grid-column: 1 / -1;
         }
 
         .mendo-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
+            box-shadow: 0 4px 8px rgba(230, 170, 104, 0.3);
         }
 
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c1810' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
+        .mendo-btn-signup {
+            background-color: #E6AA68;
+            color: #2c1810;
         }
 
-        .full-width {
-            grid-column: 1 / -1;
+        .btn-action {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .task-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr auto;
-            gap: 0.75rem;
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #fca5a5;
+        }
+
+        /* Utilities */
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
             align-items: center;
         }
 
-        .task-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .justify-content-end {
+            justify-content: flex-end;
+        }
+
+        .gap-3 {
+            gap: 1rem;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mb-3 {
             margin-bottom: 1rem;
         }
 
-        .remove-btn {
-            background-color: #ff4444;
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            width: 2rem;
-            height: 2rem;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
+        .mb-4 {
+            margin-bottom: 1.5rem;
         }
 
-        .remove-btn:hover {
-            background-color: #cc0000;
+        .mb-5 {
+            margin-bottom: 2rem;
         }
 
-        .add-task-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
+        .me-2 {
+            margin-right: 0.5rem;
+        }
+
+        .fw-medium {
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: auto;
-            margin-left: auto;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
         }
 
-        .add-task-btn:hover {
-            background-color: #45a049;
-            transform: translateY(-1px);
+        .fw-semibold {
+            font-weight: 600;
         }
 
-        .add-task-btn::before {
-            content: "+";
-            font-size: 1.2rem;
-            font-weight: bold;
+        .text-danger {
+            color: #dc2626;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .form-card {
-                padding: 1.5rem;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
             .form-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2 class="section-title">Регистрација на натпревар</h2>
+<!-- Navigation -->
+<nav class="toolbar-top">
+    <div class="d-flex align-items-center justify-content-between px-4">
+        <div class="d-flex align-items-center gap-3">
+            <a th:href="@{/}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Назад</span>
+            </a>
+            <h1 class="h4 mb-0 fw-semibold text-dark">Регистрација на натпревар</h1>
+        </div>
+    </div>
+</nav>
 
-    <div class="form-card">
-        <form id="competitionForm" class="form-grid" method="POST">
-            <!-- Left Column -->
-            <div class="form-group">
-                <label class="form-label">Наслов на натпреварот</label>
-                <input type="text" class="form-control" name="title" required
-                       placeholder="Внесете наслов на натпреварот">
+<!-- Main Content -->
+<div class="grid-content py-4">
+    <div class="content-card mx-auto" style="max-width: 1000px;">
+        <form id="competitionForm" method="POST" class="p-4">
+
+            <!-- Basic Information Section -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Основни информации</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Наслов на натпреварот</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               name="title"
+                               required
+                               placeholder="Внесете наслов на натпреварот"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Тип на натпревар</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control"
+                                name="type"
+                                required
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете тип на натпревар</option>
+                            <option th:each="type : ${types}"
+                                    th:value="${type}"
+                                    th:text="${type}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Датум на одржување</label>
-                <input type="date" class="form-control" name="startDate" required>
+            <!-- Date and Time Section -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Временски податоци</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Датум на одржување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date"
+                               class="form-control"
+                               name="startDate"
+                               required
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Време на почеток</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="time"
+                               class="form-control"
+                               name="startTime"
+                               required
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Време на завршување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="time"
+                               class="form-control"
+                               name="endTime"
+                               required
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Краен рок за пријавување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               name="deadline"
+                               required
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Време на почеток</label>
-                <input type="time" class="form-control" name="startTime" required>
+            <!-- Location and Additional Info -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Локација и дополнителни информации</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Место на одржување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               name="place"
+                               required
+                               placeholder="Внесете место на одржување"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Циклус на натпревари</span>
+                        </label>
+                        <select class="form-control"
+                                name="cycleId"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете циклус</option>
+                            <option th:each="cycle : ${cycles}"
+                                    th:value="${cycle.id}"
+                                    th:text="${cycle.value}">
+                            </option>
+                            <option value="">Самостоен натпревар</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Претходен натпревар</span>
+                        </label>
+                        <select class="form-control"
+                                name="parentId"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете претходен натпревар</option>
+                            <option th:each="parent : ${competitions}"
+                                    th:value="${parent.id}"
+                                    th:text="${parent.title}">
+                            </option>
+                            <option value="">Нема претходен натпревар</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Тагови</span>
+                        </label>
+                        <select id="activity-tag"
+                                name="roomIds[]"
+                                class="form-control"
+                                multiple="multiple"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option th:each="room : ${rooms}"
+                                    th:value="${room.id}"
+                                    th:text="${room.value}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <label class="form-label d-block mb-2">
+                        <span class="fw-medium">Дополнителни информации</span>
+                    </label>
+                    <textarea class="form-control"
+                              name="info"
+                              rows="4"
+                              placeholder="Внесете дополнителни информации за натпреварот"
+                              style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; resize: vertical;">
+                    </textarea>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Време на завршување</label>
-                <input type="time" class="form-control" name="endTime" required>
+            <!-- Tasks Section -->
+            <div class="mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-semibold text-dark mb-0">Задачи</h3>
+                    <button type="button"
+                            class="mendo-btn mendo-btn-signup"
+                            onclick="addTaskRow()"
+                            style="width: auto; padding: 0.5rem 1rem;">
+                        <i class="fas fa-plus me-2"></i>
+                        Додади задача
+                    </button>
+                </div>
+
+                <div id="taskContainer" class="task-container mb-4">
+                    <!-- Tasks will be added here dynamically -->
+                </div>
             </div>
 
-            <!-- Right Column -->
-            <div class="form-group">
-                <label class="form-label">Тип на натпревар</label>
-                <select class="form-control" name="type" required>
-                    <option value="">Изберете тип на натпревар</option>
-                    <option th:each="type : ${types}"
-                            th:value="${type}"
-                            th:text="${type}">
-                    </option>
-                </select>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end">
+                <button type="submit"
+                        class="mendo-btn mendo-btn-signup"
+                        style="width: auto; padding: 0.8rem 2rem;">
+                    <i class="fas fa-save me-2"></i>
+                    Регистрирај натпревар
+                </button>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">Место на одржување</label>
-                <input type="text" class="form-control" name="place" required placeholder="Внесете место на одржување">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Краен рок за пријавување</label>
-                <input type="datetime-local" class="form-control" name="deadline" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Циклус на натпревари</label>
-                <select class="form-control" name="cycleId" required>
-                    <option value="">Изберете циклус</option>
-                    <option th:each="cycle : ${cycles}"
-                            th:value="${cycle.id}"
-                            th:text="${cycle.value}">
-                    </option>
-                    <option value="">Самостоен натпревар</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Претходен натпревар</label>
-                <select class="form-control" name="parentId" required>
-                    <option value="">Изберете претходен на натпревар</option>
-                    <option th:each="parent : ${competitions}"
-                            th:value="${parent.id}"
-                            th:text="${parent.title}">
-                    </option>
-                    <option value="">Нема претоден натпревар</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="activity-tag" class="form-label">Тагови</label>
-                <select id="activity-tag" name="roomIds[]" class="form-control form-select" multiple="multiple">
-                    <option th:each="room : ${rooms}"
-                            th:value="${room.id}"
-                            th:text="${room.value}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group full-width">
-                <label class="form-label">Дополнителни информации</label>
-                <textarea class="form-control" name="info" rows="3"
-                          placeholder="Внесете дополнителни информации за натпреварот"></textarea>
-            </div>
-
-            <div class="form-group full-width task-section">
-                <label class="form-label">Задачи</label>
-                <div id="taskContainer" class="task-container"></div>
-                <button type="button" class="add-task-btn" onclick="addTaskRow()">Додади задача</button>
-            </div>
-
-            <button type="submit" class="mendo-btn">
-                Регистрирај натпревар
-            </button>
         </form>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var checkboxes = document.getElementById('activity-tag');
-
-        $(checkboxes).multiselect({
-            templates: {
-                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
-            },
-            enableCaseInsensitiveFiltering: true,
-            withSynchronizationMode: 'ifPopupIsSmaller',
-            buttonWidth: '100%',
-            numberDisplayed: 5,
-            nonSelectedText: "Немате избрано тагови за предавањето",
-            widthSynchronizationMode: 'always',
-            allSelectedText: false,
-            filterPlaceholder: 'Пребарај...',
-            includeSelectAllOption: true,
-            selectAllText: "Избери ги сите"
-        });
-
-        const saveButton = document.querySelector('.mendo-btn');
-        saveButton?.addEventListener('click', function () {
-            if (typeof tinymce !== 'undefined') {
-                tinymce.triggerSave();
-            }
-            document.querySelector('form').submit();
-        });
+        initializeMultiselect();
+        initializeFormSubmission();
     });
+
+    function initializeMultiselect() {
+        const checkboxes = document.getElementById('activity-tag');
+        if (checkboxes) {
+            $(checkboxes).multiselect({
+                templates: {
+                    button: '<button type="button" class="multiselect form-control text-start dropdown-toggle" style="text-align: left !important; padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                },
+                enableCaseInsensitiveFiltering: true,
+                buttonWidth: '100%',
+                numberDisplayed: 5,
+                nonSelectedText: "Немате избрано тагови",
+                filterPlaceholder: 'Пребарај...',
+                includeSelectAllOption: true,
+                selectAllText: "Избери ги сите"
+            });
+        }
+    }
+
+    function initializeFormSubmission() {
+        const form = document.getElementById('competitionForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (typeof tinymce !== 'undefined') {
+                    tinymce.triggerSave();
+                }
+            });
+        }
+    }
 </script>
 </body>
 </html>

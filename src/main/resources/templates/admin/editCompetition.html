@@ -1,392 +1,385 @@
+<link rel="stylesheet" href="/style/grid.css">
+<link rel="stylesheet" href="/style/style.css">
 
-    <title>МЕНДО - Измена на натпревар</title>
-    <script th:inline="javascript">
-        // Initialize tasks and competition from Thymeleaf model
-        const tasks = /*[[${tasks}]]*/ [];
-        const competition = /*[[${competition}]]*/ {};
 
-        function addTaskRow(selectedTaskId, points) {
+
+<!-- Navigation -->
+<nav class="toolbar-top">
+    <div class="d-flex align-items-center justify-content-between px-4">
+        <div class="d-flex align-items-center gap-3">
+            <a th:href="@{/}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Назад</span>
+            </a>
+            <h1 class="h4 mb-0 fw-semibold text-dark">Измена на натпревар</h1>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="grid-content py-4">
+    <div class="content-card mx-auto" style="max-width: 1000px;">
+        <form id="competitionForm" method="POST" th:action="@{/competition/edit/{id}(id=${competitionId})}" class="p-4">
+
+            <!-- Basic Information Section -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Основни информации</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Наслов на натпреварот</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               name="title"
+                               required
+                               th:value="${competition.title}"
+                               placeholder="Внесете наслов на натпреварот"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Тип на натпревар</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control"
+                                name="type"
+                                required
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете тип на натпревар</option>
+                            <option th:each="type : ${types}"
+                                    th:value="${type}"
+                                    th:text="${type}"
+                                    th:selected="${type == competition.type}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date and Time Section -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Временски податоци</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Датум на одржување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date"
+                               class="form-control"
+                               name="startDate"
+                               required
+                               th:value="${competition.startDate}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Време на почеток</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="time"
+                               class="form-control"
+                               name="startTime"
+                               required
+                               th:value="${competition.startTime}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Време на завршување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="time"
+                               class="form-control"
+                               name="endTime"
+                               required
+                               th:value="${competition.endTime}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Краен рок за пријавување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               name="deadline"
+                               required
+                               th:value="${#temporals.format(competition.deadline, 'yyyy-MM-dd''T''HH:mm')}"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location and Additional Info -->
+            <div class="mb-5">
+                <h3 class="fw-semibold mb-4 text-dark">Локација и дополнителни информации</h3>
+                <div class="d-grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Место на одржување</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               name="place"
+                               required
+                               th:value="${competition.place}"
+                               placeholder="Внесете место на одржување"
+                               style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Циклус на натпревари</span>
+                        </label>
+                        <select class="form-control"
+                                name="cycleId"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете циклус</option>
+                            <option th:each="cycle : ${cycles}"
+                                    th:value="${cycle.id}"
+                                    th:text="${cycle.name}"
+                                    th:selected="${competition.cycleId != null && cycle.id == competition.cycleId}">
+                            </option>
+                            <option value="">Самостоен натпревар</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Претходен натпревар</span>
+                        </label>
+                        <select class="form-control"
+                                name="parentId"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option value="">Изберете претходен натпревар</option>
+                            <option th:each="parent : ${competitions}"
+                                    th:value="${parent.id}"
+                                    th:text="${parent.title}"
+                                    th:selected="${competition.parentId != null && parent.id == competition.parentId}">
+                            </option>
+                            <option value="">Нема претходен натпревар</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label d-block mb-2">
+                            <span class="fw-medium">Тагови</span>
+                        </label>
+                        <select id="activity-tag"
+                                name="roomIds"
+                                class="form-control"
+                                multiple="multiple"
+                                style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%;">
+                            <option th:each="room : ${rooms}"
+                                    th:value="${room.id}"
+                                    th:text="|${room.name} ${room.city}|"
+                                    th:selected="${competition.roomIds != null && competition.roomIds.contains(room.id)}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <label class="form-label d-block mb-2">
+                        <span class="fw-medium">Дополнителни информации</span>
+                    </label>
+                    <textarea class="form-control"
+                              name="info"
+                              rows="4"
+                              placeholder="Внесете дополнителни информации за натпреварот"
+                              style="padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; resize: vertical;"
+                              th:text="${competition.info}">
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-semibold text-dark mb-0">Задачи</h3>
+                    <button type="button"
+                            class="mendo-btn mendo-btn-signup"
+                            onclick="addTaskRow()"
+                            style="width: auto; padding: 0.5rem 1rem;">
+                        <i class="fas fa-plus me-2"></i>
+                        Додади задача
+                    </button>
+                </div>
+
+                <div id="taskContainer" class="task-container mb-4">
+                    <!-- Tasks will be added here dynamically -->
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end">
+                <button type="submit"
+                        class="mendo-btn mendo-btn-signup"
+                        style="width: auto; padding: 0.8rem 2rem;">
+                    <i class="fas fa-save me-2"></i>
+                    Зачувај измени
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    // Initialize tasks and competition data from Thymeleaf
+    const tasks = /*[[${tasks}]]*/ [];
+    const competition = /*[[${competition}]]*/ {};
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeMultiselect();
+        initializeFormSubmission();
+
+        if (competition && competition.taskIds && competition.taskPoints) {
             const taskContainer = document.getElementById("taskContainer");
-            const lastRow = taskContainer.lastElementChild;
+            taskContainer.innerHTML = ''; // Clear existing tasks
 
-            if (lastRow) {
-                const lastTask = lastRow.querySelector("select").value;
-                const lastPoints = lastRow.querySelector("input").value;
-                if (!lastTask || !lastPoints) {
-                    alert("Пополнете го претходниот ред пред да додадете нов.");
-                    return;
+            for (let i = 0; i < competition.taskIds.length; i++) {
+                addTaskRow(competition.taskIds[i], competition.taskPoints[i]);
+            }
+        }
+    });
+
+    function addTaskRow(selectedTaskId, points) {
+        const taskContainer = document.getElementById("taskContainer");
+
+        // Validate last row if it exists
+        const lastRow = taskContainer.lastElementChild;
+        if (lastRow) {
+            const lastTask = lastRow.querySelector("select").value;
+            const lastPoints = lastRow.querySelector("input").value;
+            if (!lastTask || !lastPoints) {
+                alert("Пополнете го претходниот ред пред да додадете нов.");
+                return;
+            }
+        }
+
+        // Create new row container
+        const newRow = document.createElement("div");
+        newRow.classList.add("d-flex", "gap-3", "align-items-center", "mb-3", "task-row");
+
+        // Create task select
+        const select = createTaskSelect(selectedTaskId);
+
+        // Create points input
+        const input = createPointsInput(points);
+
+        // Create remove button
+        const removeBtn = createRemoveButton();
+
+        // Assemble row
+        newRow.appendChild(select);
+        newRow.appendChild(input);
+        newRow.appendChild(removeBtn);
+        taskContainer.appendChild(newRow);
+    }
+
+    function createTaskSelect(selectedTaskId) {
+        const select = document.createElement("select");
+        select.classList.add("form-control");
+        select.name = "taskIds[]";
+        select.required = true;
+        select.style.cssText = "padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; flex: 2;";
+
+        // Add default option
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Изберете задача";
+        select.appendChild(defaultOption);
+
+        // Add task options from the tasks array
+        if (tasks && tasks.length) {
+            tasks.forEach(task => {
+                const option = document.createElement("option");
+                option.value = task.id;
+                option.textContent = task.title;
+                if (selectedTaskId && task.id === parseInt(selectedTaskId)) {
+                    option.selected = true;
                 }
-            }
-
-            const newRow = document.createElement("div");
-            newRow.classList.add("form-group", "task-row");
-
-            const select = document.createElement("select");
-            select.classList.add("form-control");
-            select.name = "taskIds[]";
-            select.required = true;
-
-            const defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "Изберете задача";
-            select.appendChild(defaultOption);
-
-            if (tasks && tasks.length) {
-                tasks.forEach(task => {
-                    const option = document.createElement("option");
-                    option.value = task.id;
-                    option.textContent = task.title;
-                    if (selectedTaskId && task.id === selectedTaskId) {
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-            }
-
-            const input = document.createElement("input");
-            input.type = "number";
-            input.classList.add("form-control");
-            input.name = "taskPoints[]";
-            input.required = true;
-            input.min = "1";
-            input.placeholder = "Поени";
-            if (points) {
-                input.value = points;
-            }
-
-            const removeBtn = document.createElement("button");
-            removeBtn.type = "button";
-            removeBtn.classList.add("remove-btn");
-            removeBtn.textContent = "X";
-            removeBtn.onclick = function() { removeTaskRow(this); };
-
-            newRow.appendChild(select);
-            newRow.appendChild(input);
-            newRow.appendChild(removeBtn);
-
-            taskContainer.appendChild(newRow);
+                select.appendChild(option);
+            });
         }
 
-        function removeTaskRow(button) {
-            button.parentElement.remove();
+        return select;
+    }
+
+    function createPointsInput(points) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.classList.add("form-control");
+        input.name = "taskPoints[]";
+        input.required = true;
+        input.min = "1";
+        input.placeholder = "Поени";
+        input.style.cssText = "padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; flex: 1;";
+
+        if (points) {
+            input.value = points;
         }
 
-        // Single DOMContentLoaded event listener that handles everything
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize multiselect for room tags
-            var checkboxes = document.getElementById('activity-tag');
+        return input;
+    }
+
+    function createRemoveButton() {
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.classList.add("btn-action", "btn-delete");
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        removeBtn.onclick = function() { removeTaskRow(this); };
+        removeBtn.style.cssText = "padding: 0.8rem; border: none; border-radius: 8px; background: #fee2e2; color: #dc2626; cursor: pointer; transition: all 0.2s ease;";
+
+        removeBtn.addEventListener('mouseover', function() {
+            this.style.backgroundColor = '#fca5a5';
+        });
+        removeBtn.addEventListener('mouseout', function() {
+            this.style.backgroundColor = '#fee2e2';
+        });
+
+        return removeBtn;
+    }
+
+    function removeTaskRow(button) {
+        button.closest('.task-row').remove();
+    }
+
+    function initializeMultiselect() {
+        const checkboxes = document.getElementById('activity-tag');
+        if (checkboxes) {
             $(checkboxes).multiselect({
                 templates: {
-                    button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                    button: '<button type="button" class="multiselect form-control text-start dropdown-toggle" style="text-align: left !important; padding: 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
                 },
                 enableCaseInsensitiveFiltering: true,
-                withSynchronizationMode: 'ifPopupIsSmaller',
                 buttonWidth: '100%',
                 numberDisplayed: 5,
-                nonSelectedText: "Немате избрано тагови за предавањето",
-                widthSynchronizationMode: 'always',
-                allSelectedText: false,
+                nonSelectedText: "Немате избрано тагови",
                 filterPlaceholder: 'Пребарај...',
                 includeSelectAllOption: true,
                 selectAllText: "Избери ги сите"
             });
+        }
+    }
 
-            // Initialize tasks
-            if (competition && competition.taskIds && competition.taskPoints) {
-                for (let i = 0; i < competition.taskIds.length; i++) {
-                    addTaskRow(competition.taskIds[i], competition.taskPoints[i]);
-                }
-            }
-
-            // Add form submission handler
-            const saveButton = document.querySelector('.mendo-btn');
-            saveButton?.addEventListener('click', function() {
+    function initializeFormSubmission() {
+        const form = document.getElementById('competitionForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
                 if (typeof tinymce !== 'undefined') {
                     tinymce.triggerSave();
                 }
-                document.querySelector('form').submit();
+                this.submit();
             });
-        });
-    </script>
-        <style>
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            width: 100%;
         }
-
-        .section-title {
-            font-weight: 600;
-        }
-
-        .form-card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 3rem;
-            box-shadow: 0 4px 6px rgba(44, 24, 16, 0.1);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            color: #2c1810;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #E6AA68;
-            border-radius: 0.8rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: #fff5eb;
-            color: #2c1810;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #2c1810;
-            box-shadow: 0 0 0 3px rgba(230, 170, 104, 0.2);
-        }
-
-        .helper-text {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .mendo-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 0.8rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            width: 100%;
-            font-size: 1.1rem;
-            background-color: #E6AA68;
-            color: #2c1810;
-            margin-top: 1rem;
-            grid-column: 1 / -1;
-        }
-
-        .mendo-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 170, 104, 0.3);
-        }
-
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c1810' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .task-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr auto;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .task-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .remove-btn {
-            background-color: #ff4444;
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            width: 2rem;
-            height: 2rem;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .remove-btn:hover {
-            background-color: #cc0000;
-        }
-
-        .add-task-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: auto;
-            margin-left: auto;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .add-task-btn:hover {
-            background-color: #45a049;
-            transform: translateY(-1px);
-        }
-
-        .add-task-btn::before {
-            content: "+";
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .form-card {
-                padding: 1.5rem;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
-    </style>
-<body>
-<div class="container">
-    <h2 class="section-title">Измена на натпревар</h2>
-
-    <div class="form-card">
-        <form id="competitionForm" class="form-grid" method="POST" th:action="@{/admin/competition/edit/{id}(id=${competitionId})}">
-            <div class="form-group">
-                <label class="form-label">Наслов на натпреварот</label>
-                <input type="text" class="form-control" name="title" required
-                       th:value="${competition.title}"
-                       placeholder="Внесете наслов на натпреварот">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Датум на одржување</label>
-                <input type="date" class="form-control" name="startDate" required
-                       th:value="${competition.startDate}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Време на почеток</label>
-                <input type="time" class="form-control" name="startTime" required
-                       th:value="${competition.startTime}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Време на завршување</label>
-                <input type="time" class="form-control" name="endTime" required
-                       th:value="${competition.endTime}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Тип на натпревар</label>
-                <select class="form-control" name="type" required>
-                    <option value="">Изберете тип на натпревар</option>
-                    <option th:each="type : ${types}"
-                            th:value="${type}"
-                            th:text="${type}"
-                            th:selected="${type == competition.type}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Место на одржување</label>
-                <input type="text" class="form-control" name="place" required
-                       th:value="${competition.place}"
-                       placeholder="Внесете место на одржување">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Краен рок за пријавување</label>
-                <input type="datetime-local" class="form-control" name="deadline" required
-                       th:value="${#temporals.format(competition.deadline, 'yyyy-MM-dd''T''HH:mm')}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Циклус на натпревари</label>
-                <select class="form-control" name="cycleId">
-                    <option value="">Изберете циклус</option>
-                    <option th:each="cycle : ${cycles}"
-                            th:value="${cycle.id}"
-                            th:text="${cycle.name}"
-                            th:selected="${competition.cycleId != null && cycle.id == competition.cycleId}">
-                    </option>
-                    <option value="">Самостоен натпревар</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Претходен натпревар</label>
-                <select class="form-control" name="parentId">
-                    <option value="">Изберете претходен на натпревар</option>
-                    <option th:each="parent : ${competitions}"
-                            th:value="${parent.id}"
-                            th:text="${parent.title}"
-                            th:selected="${competition.parentId != null && parent.id == competition.parentId}">
-                    </option>
-                    <option value="">Нема претоден натпревар</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="activity-tag" class="form-label">Тагови</label>
-                <select id="activity-tag" name="roomIds" class="form-control form-select" multiple="multiple">
-                    <option th:each="room : ${rooms}"
-                            th:value="${room.id}"
-                            th:text="|${room.name} ${room.city}|"
-                            th:selected="${competition.roomIds != null && competition.roomIds.contains(room.id)}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group full-width">
-                <label class="form-label">Дополнителни информации</label>
-                <textarea class="form-control" name="info" rows="3"
-                          placeholder="Внесете дополнителни информации за натпреварот"
-                          th:text="${competition.info}"></textarea>
-            </div>
-
-            <div class="form-group full-width task-section">
-                <label class="form-label">Задачи</label>
-                <div id="taskContainer" class="task-container"></div>
-                <button type="button" class="add-task-btn" onclick="addTaskRow()">Додади задача</button>
-            </div>
-
-            <button type="submit" class="mendo-btn">
-                Зачувај измени
-            </button>
-        </form>
-    </div>
-</div>
-</body>
+    }
+</script>
