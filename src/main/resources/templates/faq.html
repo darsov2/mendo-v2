@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МЕНДО - FAQ Table Layout Preview</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #fafafa;
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .main-content {
+            padding: 2rem;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .quick-start {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #105679;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* FAQ Table Styles */
+        .faq-table {
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-row {
+            display: flex;
+            flex-direction: row;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .faq-row:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            width: 30%;
+            background-color: #E6F1FE;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .faq-question h3 {
+            color: #105679;
+            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .faq-answer {
+            padding: 1.5rem;
+            width: 70%;
+            background-color: white;
+        }
+
+        .faq-answer p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-answer ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .faq-answer h4 {
+            color: #105679;
+            margin: 1.25rem 0 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .faq-answer h4:first-child {
+            margin-top: 0;
+        }
+
+        .news-link {
+            color: #105679;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .news-link:hover {
+            color: #E6AA68;
+        }
+
+        .news-link:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #E6AA68;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .news-link:hover:after {
+            transform: scaleX(1);
+        }
+
+        /* View controls */
+        .view-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .view-btn {
+            background: #105679;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .view-btn:hover {
+            background-color: #0d4563;
+        }
+
+        .page-container {
+            transition: all 0.3s ease;
+        }
+
+        body.mobile-view .page-container {
+            max-width: 375px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mobile view */
+        /*@media (max-width: 768px), body.mobile-view {*/
+        /*  .faq-row {*/
+        /*    flex-direction: column;*/
+        /*  }*/
+
+        /*  .faq-question,*/
+        /*  .faq-answer {*/
+        /*    width: 100%;*/
+        /*    border-right: none;*/
+        /*  }*/
+
+        /*  .faq-question {*/
+        /*    border-bottom: 1px solid #e2e8f0;*/
+        /*    padding: 1rem 1.25rem;*/
+        /*  }*/
+
+        /*  .faq-answer {*/
+        /*    padding: 1.25rem;*/
+        /*  }*/
+        /*}*/
+    </style>
+    <script>
+        function toggleView() {
+            document.body.classList.toggle('mobile-view');
+            const btn = document.getElementById('viewToggle');
+            if (document.body.classList.contains('mobile-view')) {
+                btn.textContent = 'Desktop View';
+            } else {
+                btn.textContent = 'Mobile View';
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="view-controls">
+    <button id="viewToggle" class="view-btn" onclick="toggleView()">Mobile View</button>
+</div>
+
+<div class="page-container">
+    <div class="main-content">
+        <div class="quick-start">
+            <h1 class="section-title">Често поставувани прашања</h1>
+
+            <div class="faq-table">
+                <!-- First row -->
+                <div class="faq-row">
+                    <div class="faq-question">
+                        <h3>Што треба да прават моите програми?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Вашите програми треба да ги почитуваат следниве правила:</p>
+                        <ul>
+                            <li>да читаат од стандарден влез и запишуваат на стандарден излез (stdin/stdout)</li>
+                            <li>да не го надминуваат дозволениот временски лимит (најчесто 1 секунда)</li>
+                            <li>да не го надминуваат дозволениот мемориски лимит (најчесто 64 мб)</li>
+                            <li>за решенија во програмскиот јазик Java, името на класата треба да биде Main</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Second row -->
+                <div class="faq-row">
+                    <div class="faq-question">
+                        <h3>Од каде да почнам со учење?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Доколку сте почетник во информатиката и програмирањето, или ве интересира како да почнете со
+                            решавање на задачи на нашиот сајт или како да се подготвите за националните натпревари, ве
+                            молиме да ја посетите <a href="beginners.html" class="news-link">оваа страница</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Third row -->
+                <div class="faq-row">
+                    <div class="faq-question">
+                        <h3>Која е целта на овој проект?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Овој сајт (проект) е пуштен во употреба како дел од напорите за популаризирање на
+                            натпреварите по информатика во Македонија. Иако целта на сајтот е овозможување на тренинг за
+                            македонските натпреварувачи, секој посетител е добредојден да го користи.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fourth row -->
+                <div class="faq-row">
+                    <div class="faq-question">
+                        <h3>Што ако имам прашање?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Доколку имате прашања, слободно поставете ги на <a href="forum.html" class="news-link">форумот</a>.
+                            Ако навистина мора да контактирате со некој од администраторите или модераторите директно,
+                            користете ги информациите дадени подолу.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fifth row -->
+                <div class="faq-row">
+                    <div class="faq-question">
+                        <h3>Кои сте вие?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Еве ја целосната листа на луѓе кои се вклучени во овој проект:</p>
+
+                        <h4>Администратори на проектот:</h4>
+                        <ul>
+                            <li>Бојан Костадинов (bojankostadinov at gmail.com)</li>
+                        </ul>
+
+                        <h4>Модератори на проектот:</h4>
+                        <ul>
+                            <li>Миле Јованов (mile at ii.edu.mk)</li>
+                            <li>Емил Станков (emil.stankov at gmail.com)</li>
+                            <li>Бојан Илијоски (b.ilijoski at gmail.com)</li>
+                            <li>Мартин Динев (dinevpirava at outlook.com)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

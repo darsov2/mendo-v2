@@ -130,6 +130,13 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(44, 24, 16, 0.15);
   }
+  .tab-pane {
+    display: none !important;
+  }
+
+  .tab-pane.active {
+    display: block !important;
+  }
 
   .run-button:active {
     transform: translateY(0);
@@ -360,9 +367,22 @@
             <span
                 th:text="${post?.mendoUser?.name + ' ' + post?.mendoUser?.surname}">Null</span>
               <!--                        <span th:text="${#temporals.format(post?.timestamp, 'пред ')} + ${T(java.time.temporal.ChronoUnit.DAYS).between(post?.timestamp, T(java.time.LocalDateTime).now())} + ' дена'"></span>-->
+              <button id="reply" th:attr="onclick='addForm(' + ${post.id} + ', event)'" class="btn-back link-no-decor">Reply</button>
             </div>
+
             <p th:text="${post?.description}">/</p>
+            <br>
+            <div class="forum-post" th:each="post : ${post?.childrenPosts}">
+              <!-- ... existing forum post content ... -->
+              <div class="post-header">
+            <span
+                    th:text="${post?.mendoUser?.name + ' ' + post?.mendoUser?.surname}">Null</span>
+                <!--                        <span th:text="${#temporals.format(post?.timestamp, 'пред ')} + ${T(java.time.temporal.ChronoUnit.DAYS).between(post?.timestamp, T(java.time.LocalDateTime).now())} + ' дена'"></span>-->
+              </div>
+              <p th:text="${post?.description}">/</p>
+            </div>
           </div>
+
         </div>
         <form id="schoolForm" method="POST" th:action="@{'/posts/' + *{thread?.id}}">
           <!-- ... existing form content ... -->
@@ -416,4 +436,49 @@
     });
     document.getElementById(tabId).classList.add('active');
   }
+
+  function addForm(postId, event) {
+    event.preventDefault();
+
+    const button = event.currentTarget;
+
+    // Get the parent forum post
+    const forumPost = button.closest('.forum-post');
+
+    if (!forumPost) {
+      console.error('Forum post not found');
+      return;
+    }
+
+    // Check if form already exists to prevent duplicates
+    if (forumPost.querySelector('.reply-form')) {
+      return;
+    }
+
+    const replyForm = document.createElement('div');
+    replyForm.className = 'reply-form';
+    replyForm.innerHTML = `
+    <form class="mt-3" id="replyForm" method="POST" action="/posts/reply/${postId}">
+      <div class="form-group">
+        <textarea
+          class="form-control"
+          name="description"
+          placeholder="add comment"
+        ></textarea>
+      </div>
+      <button type="submit" class="mendo-btn">
+        Остави коментар
+      </button>
+    </form>
+  `;
+
+    // Insert the form after the reply button
+    forumPost.appendChild(replyForm);
+
+    // Focus on the textarea
+    replyForm.querySelector('textarea').focus();
+  }
+
+
+
 </script>
