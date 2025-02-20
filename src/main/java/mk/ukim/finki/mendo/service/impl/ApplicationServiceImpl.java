@@ -103,7 +103,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         Competition competition = competitionService.findById(competitionId);
 
-        if (competition.getRegistrationOpens().isBefore(LocalDateTime.now())) {
+        if (competition.getRegistrationOpens().isAfter(LocalDateTime.now())) {
             throw new RuntimeException("Registration ended for: "+competition.getTitle());
         }
 

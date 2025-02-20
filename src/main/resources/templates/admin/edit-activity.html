@@ -108,7 +108,6 @@
         </div>
     </div>
 </nav>
-<div th:replace="fragments/_toolbar :: toolbar('Уредување предавање', '/activities')"></div>
 
 
 <div class="main-container">
@@ -172,7 +171,7 @@
 
         $(checkboxes).multiselect({
             templates: {
-                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                button: '<button type="button" class="multiselect form-control form-select text-start" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
             },
             enableCaseInsensitiveFiltering: true,
             withSynchronizationMode: 'ifPopupIsSmaller',

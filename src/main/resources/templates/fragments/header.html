@@ -30,13 +30,11 @@
         <a href="#help">Помош</a>
     </div>
     <div class="auth-buttons">
-        <!-- Show login/register buttons when not authenticated -->
         <div sec:authorize="!isAuthenticated()">
             <a href="/login" class="mendo-btn mendo-btn-login">Најава</a>
             <a href="/auth/register" class="mendo-btn mendo-btn-signup">Регистрација</a>
         </div>
 
-        <!-- Show user dropdown when authenticated -->
         <div sec:authorize="isAuthenticated()" class="user-dropdown">
             <button class="dropdown-toggle" onclick="toggleDropdown()">
                 <i class="fas fa-user"></i>
