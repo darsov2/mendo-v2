@@ -32,7 +32,9 @@ public class AuthMapper {
         mendoUser.setGrade(userRegisterRequest.getGrade());
         mendoUser.setCity(userRegisterRequest.getCity());
         mendoUser.setCountry(userRegisterRequest.getCountry());
-        mendoUser.setStudiesSchool(schoolMapper.findById(userRegisterRequest.getSchoolId()));
+        if(userRegisterRequest.getSchoolId() != null) {
+            mendoUser.setStudiesSchool(schoolMapper.findById(userRegisterRequest.getSchoolId()));
+        }
         mendoUser.setRoles(Set.of(roleService.findRoleByName(RoleNames.ROLE_STUDENT)));
         return userService.registerUser(mendoUser) != null;
     }
