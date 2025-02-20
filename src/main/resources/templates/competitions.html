@@ -173,9 +173,9 @@
     <div th:replace="fragments/_toolbar :: toolbar('Листа на натпревари', '/')"></div>
 
     <div class="main-content">
-        <div class="d-flex justify-content-start">
-            <div th:if="${currentUser != null}">
-                <a href="#" class="mendo-btn">
+        <div th:if="${currentUser != null && currentUser.isAdmin()}" class="d-flex justify-content-start pb-5">
+            <div >
+                <a href="/competition/add" class="mendo-btn">
                     <i class="fas fa-plus"></i>
                     Додади натпревар
                 </a>
