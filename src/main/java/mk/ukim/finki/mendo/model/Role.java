@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.mendo.model.enums.RoleNames;
 
 import java.util.Set;
 
@@ -17,7 +18,8 @@ public class Role {
     private Long id;
 
     @Column(unique = true)
-    private String name;  // e.g., "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT"
+    @Enumerated(EnumType.STRING)
+    private RoleNames name;  // e.g., "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT"
 
     private String description;
 
