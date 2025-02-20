@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthMapper {
     private final MendoUserService userService;
+    private final SchoolMapper schoolMapper;
 
-    public AuthMapper(MendoUserService userService) {
+    public AuthMapper(MendoUserService userService, SchoolMapper schoolMapper) {
         this.userService = userService;
+        this.schoolMapper = schoolMapper;
     }
 
     public Boolean registerUser(UserRegisterRequest userRegisterRequest) {
@@ -23,6 +25,7 @@ public class AuthMapper {
         mendoUser.setGrade(userRegisterRequest.getGrade());
         mendoUser.setCity(userRegisterRequest.getCity());
         mendoUser.setCountry(userRegisterRequest.getCountry());
+        mendoUser.setStudiesSchool(schoolMapper.findById(userRegisterRequest.getSchoolId()));
 
         return userService.registerUser(mendoUser) != null;
     }

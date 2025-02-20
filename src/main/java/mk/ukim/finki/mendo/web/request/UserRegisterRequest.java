@@ -14,4 +14,5 @@ public class UserRegisterRequest {
     String city;
     String country;
     Grade grade;
+    Long schoolId;
 }
