@@ -3,6 +3,8 @@ package mk.ukim.finki.mendo.web.request;
 import lombok.Data;
 import mk.ukim.finki.mendo.model.enums.Grade;
 
+import java.util.List;
+
 @Data
 public class UserRegisterRequest {
     String firstName;
@@ -15,4 +17,5 @@ public class UserRegisterRequest {
     String country;
     Grade grade;
     Long schoolId;
+    List<Long> roles;
 }
