@@ -23,7 +23,6 @@ public class ArticleController {
 
     @GetMapping
     public String showArticles(Model model) {
-        authorizationService.canViewArticles();
 
         List<Article> articles = articleService.findAll();
         model.addAttribute("articles", articles);
@@ -78,7 +77,6 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public String showArticleDetails(@PathVariable Long id, Model model) {
-        authorizationService.canViewArticles();
 
         Article article = articleService.findById(id);
         if (article == null) {

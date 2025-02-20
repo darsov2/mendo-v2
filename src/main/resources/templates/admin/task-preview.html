@@ -367,7 +367,7 @@
             <span
                 th:text="${post?.mendoUser?.name + ' ' + post?.mendoUser?.surname}">Null</span>
               <!--                        <span th:text="${#temporals.format(post?.timestamp, 'пред ')} + ${T(java.time.temporal.ChronoUnit.DAYS).between(post?.timestamp, T(java.time.LocalDateTime).now())} + ' дена'"></span>-->
-              <button id="reply" th:attr="onclick='addForm(' + ${post.id} + ', event)'" class="btn-back link-no-decor">Reply</button>
+              <button sec:authorize="hasAuthority('MANAGE_POST')" id="reply" th:attr="onclick='addForm(' + ${post.id} + ', event)'" class="btn-back link-no-decor">Reply</button>
             </div>
 
             <p th:text="${post?.description}">/</p>
@@ -384,7 +384,7 @@
           </div>
 
         </div>
-        <form id="schoolForm" method="POST" th:action="@{'/posts/' + *{thread?.id}}">
+        <form sec:authorize="hasAuthority('MANAGE_POST')" id="schoolForm" method="POST" th:action="@{'/posts/' + *{thread?.id}}">
           <!-- ... existing form content ... -->
           <div class="form-group">
         <textarea
@@ -397,6 +397,9 @@
             Остави коментар
           </button>
         </form>
+        <div sec:authorize="!isAuthenticated()">
+          <h5>Најавете за да пишувате во форумот</h5>
+        </div>
       </div>
 
 

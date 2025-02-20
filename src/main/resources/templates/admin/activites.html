@@ -247,7 +247,7 @@
     <div class="col-md-10">
       <div class="grid-content">
 
-        <div class="header">
+        <div sec:authorize="hasAuthority('MANAGE_CONTENT')" class="header">
           <div></div>
           <div style="display: flex; gap: 10px;">
             <a href="/activities/lectures/add" class="btn-add link-no-decor">
