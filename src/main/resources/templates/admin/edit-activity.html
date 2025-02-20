@@ -104,15 +104,13 @@
         </div>
         <div>
             <button class="mendo-btn mendo-btn-secondary me-2">Откажи</button>
-            <button class="mendo-btn mendo-btn-primary">Зачувај</button>
+            <button id='save-button' class="mendo-btn mendo-btn-primary">Зачувај</button>
         </div>
     </div>
 </nav>
-<div th:replace="fragments/_toolbar :: toolbar('Уредување предавање', '/activities')"></div>
-
 
 <div class="main-container">
-    <form th:object="${lecture}"
+    <form id="lecture-form" th:object="${lecture}"
           th:method="${lecture?.id != null} ? 'put' : 'post'"
           th:action="${lecture?.id != null} ? '/activities/lectures/' + ${lecture?.id} : '/activities/lectures'">
     <div class="content-card">
@@ -172,7 +170,7 @@
 
         $(checkboxes).multiselect({
             templates: {
-                button: '<button type="button" class="multiselect form-control form-select text-start dropdown-toggle" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
+                button: '<button type="button" class="multiselect form-control form-select text-start" style="text-align: left !important;" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>',
             },
             enableCaseInsensitiveFiltering: true,
             withSynchronizationMode: 'ifPopupIsSmaller',
@@ -187,10 +185,10 @@
             // includeFilterClearBtn: false
         });
 
-        const saveButton = document.querySelector('.mendo-btn-primary');
+        const saveButton = document.querySelector('#save-button');
         saveButton.addEventListener('click', function() {
             tinymce.triggerSave();
-            document.querySelector('form').submit();
+            document.querySelector('#lecture-form').submit();
         });
 
         var manualTopicCheckbox = document.getElementById('add-manual-topic');
@@ -201,6 +199,7 @@
             if (this.checked) {
                 topicSelect.style.display = 'none';
                 manualTopicInput.style.display = 'block';
+                topicSelect.value = null;
             } else {
                 topicSelect.style.display = 'block';
                 manualTopicInput.style.display = 'none';
@@ -221,11 +220,9 @@
         toolbar2: 'bullist numlist outdent indent | link image | codesample code | removeformat',
         fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
 
-        //Settings for pasting/uploading images. Separate REST API controller used for this, with specific response in format {location: "actualLink"/}
         images_upload_url: '/api/documents/upload-mce',
-        images_upload_credentials: true,  // Enable credentials for cross-origin uploads
+        images_upload_credentials: true,
 
-        // Optional: File picker settings
         file_picker_types: 'image',
         file_picker_callback: function (cb, value, meta) {
             var input = document.createElement('input');
